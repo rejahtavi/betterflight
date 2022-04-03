@@ -14,11 +14,13 @@ authors="Rejah Tavi" #optional
 description='''
 This mod improves elytra flight by allowing you to spend hunger to fly.
 
-The default keybinding is space, the same as Jump.
+Sprint and press the Take Off key to launch yourself into the air.
 
-Hold while sprinting to take off.
-Tap while in the air to gain altitude.
-Hold while in the air to flare and slow down.
+While flying, tap the Flap key to gain altitude and a little forward momentum.
+
+While flying, hold Flare to slow down.
+
+Watch your elytra meter, and manage its charge well!
 '''
 
 [[dependencies.betterflight]]
