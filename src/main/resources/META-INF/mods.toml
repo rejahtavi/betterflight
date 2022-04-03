@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[36,)"
-license="(CC-BY-SA-4.0) https://creativecommons.org/licenses/by-sa/4.0/legalcode"
-#issueTrackerURL="" #optional
+license="https://creativecommons.org/licenses/by-sa/4.0/"
+issueTrackerURL="https://github.com/rejahtavi/betterflight/issues" #optional
 
 [[mods]]
 modId="betterflight"
