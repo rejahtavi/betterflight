@@ -1,0 +1,36 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="(CC-BY-SA-4.0) https://creativecommons.org/licenses/by-sa/4.0/legalcode"
+#issueTrackerURL="" #optional
+
+[[mods]]
+modId="betterflight"
+version="${file.jarVersion}"
+displayName="BetterFlight" #mandatory
+#displayURL="" #optional
+logoFile="logo.png" #optional
+credits="Rejah Tavi" #optional
+authors="Rejah Tavi" #optional
+description='''
+This mod improves elytra flight by allowing you to spend hunger to fly.
+
+The default keybinding is space, the same as Jump.
+
+Hold while sprinting to take off.
+Tap while in the air to gain altitude.
+Hold while in the air to flare and slow down.
+'''
+
+[[dependencies.betterflight]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.betterflight]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5]"
+    ordering="NONE"
+    side="BOTH"
