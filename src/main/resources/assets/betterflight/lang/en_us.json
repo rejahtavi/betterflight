@@ -1,6 +1,7 @@
 {
-    "betterflight.takeoff": "Take Off",
-    "betterflight.flap": "Flap",
-    "betterflight.flare": "Flare",
-    "betterflight.widget": "Move HUD"
+    "betterflight.keys.takeoff": "Take Off",
+    "betterflight.keys.flap": "Flap",
+    "betterflight.keys.flare": "Flare",
+    "betterflight.keys.widget": "Move HUD",
+    "betterflight.subtitles.flap": "Elytra flap"
 }

@@ -5,5 +5,6 @@ package com.rejahtavi.betterflight.common;
 public enum FlightActionType {
     TAKEOFF,
     FLAP,
-    FLARE
+    FLARE,
+    RECHARGE
 }

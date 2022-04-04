@@ -2,15 +2,14 @@ package com.rejahtavi.betterflight.network;
 
 import java.util.function.Supplier;
 
+import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.common.FlightActionType;
-import com.rejahtavi.betterflight.common.FlightActions;
+import com.rejahtavi.betterflight.common.ServerLogic;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
-// implements our Client->Server packet, used for telling the server how each
-// client is behaving, and allowing it to keep the server-side simulation in
-// sync with the behaviors implemented by the mod.
+// Client->Server packet, keeps server up to date when a client flaps an elytra
 public class CFlightActionPacket {
 
     private FlightActionType flightUpdate;
@@ -31,12 +30,14 @@ public class CFlightActionPacket {
         return new CFlightActionPacket(buffer.readEnum(FlightActionType.class));
     }
 
-    // This is a SERVER-SIDE packet handler for receiving FROM clients.
-    // No client side is necessary, as the server will never *send* a packet.
     public static void onPacketReceived(CFlightActionPacket message, Supplier<Context> context) {
         context.get().enqueueWork(() -> {
-            FlightActions.handleCFlightActionPacket(message, context);
+            ServerLogic.handleCFlightActionPacket(message, context);
         });
         context.get().setPacketHandled(true);
+    }
+    
+    public static void send(FlightActionType action) {
+        BetterFlight.NETWORK.sendToServer(new CFlightActionPacket(action));
     }
 }
