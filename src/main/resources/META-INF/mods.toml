@@ -33,6 +33,6 @@ Watch your elytra meter, and manage its charge well!
 [[dependencies.betterflight]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5]"
+    versionRange="[1.16.5,)"
     ordering="NONE"
     side="BOTH"

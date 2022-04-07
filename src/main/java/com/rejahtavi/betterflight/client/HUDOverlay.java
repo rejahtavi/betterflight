@@ -18,7 +18,7 @@ public class HUDOverlay {
     // HUD layout constraints
     private static final int OFFSET_FROM_CURSOR = 24;
     private static final int OFFSET_TO_HOTBAR_SIDES = 105;
-    private static final int OFFSET_ABOVE_HOTBAR = 40;
+    private static final int OFFSET_ABOVE_HOTBAR = 44;
 
     // Texture Data
     private static final int TEXTURE_SIZE = 128;
@@ -126,7 +126,7 @@ public class HUDOverlay {
                 long thisTick = mc.level.getGameTime();
 
                 // flash border white and red every 5 ticks
-                borderOffset = (int) ((thisTick / 5) % 2) + SPRITE_ALARM;
+                borderOffset = ((int) ((thisTick / 5) % 2) * ICON_SIZE) + SPRITE_ALARM;
 
                 // move icon randomly +/- 1 pixel in each direction, with uneven timing for X and Y
                 // very chaotic and attention grabbing

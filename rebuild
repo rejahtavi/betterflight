@@ -1,0 +1,12 @@
+#!/bin/bash
+
+MATCH="betterflight*.jar"
+
+rm ./build/libs/$MATCH
+rm ./build/libs/$MATCH /home/jadyn/.local/opt/multimc/instances/Rejahs_1.16_1.1/.minecraft/mods/$MATCH
+rm ./build/libs/$MATCH /home/jadyn/.local/opt/mcserver_1.16_test/mods/$MATCH
+
+./gradlew build
+
+cp -v ./build/libs/$MATCH /home/jadyn/.local/opt/multimc/instances/Rejahs_1.16_1.1/.minecraft/mods/
+cp -v ./build/libs/$MATCH /home/jadyn/.local/opt/mcserver_1.16_test/mods/
