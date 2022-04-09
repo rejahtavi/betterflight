@@ -1,0 +1,38 @@
+modLoader="javafml"
+loaderVersion="[38,)"
+license="https://creativecommons.org/licenses/by-sa/4.0/"
+issueTrackerURL="https://github.com/rejahtavi/betterflight/issues" #optional
+
+[[mods]]
+modId="betterflight"
+version="${file.jarVersion}"
+displayName="BetterFlight" #mandatory
+#displayURL="" #optional
+logoFile="logo.png" #optional
+credits="Rejah Tavi" #optional
+authors="Rejah Tavi" #optional
+description='''
+This mod improves elytra flight by allowing you to spend hunger to fly.
+
+Sprint and press the Take Off key to launch yourself into the air.
+
+While flying, tap the Flap key to gain altitude and a little forward momentum.
+
+While flying, hold Flare to slow down.
+
+Watch your elytra meter, and manage its charge well!
+'''
+
+[[dependencies.betterflight]]
+    modId="forge"
+    mandatory=true
+    versionRange="[38,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.betterflight]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18,)"
+    ordering="NONE"
+    side="BOTH"

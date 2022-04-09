@@ -1,0 +1,78 @@
+package com.rejahtavi.betterflight.client;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.rejahtavi.betterflight.BetterFlight;
+
+import net.minecraftforge.common.ForgeConfigSpec;
+
+public class ClientConfig {
+
+    public static final Client CLIENT;
+    public static final ForgeConfigSpec CLIENT_SPEC;
+
+    // constants, might make some of these configurable later
+    public static final int BORDER_FLASH_TICKS = 5;
+    public static final float FLAP_SOUND_PITCH = 2.0f;
+
+    // HUD icon position
+    public enum HudLocation {
+        BAR_CENTER,
+        BAR_LEFT,
+        BAR_RIGHT,
+        CURSOR_ABOVE,
+        CURSOR_RIGHT,
+        CURSOR_BELOW,
+        CURSOR_LEFT
+    }
+
+    public static HudLocation hudLocation = HudLocation.BAR_CENTER;
+    public static double takeOffVolume;
+    public static double flapVolume;
+
+    // set up config file
+    static {
+        Pair<Client, ForgeConfigSpec> clientSpecPair = new ForgeConfigSpec.Builder().configure(Client::new);
+        CLIENT = clientSpecPair.getLeft();
+        CLIENT_SPEC = clientSpecPair.getRight();
+    }
+
+    // handles 'baking' the config into ram-accessible objects that are much faster
+    // than ForgeConfig. This is VERY important because we rely on some of these
+    // not just every tick, but *every frame*
+
+    //@formatter:off
+    public static void bake() {
+        takeOffVolume               = CLIENT.takeOffVolume.get();
+        flapVolume                  = CLIENT.flapVolume.get();
+        hudLocation                 = CLIENT.hudLocation.get();
+    }
+
+    // defines config file format
+    public static class Client {
+
+        public final ForgeConfigSpec.DoubleValue takeOffVolume;
+        public final ForgeConfigSpec.DoubleValue flapVolume;
+        public final ForgeConfigSpec.EnumValue<HudLocation> hudLocation;
+
+        public Client(ForgeConfigSpec.Builder builder) {
+            builder.push(BetterFlight.MODID);
+
+            takeOffVolume = builder
+                    .comment("Loudness of the flap sound on takeoff.")
+                    .defineInRange("TakeOffVolume", 1.0D, 0.0D, 1.0D);
+
+            flapVolume = builder
+                    .comment("Loudness of the flap sound when flapping wings.")
+                    .defineInRange("FlapVolume", 0.5D, 0.0D, 1.0D);
+            
+            hudLocation = builder
+                    .comment("Stores preferred position of elytra widget on HUD.\n"
+                            + "Options: BAR_CENTER, BAR_LEFT, BAR_RIGHT,\n"
+                            + "CURSOR_BELOW, CURSOR_ABOVE, CURSOR_RIGHT, CURSOR_LEFT.")
+                    .defineEnum("HudLocation", HudLocation.BAR_CENTER);
+            
+            builder.pop();
+        }        
+    }
+}
