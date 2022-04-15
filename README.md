@@ -29,8 +29,10 @@ _Please post any suggestions or problems on the issue tracker!_
 
 
 Durability indicator:
+
 ![durability](https://i.imgur.com/2AdY9Hw.png)
 
 
 Preview (yellow food bar outlines are from [AppleSkin](https://modrinth.com/mod/appleskin)):
+
 ![preview](https://i.imgur.com/rAhqsPe.png)
