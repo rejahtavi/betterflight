@@ -1,0 +1,14 @@
+#!/bin/bash
+
+VERSION=$(cat ./version)
+
+
+echo "Setting VERSION = "$VERSION
+
+sed -i "s/version = .*/version = '1.16.5-"$VERSION"'/" ./forge-1.16/build.gradle
+sed -i 's/    public static final String VERSION = .*/    public static final String VERSION = "'$VERSION'";/' ./forge-1.16/src/main/java/com/rejahtavi/betterflight/BetterFlight.java
+
+sed -i "s/version = .*/version = '1.18-"$VERSION"'/" ./forge-1.18/build.gradle
+sed -i 's/    public static final String VERSION = .*/    public static final String VERSION = "'$VERSION'";/' ./forge-1.18/src/main/java/com/rejahtavi/betterflight/BetterFlight.java
+
+

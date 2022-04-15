@@ -56,7 +56,7 @@ public class HUDOverlay {
     public static void renderOverlay(MatrixStack stack) {
 
         // only draw hud element when elytra is both equipped and functional
-        //if (ClientLogic.isElytraEquipped == false) return;
+        if (ClientLogic.isElytraEquipped == false) return;
         if (ClientLogic.elytraDurabilityLeft <= 1) return;
 
         Minecraft mc = Minecraft.getInstance();

@@ -33,7 +33,7 @@ public class BetterFlight {
     // Mod identification data
     public static final String MODID = "betterflight";
     public static final String MODNAME = "Better Flight";
-    public static final String VERSION = "1.18-0.6.0";
+    public static final String VERSION = "0.6.2";
 
     // Network Channel
     public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder
@@ -49,7 +49,7 @@ public class BetterFlight {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_SPEC, MODID + "-server.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_SPEC, MODID + "-client.toml");
-        
+
         eventBus.addListener(this::onCommonSetupEvent);
         eventBus.addListener(this::onModConfigEvent);
         eventBus.addListener(this::onLoadCompleteEvent);

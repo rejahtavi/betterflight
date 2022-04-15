@@ -1,0 +1,17 @@
+#!/bin/bash
+
+MATCH="betterflight*.jar"
+
+echo "=== BUILDING 1.16 ==="
+cd forge-1.16
+./rebuild
+cd ..
+
+echo "=== BUILDING 1.16 ==="
+cd forge-1.18
+./rebuild
+cd ..
+
+cp ./forge-1.16/build/libs/$MATCH ./out/
+cp ./forge-1.18/build/libs/$MATCH ./out/
+

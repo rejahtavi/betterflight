@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "=== EXECUTING GRADLEW FOR FORGE 1.16 ==="
+cd forge-1.16
+./gradlew $@
+cd ..
+
+echo "=== EXECUTING GRADLEW FOR FORGE 1.18 ==="
+cd forge-1.18
+./gradlew $@
+cd ..
+
+
