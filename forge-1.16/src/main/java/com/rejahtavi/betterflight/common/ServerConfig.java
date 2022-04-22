@@ -53,16 +53,16 @@ public class ServerConfig {
 
     //@formatter:off
     public static void bake() {
-        maxCharge                   = SERVER.maxCharge.get();
-        takeOffCost                 = SERVER.takeOffCost.get();
-        flapCost                    = SERVER.flapCost.get();
-        rechargeTicksInAir          = SERVER.rechargeTicksInAir.get();
-        rechargeTicksOnGround       = SERVER.rechargeTicksOnGround.get();
-        flareTicksPerChargePoint    = SERVER.flareTicksPerChargePoint.get();
-        exhaustionPerChargePoint    = SERVER.exhaustionPerChargePoint.get();
-        minFood                     = SERVER.minFood.get();
-        cooldownTicks               = SERVER.cooldownTicks.get();
-        elytraItems                 = new ArrayList<>();
+        maxCharge = SERVER.maxCharge.get();
+        takeOffCost = SERVER.takeOffCost.get();
+        flapCost = SERVER.flapCost.get();
+        rechargeTicksInAir = SERVER.rechargeTicksInAir.get();
+        rechargeTicksOnGround = SERVER.rechargeTicksOnGround.get();
+        flareTicksPerChargePoint = SERVER.flareTicksPerChargePoint.get();
+        exhaustionPerChargePoint = SERVER.exhaustionPerChargePoint.get();
+        minFood = SERVER.minFood.get();
+        cooldownTicks = SERVER.cooldownTicks.get();
+        elytraItems = new ArrayList<>();
 
         for (String id : SERVER.elytraItems.get()) {
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(id));
@@ -100,7 +100,7 @@ public class ServerConfig {
             flapCost = builder
                     .comment("Meter point cost to flap wings.")
                     .defineInRange("FlapCost", 1, 0, 255);
-            
+
             rechargeTicksInAir = builder
                     .comment("Time, in ticks, it takes to recharge 1 point on the meter while in the air.")
                     .defineInRange("RechargeTicksInAir", 100, 5, 600);
@@ -120,7 +120,7 @@ public class ServerConfig {
             minFood = builder
                     .comment("Minimum food required on hunger bar to recharge elytra meter. (6 = same as sprint)")
                     .defineInRange("MinFood", 6, 0, 20);
-            
+
             cooldownTicks = builder
                     .comment("Time, in ticks, players must wait between wing flaps.")
                     .defineInRange("CooldownTicks", 20, 5, 200);
@@ -129,13 +129,14 @@ public class ServerConfig {
                     .comment("A list of modid:itemname registry keys that count as an Elytra.")
                     .defineList("elytraItems",
                             new ArrayList<>(Arrays.asList(
-                            "minecraft:elytra",
-                            "mekanism:hdpe_elytra",
-                            "alexsmobs:tarantula_hawk_elytra",
-                            "tconstruct:slime_chestplate")),
+                                    "minecraft:elytra",
+                                    "mekanism:hdpe_elytra",
+                                    "alexsmobs:tarantula_hawk_elytra",
+                                    "tconstruct:slime_chestplate",
+                                    "customizableelytra:customizable_elytra")),
                             s -> s instanceof String);
 
             builder.pop();
-        }        
+        }
     }
 }

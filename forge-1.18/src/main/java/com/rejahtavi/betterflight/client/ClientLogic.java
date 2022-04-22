@@ -115,8 +115,7 @@ public class ClientLogic {
         // track ground state for takeoff logic
         if (player.isOnGround()) {
             offGroundTickCounter = 0;
-        }
-        else {
+        } else {
             offGroundTickCounter++;
         }
 
@@ -131,7 +130,8 @@ public class ClientLogic {
     }
 
     private static void tryTakeOff(LocalPlayer player) {
-        if (offGroundTickCounter > ServerConfig.TAKE_OFF_JUMP_DELAY
+        if (isElytraEquipped
+                && offGroundTickCounter > ServerConfig.TAKE_OFF_JUMP_DELAY
                 && player.isSprinting()
                 && !player.isFallFlying()
                 && player.getDeltaMovement().length() > ServerConfig.TAKE_OFF_SPEED) {
@@ -145,7 +145,8 @@ public class ClientLogic {
     }
 
     private static void tryFlap(LocalPlayer player) {
-        if (cooldownTimer <= 0
+        if (isElytraEquipped
+                && cooldownTimer <= 0
                 && !player.isOnGround()
                 && player.isFallFlying()) {
 
@@ -183,8 +184,8 @@ public class ClientLogic {
     }
 
     private static void handleFlare(LocalPlayer player) {
-        if (flareKey.isDown()
-                && isElytraEquipped
+        if (isElytraEquipped
+                && flareKey.isDown()
                 && (player.isCreative() || charge > 0)
                 && !player.isOnGround()
                 && player.isFallFlying()) {
@@ -199,8 +200,7 @@ public class ClientLogic {
                 spendCharge(player, 1);
                 flareTickCounter = 0;
             }
-        }
-        else {
+        } else {
             if (flareTickCounter > 0) {
                 flareTickCounter--;
             }
@@ -218,8 +218,7 @@ public class ClientLogic {
             cooldownTimer = ServerConfig.cooldownTicks;
             depletionBorderTimer = ClientConfig.BORDER_FLASH_TICKS;
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -257,8 +256,7 @@ public class ClientLogic {
 
             if (elytraDurabilityLeft > 1) {
                 elytraDurability = (float) elytraStack.getItem().getDamage(elytraStack) / (float) elytraStack.getMaxDamage();
-            }
-            else {
+            } else {
                 // this elytra has broken
                 isElytraEquipped = false;
             }
