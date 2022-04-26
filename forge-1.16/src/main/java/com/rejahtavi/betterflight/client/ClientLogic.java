@@ -1,9 +1,5 @@
 package com.rejahtavi.betterflight.client;
 
-import java.util.function.Supplier;
-
-import org.lwjgl.glfw.GLFW;
-
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig.HudLocation;
 import com.rejahtavi.betterflight.common.FlightActionType;
@@ -12,7 +8,6 @@ import com.rejahtavi.betterflight.common.ServerLogic;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CFlightActionPacket;
 import com.rejahtavi.betterflight.network.SElytraChargePacket;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
@@ -28,13 +23,13 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import org.lwjgl.glfw.GLFW;
 import top.theillusivec4.curios.api.CuriosApi;
 
 @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT)
 public class ClientLogic {
 
-    // keybinds
+    // key bindings
     public static KeyBinding takeOffKey;
     public static KeyBinding flapKey;
     public static KeyBinding flareKey;
@@ -84,9 +79,11 @@ public class ClientLogic {
     public static void onKeyInput(InputEvent.KeyInputEvent event) {
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc == null) return;
         PlayerEntity player = mc.player;
         if (player == null) return;
+
+        // don't react to key presses if a screen or chat is open
+        if (mc.screen != null) return;
 
         if (event.getKey() == takeOffKey.getKey().getValue()
                 && (event.getAction() == GLFW.GLFW_PRESS)) {
@@ -108,7 +105,6 @@ public class ClientLogic {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc == null) return;
         PlayerEntity player = mc.player;
         if (player == null) return;
 
@@ -294,7 +290,7 @@ public class ClientLogic {
         ClientConfig.CLIENT.hudLocation.save();
     }
 
-    public static void handleSElytraChargePacket(SElytraChargePacket message, Supplier<Context> context) {
+    public static void handleSElytraChargePacket(SElytraChargePacket message) {
         charge = message.getCharge();
     }
 }

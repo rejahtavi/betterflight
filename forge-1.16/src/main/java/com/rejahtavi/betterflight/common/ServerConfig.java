@@ -36,6 +36,9 @@ public class ServerConfig {
     public static double exhaustionPerChargePoint;
     public static int minFood;
     public static int cooldownTicks;
+    public static int softCeiling;
+    public static int hardCeiling;
+    public static int ceilingRange;
 
     // list of items that count as elytra
     public static List<Item> elytraItems;
@@ -62,6 +65,8 @@ public class ServerConfig {
         exhaustionPerChargePoint = SERVER.exhaustionPerChargePoint.get();
         minFood = SERVER.minFood.get();
         cooldownTicks = SERVER.cooldownTicks.get();
+        softCeiling = SERVER.softCeiling.get();
+        hardCeiling = SERVER.hardCeiling.get();
         elytraItems = new ArrayList<>();
 
         for (String id : SERVER.elytraItems.get()) {
@@ -70,6 +75,13 @@ public class ServerConfig {
                 elytraItems.add(item);
             }
         }
+
+        // ensure that soft ceiling is always below or equal to the hard ceiling
+        if (softCeiling > hardCeiling) {
+            softCeiling = hardCeiling;
+            SERVER.softCeiling.set(hardCeiling);
+        }
+        ceilingRange = hardCeiling - softCeiling;
     }
 
     // defines config file format
@@ -84,6 +96,8 @@ public class ServerConfig {
         public final ForgeConfigSpec.DoubleValue exhaustionPerChargePoint;
         public final ForgeConfigSpec.IntValue minFood;
         public final ForgeConfigSpec.IntValue cooldownTicks;
+        public final ForgeConfigSpec.IntValue softCeiling;
+        public final ForgeConfigSpec.IntValue hardCeiling;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> elytraItems;
 
         public Server(ForgeConfigSpec.Builder builder) {
@@ -124,6 +138,14 @@ public class ServerConfig {
             cooldownTicks = builder
                     .comment("Time, in ticks, players must wait between wing flaps.")
                     .defineInRange("CooldownTicks", 20, 5, 200);
+
+            softCeiling = builder
+                    .comment("Height above which flapping begins to be less effective. (Must be less than hardCeiling).")
+                    .defineInRange("softCeiling", 250, 0, 10000);
+
+            hardCeiling = builder
+                    .comment("Height above which flapping no longer provides any thrust.")
+                    .defineInRange("hardCeiling", 300, 0, 10000);
 
             elytraItems = builder
                     .comment("A list of modid:itemname registry keys that count as an Elytra.")

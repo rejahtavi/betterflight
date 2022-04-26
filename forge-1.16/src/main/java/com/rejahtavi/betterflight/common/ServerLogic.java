@@ -33,7 +33,7 @@ public class ServerLogic {
         // take offs need no forward component, due to the player already sprinting.
         // they do need additional vertical thrust to reliably get the player
         // enough time to flap away before hitting the ground again.
-        Vector3d verticalThrust = NORMAL_UP.scale(ServerConfig.TAKE_OFF_THRUST);
+        Vector3d verticalThrust = NORMAL_UP.scale(ServerConfig.TAKE_OFF_THRUST).scale(getCeilingFactor(player));
         player.startFallFlying();
         player.setDeltaMovement(player.getDeltaMovement().add(verticalThrust));
 
@@ -44,8 +44,9 @@ public class ServerLogic {
 
     public static void applyFlapImpulse(PlayerEntity player) {
         // grant a small amount of forward thrust along with each vertical boost
-        Vector3d verticalThrust = NORMAL_UP.scale(ServerConfig.FLAP_THRUST);
-        Vector3d forwardThrust = player.getDeltaMovement().normalize().scale(ServerConfig.FLAP_THRUST * 0.25);
+        double ceilingFactor = getCeilingFactor(player);
+        Vector3d verticalThrust = NORMAL_UP.scale(ServerConfig.FLAP_THRUST).scale(ceilingFactor);
+        Vector3d forwardThrust = player.getDeltaMovement().normalize().scale(ServerConfig.FLAP_THRUST * 0.25).scale(ceilingFactor);
         player.setDeltaMovement(player.getDeltaMovement().add(forwardThrust).add(verticalThrust));
 
         // this plays the sound to everyone EXCEPT the player it is invoked on.
@@ -65,6 +66,22 @@ public class ServerLogic {
     public static void applyElytraRechargeFoodCost(PlayerEntity player) {
         // each tick of recharge on the meter costs food
         player.causeFoodExhaustion((float) ServerConfig.exhaustionPerChargePoint);
+    }
+
+    public static double getCeilingFactor(PlayerEntity player) {
+        double altitude = player.getY();
+        // flying low, full power
+        if (altitude < ServerConfig.softCeiling) {
+            return 1.0D;
+        }
+
+        // flying too high, no power
+        if (altitude > ServerConfig.hardCeiling) {
+            return 0.0D;
+        }
+
+        // flying in between, scale power accordingly
+        return (altitude - ServerConfig.softCeiling) / ServerConfig.ceilingRange;
     }
 
     public static void handleCFlightActionPacket(CFlightActionPacket message, Supplier<Context> context) {

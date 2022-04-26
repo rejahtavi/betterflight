@@ -37,7 +37,7 @@ public class SElytraChargePacket {
     public static void onPacketReceived(SElytraChargePacket message, Supplier<Context> context) {
         context.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                    () -> () -> ClientLogic.handleSElytraChargePacket(message, context));
+                    () -> () -> ClientLogic.handleSElytraChargePacket(message));
         });
         context.get().setPacketHandled(true);
     }

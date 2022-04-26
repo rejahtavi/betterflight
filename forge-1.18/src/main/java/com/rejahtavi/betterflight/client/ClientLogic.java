@@ -1,9 +1,5 @@
 package com.rejahtavi.betterflight.client;
 
-import java.util.function.Supplier;
-
-import org.lwjgl.glfw.GLFW;
-
 import com.mojang.blaze3d.platform.InputConstants;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig.HudLocation;
@@ -13,7 +9,6 @@ import com.rejahtavi.betterflight.common.ServerLogic;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CFlightActionPacket;
 import com.rejahtavi.betterflight.network.SElytraChargePacket;
-
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -28,13 +23,13 @@ import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkEvent;
+import org.lwjgl.glfw.GLFW;
 import top.theillusivec4.curios.api.CuriosApi;
 
 @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT)
 public class ClientLogic {
 
-    // keybinds
+    // key mappings
     public static KeyMapping takeOffKey;
     public static KeyMapping flapKey;
     public static KeyMapping flareKey;
@@ -84,9 +79,11 @@ public class ClientLogic {
     public static void onKeyInput(InputEvent.KeyInputEvent event) {
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc == null) return;
         LocalPlayer player = mc.player;
         if (player == null) return;
+
+        // don't react to key presses if a screen or chat is open
+        if (mc.screen != null) return;
 
         if (event.getKey() == takeOffKey.getKey().getValue()
                 && (event.getAction() == GLFW.GLFW_PRESS)) {
@@ -108,7 +105,6 @@ public class ClientLogic {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc == null) return;
         LocalPlayer player = mc.player;
         if (player == null) return;
 
@@ -266,34 +262,20 @@ public class ClientLogic {
     private static void cycleWidgetLocation() {
 
         switch (ClientConfig.hudLocation) {
-            case BAR_CENTER:
-                ClientConfig.hudLocation = HudLocation.BAR_LEFT;
-                break;
-            case BAR_LEFT:
-                ClientConfig.hudLocation = HudLocation.BAR_RIGHT;
-                break;
-            case BAR_RIGHT:
-                ClientConfig.hudLocation = HudLocation.CURSOR_ABOVE;
-                break;
-            case CURSOR_ABOVE:
-                ClientConfig.hudLocation = HudLocation.CURSOR_RIGHT;
-                break;
-            case CURSOR_RIGHT:
-                ClientConfig.hudLocation = HudLocation.CURSOR_BELOW;
-                break;
-            case CURSOR_BELOW:
-                ClientConfig.hudLocation = HudLocation.CURSOR_LEFT;
-                break;
-            case CURSOR_LEFT:
-                ClientConfig.hudLocation = HudLocation.BAR_CENTER;
-                break;
+            case BAR_CENTER -> ClientConfig.hudLocation = HudLocation.BAR_LEFT;
+            case BAR_LEFT -> ClientConfig.hudLocation = HudLocation.BAR_RIGHT;
+            case BAR_RIGHT -> ClientConfig.hudLocation = HudLocation.CURSOR_ABOVE;
+            case CURSOR_ABOVE -> ClientConfig.hudLocation = HudLocation.CURSOR_RIGHT;
+            case CURSOR_RIGHT -> ClientConfig.hudLocation = HudLocation.CURSOR_BELOW;
+            case CURSOR_BELOW -> ClientConfig.hudLocation = HudLocation.CURSOR_LEFT;
+            case CURSOR_LEFT -> ClientConfig.hudLocation = HudLocation.BAR_CENTER;
         }
 
         ClientConfig.CLIENT.hudLocation.set(ClientConfig.hudLocation);
         ClientConfig.CLIENT.hudLocation.save();
     }
 
-    public static void handleSElytraChargePacket(SElytraChargePacket message, Supplier<NetworkEvent.Context> context) {
+    public static void handleSElytraChargePacket(SElytraChargePacket message) {
         charge = message.getCharge();
     }
 }
