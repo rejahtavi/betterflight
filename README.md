@@ -1,6 +1,3 @@
-_**This mod is in beta!**_
-_Please post any suggestions or problems on the issue tracker!_
-
 **Better Flight** aims to improve vanilla Elytra mechanics, making them more fun to use in a balanced way that reduces the need for firework rockets and gunpowder.
 
 
