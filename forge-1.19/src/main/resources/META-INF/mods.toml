@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[42,)"
+license="https://opensource.org/licenses/lgpl-3.0.html"
+issueTrackerURL="https://github.com/rejahtavi/betterflight/issues" #optional
+
+[[mods]]
+modId="betterflight"
+version="${file.jarVersion}"
+displayName="BetterFlight"
+displayURL="https://github.com/rejahtavi/betterflight"
+logoFile="logo.png"
+authors="Rejah Tavi"
+description='''
+Better Flight aims to improve vanilla Elytra mechanics, making them more fun to use in a balanced way that reduces the need for firework rockets and gunpowder.
+'''
+
+[[dependencies.betterflight]]
+    modId="forge"
+    mandatory=true
+    versionRange="[42,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.betterflight]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,)"
+    ordering="NONE"
+    side="BOTH"
