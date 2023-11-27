@@ -1,8 +1,0 @@
-#!/bin/bash
-
-MATCH="betterflight*.jar"
-
-rm ./build/libs/$MATCH
-
-./gradlew build
-
