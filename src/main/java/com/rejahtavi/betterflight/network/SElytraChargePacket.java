@@ -12,6 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 // Server->Client packet, sets player elytra charge upon login / respawn
 public class SElytraChargePacket {
@@ -44,8 +45,6 @@ public class SElytraChargePacket {
     
     public static void send(Player recipient, int charge) {
         ServerPlayer player = (ServerPlayer) recipient;
-        BetterFlight.NETWORK.sendTo(new SElytraChargePacket(charge),
-                player.connection.getConnection(),
-                NetworkDirection.PLAY_TO_CLIENT);
+        BetterFlight.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new SElytraChargePacket(charge));
     }
 }
