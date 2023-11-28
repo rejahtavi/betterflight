@@ -85,11 +85,11 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.3.0'
 
+    //compileOnly fg.deobf("curse.maven:curios-309927:3924518") //Optional Dependency for curios
+
+    // inDev dependencies. Be sure to turn off when publishing
     implementation fg.deobf("curse.maven:curios-309927:3924518")
-    //runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19-5.1.0.4")
-    //compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19-5.1.0.4:api")
-    //runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:1.19-3.0.0.3")
-    //compileOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:1.19-3.0.0.3:api")
+
 }
 
 jar {
@@ -107,7 +107,7 @@ jar {
     }*/
 }
 
-jar.finalizedBy('reobfJar')
+//jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
