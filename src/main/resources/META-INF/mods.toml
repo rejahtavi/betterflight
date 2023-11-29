@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[42,)"
+license="https://opensource.org/licenses/lgpl-3.0.html"
+issueTrackerURL="https://github.com/rejahtavi/betterflight/issues" #optional
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+displayURL="https://github.com/rejahtavi/betterflight"
+logoFile = "icon.png"
+authors="${mod_authors}"
+description="${mod_description}"
+
+[[dependencies.betterflight]]
+    modId="forge"
+    mandatory=true
+    versionRange="[42,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.betterflight]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,)"
+    ordering="NONE"
+    side="BOTH"
