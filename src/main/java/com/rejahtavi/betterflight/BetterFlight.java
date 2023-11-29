@@ -96,7 +96,7 @@ public class BetterFlight {
 
     @SubscribeEvent
     public void onLoadCompleteEvent(FMLLoadCompleteEvent event) {
-        if ((ModList.get().isLoaded("curiouselytra")
+        if ((ModList.get().isLoaded("elytraslot")
                 && ModList.get().isLoaded("curios"))) {
             isCuriousElytraLoaded = true;
         }
