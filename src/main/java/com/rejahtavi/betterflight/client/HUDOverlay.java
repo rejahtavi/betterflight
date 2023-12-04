@@ -198,6 +198,6 @@ public class HUDOverlay {
     }
 
     // TODO: Add speedometer and/or optimal glide slope indicator?
-    // Perhaps 'flight googles' as a helmet / curio to show them?
+    //  Perhaps 'flight googles' as a helmet / curio to show them?
 
 }

@@ -113,6 +113,7 @@ public class ClientLogic {
         handleFlare(player);
     }
 
+    //TODO move logic for determining if player can takeoff/fly to event listener onKeyPress
     private static void tryTakeOff(LocalPlayer player) {
         if (isElytraEquipped
                 && offGroundTickCounter > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
@@ -217,6 +218,10 @@ public class ClientLogic {
         }
     }
 
+    /**
+     * Checks if the player is wearing a working elytra in their chest slot or curios
+     * @param player
+     */
     private static void updateElytraStatus(LocalPlayer player) {
 
         // assume no elytra, then search for one
