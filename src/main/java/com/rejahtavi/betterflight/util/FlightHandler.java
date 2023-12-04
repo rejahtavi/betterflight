@@ -1,7 +1,7 @@
 package com.rejahtavi.betterflight.util;
 
 import com.rejahtavi.betterflight.client.ClientConfig;
-import com.rejahtavi.betterflight.common.CommonEvents;
+import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CFlightActionPacket;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +25,7 @@ public class FlightHandler {
         // take offs need no forward component, due to the player already sprinting.
         // they do need additional vertical thrust to reliably get the player
         // enough time to flap away before hitting the ground again.
-        Vec3 upwards = new Vec3(0.0D, CommonEvents.TAKE_OFF_THRUST,0.0D).scale(getCeilingFactor(player));
+        Vec3 upwards = new Vec3(0.0D, BetterFlightCommonConfig.TAKE_OFF_THRUST,0.0D).scale(getCeilingFactor(player));
         player.startFallFlying();
         player.push(upwards.x,upwards.y,upwards.z);
 
@@ -40,8 +40,8 @@ public class FlightHandler {
      */
     public static void handleFlap(Player player) {
         double ceilingFactor = getCeilingFactor(player);
-        Vec3 upwards = new Vec3(0.0D, CommonEvents.FLAP_THRUST,0.0D).scale(getCeilingFactor(player));
-        Vec3 forwards = player.getDeltaMovement().normalize().scale(CommonEvents.FLAP_THRUST * 0.25).scale(ceilingFactor);
+        Vec3 upwards = new Vec3(0.0D, BetterFlightCommonConfig.FLAP_THRUST,0.0D).scale(getCeilingFactor(player));
+        Vec3 forwards = player.getDeltaMovement().normalize().scale(BetterFlightCommonConfig.FLAP_THRUST * 0.25).scale(ceilingFactor);
         Vec3 impulse = forwards.add(upwards);
         player.push(impulse.x,impulse.y,impulse.z);
 
@@ -59,7 +59,7 @@ public class FlightHandler {
 
         Vec3 dragDirection = player.getDeltaMovement().normalize().reverse();
         double velocitySquared = player.getDeltaMovement().lengthSqr();
-        Vec3 dragThrust = dragDirection.scale(velocitySquared * CommonEvents.FLARE_DRAG);
+        Vec3 dragThrust = dragDirection.scale(velocitySquared * BetterFlightCommonConfig.FLARE_DRAG);
         player.push(dragThrust.x,dragThrust.y,dragThrust.z);
     }
 
@@ -68,7 +68,7 @@ public class FlightHandler {
      * @param player
      */
     public static void handleFlightStaminaExhaustion(Player player) {
-        player.getFoodData().addExhaustion((float) CommonEvents.exhaustionPerChargePoint);
+        player.getFoodData().addExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
     }
 
     /**
@@ -79,15 +79,15 @@ public class FlightHandler {
     public static double getCeilingFactor(Player player) {
         double altitude = player.getY();
         // flying low, full power
-        if (altitude < CommonEvents.softCeiling) {
+        if (altitude < BetterFlightCommonConfig.softCeiling) {
             return 1.0D;
         }
         // flying too high, no power
-        if (altitude > CommonEvents.hardCeiling) {
+        if (altitude > BetterFlightCommonConfig.hardCeiling) {
             return 0.0D;
         }
         // flying in between, scale power accordingly
-        return (altitude - CommonEvents.softCeiling) / CommonEvents.ceilingRange;
+        return (altitude - BetterFlightCommonConfig.softCeiling) / BetterFlightCommonConfig.ceilingRange;
     }
 
     public static void handleCFlightActionPacket(CFlightActionPacket message, Supplier<NetworkEvent.Context> context) {

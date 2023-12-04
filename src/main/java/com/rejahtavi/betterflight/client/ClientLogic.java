@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig.HudLocation;
 import com.rejahtavi.betterflight.common.FlightActionType;
-import com.rejahtavi.betterflight.common.CommonEvents;
+import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CFlightActionPacket;
 import com.rejahtavi.betterflight.network.SElytraChargePacket;
@@ -41,7 +41,7 @@ public class ClientLogic {
     // state
     public static boolean isElytraEquipped = false;
     public static boolean isFlaring = false;
-    public static int charge = CommonEvents.maxCharge;
+    public static int charge = BetterFlightCommonConfig.maxCharge;
 
     // elytra damage
     public static double elytraDurability = 0.5D;
@@ -59,7 +59,7 @@ public class ClientLogic {
 
     public static void init() {
         // default to full elytra meter on startup
-        charge = CommonEvents.maxCharge;
+        charge = BetterFlightCommonConfig.maxCharge;
     }
 
     // key mapping registration
@@ -129,12 +129,12 @@ public class ClientLogic {
 
     private static void tryTakeOff(LocalPlayer player) {
         if (isElytraEquipped
-                && offGroundTickCounter > CommonEvents.TAKE_OFF_JUMP_DELAY
+                && offGroundTickCounter > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
                 && player.isSprinting()
                 && !player.isFallFlying()
-                && player.getDeltaMovement().length() > CommonEvents.TAKE_OFF_SPEED) {
+                && player.getDeltaMovement().length() > BetterFlightCommonConfig.TAKE_OFF_SPEED) {
 
-            if (spendCharge(player, CommonEvents.takeOffCost)) {
+            if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
                 CFlightActionPacket.send(FlightActionType.TAKEOFF);
                 FlightHandler.handleTakeoff(player);
                 // player.playSound(Sounds.SOUND_FLAP.get(), (float) ClientConfig.takeOffVolume,
@@ -150,7 +150,7 @@ public class ClientLogic {
                 && !player.isOnGround()
                 && player.isFallFlying()) {
 
-            if (spendCharge(player, CommonEvents.flapCost)) {
+            if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
                 CFlightActionPacket.send(FlightActionType.FLAP);
                 FlightHandler.handleFlap(player);
                 player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
@@ -161,24 +161,24 @@ public class ClientLogic {
     private static void handleRecharge(LocalPlayer player) {
 
         if (player.isCreative()) {
-            charge = CommonEvents.maxCharge;
+            charge = BetterFlightCommonConfig.maxCharge;
             return;
         }
 
-        int threshold = player.isOnGround() ? CommonEvents.rechargeTicksOnGround : CommonEvents.rechargeTicksInAir;
+        int threshold = player.isOnGround() ? BetterFlightCommonConfig.rechargeTicksOnGround : BetterFlightCommonConfig.rechargeTicksInAir;
 
         if (rechargeTickCounter < threshold) {
             rechargeTickCounter++;
         }
 
-        if (!isFlaring && rechargeTickCounter >= threshold && charge < CommonEvents.maxCharge) {
+        if (!isFlaring && rechargeTickCounter >= threshold && charge < BetterFlightCommonConfig.maxCharge) {
 
-            if (player.getFoodData().getFoodLevel() > CommonEvents.minFood) {
+            if (player.getFoodData().getFoodLevel() > BetterFlightCommonConfig.minFood) {
                 charge++;
                 rechargeTickCounter = 0;
                 rechargeBorderTimer = ClientConfig.BORDER_FLASH_TICKS;
                 CFlightActionPacket.send(FlightActionType.RECHARGE);
-                player.causeFoodExhaustion((float) CommonEvents.exhaustionPerChargePoint);
+                player.causeFoodExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
             }
         }
     }
@@ -196,7 +196,7 @@ public class ClientLogic {
             flareTickCounter++;
             isFlaring = true;
 
-            if (flareTickCounter >= CommonEvents.flareTicksPerChargePoint) {
+            if (flareTickCounter >= BetterFlightCommonConfig.flareTicksPerChargePoint) {
                 spendCharge(player, 1);
                 flareTickCounter = 0;
             }
@@ -222,7 +222,7 @@ public class ClientLogic {
         if (charge >= points) {
             charge -= points;
             rechargeTickCounter = 0;
-            cooldownTimer = CommonEvents.cooldownTicks;
+            cooldownTimer = BetterFlightCommonConfig.cooldownTicks;
             depletionBorderTimer = ClientConfig.BORDER_FLASH_TICKS;
             return true;
         }
@@ -240,14 +240,14 @@ public class ClientLogic {
 
         // check the player's chest slot for elytra
         ItemStack elytraStack = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (CommonEvents.elytraItems.contains(elytraStack.getItem())) {
+        if (BetterFlightCommonConfig.elytraItems.contains(elytraStack.getItem())) {
             // elytra is present in the chest slot
             isElytraEquipped = true;
         }
 
         // if dependencies are present, check the curios slots as well
         if (BetterFlight.isCuriousElytraLoaded) {
-            for (Item elytraItem : CommonEvents.elytraItems) {
+            for (Item elytraItem : BetterFlightCommonConfig.elytraItems) {
                 if (CuriosApi.getCuriosHelper().findEquippedCurio(elytraItem, player).isPresent()) {
                     isElytraEquipped = true;
                     elytraStack = CuriosApi.getCuriosHelper()

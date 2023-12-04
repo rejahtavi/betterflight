@@ -14,7 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class CommonEvents {
+public class BetterFlightCommonConfig {
 
     public static final Server SERVER;
     public static final ForgeConfigSpec SERVER_SPEC;
