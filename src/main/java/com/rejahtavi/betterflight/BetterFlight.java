@@ -3,8 +3,8 @@ package com.rejahtavi.betterflight;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.ClientLogic;
 import com.rejahtavi.betterflight.client.HUDOverlay;
-import com.rejahtavi.betterflight.common.CommonEvents;
-import com.rejahtavi.betterflight.events.ServerLogic;
+import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
+import com.rejahtavi.betterflight.events.CommonEvents;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CFlightActionPacket;
 import com.rejahtavi.betterflight.network.SElytraChargePacket;
@@ -50,7 +50,7 @@ public class BetterFlight {
 
         Sounds.SOUNDS.register(eventBus);
         
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, CommonEvents.SERVER_SPEC, MODID + "-server.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BetterFlightCommonConfig.SERVER_SPEC, MODID + "-server.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_SPEC, MODID + "-client.toml");
         
         eventBus.addListener(this::onCommonSetupEvent);
@@ -63,7 +63,7 @@ public class BetterFlight {
             eventBus.addListener(this::onClientSetupEvent);
         }
 
-        MinecraftForge.EVENT_BUS.register(ServerLogic.class);
+        MinecraftForge.EVENT_BUS.register(CommonEvents.class);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -88,7 +88,7 @@ public class BetterFlight {
     public void onModConfigEvent(final ModConfigEvent evt) {
         if (evt.getConfig().getModId().equals(MODID)) {
             if (evt.getConfig().getType() == Type.SERVER)
-                CommonEvents.bake();
+                BetterFlightCommonConfig.bake();
             if (evt.getConfig().getType() == Type.CLIENT)
                 ClientConfig.bake();
         }
