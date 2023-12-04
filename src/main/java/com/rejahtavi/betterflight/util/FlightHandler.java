@@ -1,24 +1,16 @@
-package com.rejahtavi.betterflight.common;
+package com.rejahtavi.betterflight.util;
+
+import com.rejahtavi.betterflight.client.ClientConfig;
+import com.rejahtavi.betterflight.common.CommonEvents;
+import com.rejahtavi.betterflight.common.Sounds;
+import com.rejahtavi.betterflight.network.CFlightActionPacket;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-import com.rejahtavi.betterflight.BetterFlight;
-import com.rejahtavi.betterflight.client.ClientConfig;
-import com.rejahtavi.betterflight.network.CFlightActionPacket;
-import com.rejahtavi.betterflight.network.SElytraChargePacket;
-
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkEvent;
-
-@Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.DEDICATED_SERVER)
-public class ServerLogic {
-
-    private static final Vec3 NORMAL_UP = new Vec3(0.0D, 1.0D, 0.0D);
+public class FlightHandler {
 
     // These static methods implement the actual flight behaviors.
     // They are used by both client and server.
@@ -29,11 +21,11 @@ public class ServerLogic {
     // The server responds by running the exact same method on
     // to keep server state in sync with the client's requests.
 
-    public static void applyTakeOffImpulse(Player player) {
+    public static void handleTakeoff(Player player) {
         // take offs need no forward component, due to the player already sprinting.
         // they do need additional vertical thrust to reliably get the player
         // enough time to flap away before hitting the ground again.
-        Vec3 upwards = new Vec3(0.0D,ServerConfig.TAKE_OFF_THRUST,0.0D).scale(getCeilingFactor(player));
+        Vec3 upwards = new Vec3(0.0D, CommonEvents.TAKE_OFF_THRUST,0.0D).scale(getCeilingFactor(player));
         player.startFallFlying();
         player.push(upwards.x,upwards.y,upwards.z);
 
@@ -46,10 +38,10 @@ public class ServerLogic {
      * grant a small amount of forward thrust along with each vertical boost
      * @param player
      */
-    public static void applyFlapImpulse(Player player) {
+    public static void handleFlap(Player player) {
         double ceilingFactor = getCeilingFactor(player);
-        Vec3 upwards = new Vec3(0.0D,ServerConfig.FLAP_THRUST,0.0D).scale(getCeilingFactor(player));
-        Vec3 forwards = player.getDeltaMovement().normalize().scale(ServerConfig.FLAP_THRUST * 0.25).scale(ceilingFactor);
+        Vec3 upwards = new Vec3(0.0D, CommonEvents.FLAP_THRUST,0.0D).scale(getCeilingFactor(player));
+        Vec3 forwards = player.getDeltaMovement().normalize().scale(CommonEvents.FLAP_THRUST * 0.25).scale(ceilingFactor);
         Vec3 impulse = forwards.add(upwards);
         player.push(impulse.x,impulse.y,impulse.z);
 
@@ -63,11 +55,11 @@ public class ServerLogic {
      * ignore all the constants and just use a single coefficient from config
      * @param player
      */
-    public static void applyFlareImpulse(Player player) {
+    public static void handleFlare(Player player) {
 
         Vec3 dragDirection = player.getDeltaMovement().normalize().reverse();
         double velocitySquared = player.getDeltaMovement().lengthSqr();
-        Vec3 dragThrust = dragDirection.scale(velocitySquared * ServerConfig.FLARE_DRAG);
+        Vec3 dragThrust = dragDirection.scale(velocitySquared * CommonEvents.FLARE_DRAG);
         player.push(dragThrust.x,dragThrust.y,dragThrust.z);
     }
 
@@ -75,8 +67,8 @@ public class ServerLogic {
      * converts food into flight stamina by adding exhaustion to the player
      * @param player
      */
-    public static void applyElytraRechargeFoodCost(Player player) {
-        player.getFoodData().addExhaustion((float) ServerConfig.exhaustionPerChargePoint);
+    public static void handleFlightStaminaExhaustion(Player player) {
+        player.getFoodData().addExhaustion((float) CommonEvents.exhaustionPerChargePoint);
     }
 
     /**
@@ -87,53 +79,31 @@ public class ServerLogic {
     public static double getCeilingFactor(Player player) {
         double altitude = player.getY();
         // flying low, full power
-        if (altitude < ServerConfig.softCeiling) {
+        if (altitude < CommonEvents.softCeiling) {
             return 1.0D;
         }
-
         // flying too high, no power
-        if (altitude > ServerConfig.hardCeiling) {
+        if (altitude > CommonEvents.hardCeiling) {
             return 0.0D;
         }
-
         // flying in between, scale power accordingly
-        return (altitude - ServerConfig.softCeiling) / ServerConfig.ceilingRange;
+        return (altitude - CommonEvents.softCeiling) / CommonEvents.ceilingRange;
     }
 
     public static void handleCFlightActionPacket(CFlightActionPacket message, Supplier<NetworkEvent.Context> context) {
         switch (message.getUpdateType()) {
             case TAKEOFF:
-                applyTakeOffImpulse(context.get().getSender());
+                handleTakeoff(context.get().getSender());
                 break;
             case FLAP:
-                applyFlapImpulse(context.get().getSender());
+                handleFlap(context.get().getSender());
                 break;
             case FLARE:
-                applyFlareImpulse(context.get().getSender());
+                handleFlare(context.get().getSender());
                 break;
             case RECHARGE:
-                applyElytraRechargeFoodCost(context.get().getSender());
+                handleFlightStaminaExhaustion(context.get().getSender());
                 break;
         }
     }
-
-    @SubscribeEvent
-    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        SElytraChargePacket.send(event.getEntity(), ServerConfig.maxCharge);
-    }
-
-    @SubscribeEvent
-    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        SElytraChargePacket.send(event.getEntity(), ServerConfig.maxCharge);
-    }
-    
-    @SubscribeEvent
-    public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event) {
-        SElytraChargePacket.send(event.getEntity(), ServerConfig.maxCharge);
-    }
-
-    // TODO: Possibly a 'get altitude' function, and an option to restrict
-    // elytra flap effectiveness based on distance above terrain.
-    // Perhaps add some sort of bonus for navigating close to the ground
-    // or other obstacles? could be fun :)
 }

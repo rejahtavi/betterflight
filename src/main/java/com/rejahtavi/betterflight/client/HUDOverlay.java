@@ -5,7 +5,7 @@ import java.util.Random;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.rejahtavi.betterflight.BetterFlight;
-import com.rejahtavi.betterflight.common.ServerConfig;
+import com.rejahtavi.betterflight.common.CommonEvents;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -160,7 +160,7 @@ public class HUDOverlay {
 
         // determine how much of the meter has been emptied
         int drainedPixels = (int) Math.floor(
-                (1.0f - (float) ClientLogic.charge / (float) ServerConfig.maxCharge) * ICON_SIZE);
+                (1.0f - (float) ClientLogic.charge / (float) CommonEvents.maxCharge) * ICON_SIZE);
 
         // finally, we are ready to draw the
 
