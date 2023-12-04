@@ -72,12 +72,11 @@ public class ServerLogic {
     }
 
     /**
-     * converts food into flight stamina
+     * converts food into flight stamina by adding exhaustion to the player
      * @param player
      */
     public static void applyElytraRechargeFoodCost(Player player) {
-        // each tick of recharge on the meter costs food
-        player.causeFoodExhaustion((float) ServerConfig.exhaustionPerChargePoint);
+        player.getFoodData().addExhaustion((float) ServerConfig.exhaustionPerChargePoint);
     }
 
     /**
