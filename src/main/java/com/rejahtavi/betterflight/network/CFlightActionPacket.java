@@ -9,7 +9,9 @@ import com.rejahtavi.betterflight.common.ServerLogic;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-// Client->Server packet, keeps server up to date when a client flaps an elytra
+/**
+ * Client->Server packet, keeps server up to date when a client flaps an elytra
+  */
 public class CFlightActionPacket {
 
     private FlightActionType flightUpdate;

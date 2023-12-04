@@ -33,41 +33,58 @@ public class ServerLogic {
         // take offs need no forward component, due to the player already sprinting.
         // they do need additional vertical thrust to reliably get the player
         // enough time to flap away before hitting the ground again.
-        Vec3 verticalThrust = NORMAL_UP.scale(ServerConfig.TAKE_OFF_THRUST).scale(getCeilingFactor(player));
+        Vec3 upwards = new Vec3(0.0D,ServerConfig.TAKE_OFF_THRUST,0.0D).scale(getCeilingFactor(player));
         player.startFallFlying();
-        player.setDeltaMovement(player.getDeltaMovement().add(verticalThrust));
+        player.push(upwards.x,upwards.y,upwards.z);
 
         // this plays the sound to everyone EXCEPT the player it is invoked on.
         // the player's copy of the sound is handled on the client side.
         player.playSound(Sounds.FLAP.get(), (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
     }
 
+    /**
+     * grant a small amount of forward thrust along with each vertical boost
+     * @param player
+     */
     public static void applyFlapImpulse(Player player) {
-        // grant a small amount of forward thrust along with each vertical boost
         double ceilingFactor = getCeilingFactor(player);
-        Vec3 verticalThrust = NORMAL_UP.scale(ServerConfig.FLAP_THRUST).scale(ceilingFactor);
-        Vec3 forwardThrust = player.getDeltaMovement().normalize().scale(ServerConfig.FLAP_THRUST * 0.25).scale(ceilingFactor);
-        player.setDeltaMovement(player.getDeltaMovement().add(forwardThrust).add(verticalThrust));
+        Vec3 upwards = new Vec3(0.0D,ServerConfig.FLAP_THRUST,0.0D).scale(getCeilingFactor(player));
+        Vec3 forwards = player.getDeltaMovement().normalize().scale(ServerConfig.FLAP_THRUST * 0.25).scale(ceilingFactor);
+        Vec3 impulse = forwards.add(upwards);
+        player.push(impulse.x,impulse.y,impulse.z);
 
         // this plays the sound to everyone EXCEPT the player it is invoked on.
         // the player's copy of the sound is handled on the client side.
         player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
     }
 
+    /**
+     * simplified drag equation = (a bunch of constants) * velocity squared
+     * ignore all the constants and just use a single coefficient from config
+     * @param player
+     */
     public static void applyFlareImpulse(Player player) {
-        // simplified drag equation = (a bunch of constants) * velocity squared
-        // ignore all the constants and just use a single coefficient from config
+
         Vec3 dragDirection = player.getDeltaMovement().normalize().reverse();
         double velocitySquared = player.getDeltaMovement().lengthSqr();
         Vec3 dragThrust = dragDirection.scale(velocitySquared * ServerConfig.FLARE_DRAG);
-        player.setDeltaMovement(player.getDeltaMovement().add(dragThrust));
+        player.push(dragThrust.x,dragThrust.y,dragThrust.z);
     }
 
+    /**
+     * converts food into flight stamina
+     * @param player
+     */
     public static void applyElytraRechargeFoodCost(Player player) {
         // each tick of recharge on the meter costs food
         player.causeFoodExhaustion((float) ServerConfig.exhaustionPerChargePoint);
     }
 
+    /**
+     * determines flight power when reaching soft and hard altitude limits
+     * @param player
+     * @return 1.0d-0.0d based on distance between hard limit and player
+     */
     public static double getCeilingFactor(Player player) {
         double altitude = player.getY();
         // flying low, full power

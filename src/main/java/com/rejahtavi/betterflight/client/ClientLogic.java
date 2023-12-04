@@ -209,6 +209,12 @@ public class ClientLogic {
         }
     }
 
+    /**
+     * Determines if Flight stamina should be spent
+     * @param player target player
+     * @param points how much stamina to spend
+     * @return true if creative mode or player is able to use stamina
+     */
     private static boolean spendCharge(LocalPlayer player, int points) {
 
         if (player.isCreative()) return true;
