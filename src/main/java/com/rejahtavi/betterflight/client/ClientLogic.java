@@ -113,6 +113,7 @@ public class ClientLogic {
         handleFlare(player);
     }
 
+    //TODO move logic for determining if player can takeoff/fly to event listener onKeyPress
     private static void tryTakeOff(LocalPlayer player) {
         if (isElytraEquipped
                 && offGroundTickCounter > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
