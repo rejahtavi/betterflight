@@ -218,6 +218,10 @@ public class ClientLogic {
         }
     }
 
+    /**
+     * Checks if the player is wearing a working elytra in their chest slot or curios
+     * @param player
+     */
     private static void updateElytraStatus(LocalPlayer player) {
 
         // assume no elytra, then search for one
