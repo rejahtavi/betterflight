@@ -4,8 +4,8 @@ import java.util.function.Supplier;
 
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.common.FlightActionType;
-import com.rejahtavi.betterflight.common.ServerLogic;
 
+import com.rejahtavi.betterflight.util.FlightHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -34,7 +34,7 @@ public class CFlightActionPacket {
 
     public static void onPacketReceived(CFlightActionPacket message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
-            ServerLogic.handleCFlightActionPacket(message, context);
+            FlightHandler.handleCFlightActionPacket(message, context);
         });
         context.get().setPacketHandled(true);
     }
