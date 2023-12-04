@@ -3,27 +3,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## [1.19.2-Forge-1.1.1]
+## [Unreleased]
 
 ### Added
 
-- 
+- FlightHandler class containing methods for player flight
+- CommonEvents class containing common event listeners
+- BetterFlightCommonConfig class containing common configs and static values
+- Keybinding class for storing keybindings settings and constructors
 
 ### Fixed
 
-- 
+- Farmer Delight's Nourishment Effect now works with Better Flight hunger drain.
 
 ### Changed
 
-- Flight exhaustion no longer directly drains exhaustion, is queued like other exhaustion sources (makes this compatbility with Farmer Delight's Nourishment effect)
-- 
+- Flight exhaustion no longer directly drains exhaustion, is queued like other exhaustion sources
 - All Flight impulse handlers now use push() for movement.
-
+- Refactored ServerLogic into seperate CommonEvents listener, FlightHandler, and BetterFlightCommonConfig classes
+- Refactored ClientLogic so keybind builders are in seperate Keybinding class.
+- ClientLogic.updateElytraStatus rewritten to future-proof against upcoming Curios API changes
+- Started decoupling and simplifying event logic for flight
+- ClientLogic.updateElytraStatus(player) renamed to isPlayerWearingElytra(player) for clarity of new usage
 ### Removed
 
 - 
 
-## [1.19.2-Forge-1.1.0]
+## [1.19.2-Forge-1.1.0] - November 30th, 2023
 
 ### Added
 
