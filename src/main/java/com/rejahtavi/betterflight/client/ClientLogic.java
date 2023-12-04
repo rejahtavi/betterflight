@@ -1,6 +1,5 @@
 package com.rejahtavi.betterflight.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig.HudLocation;
 import com.rejahtavi.betterflight.common.FlightActionType;
@@ -9,7 +8,6 @@ import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CFlightActionPacket;
 import com.rejahtavi.betterflight.network.SElytraChargePacket;
 import com.rejahtavi.betterflight.util.FlightHandler;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,16 +24,6 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT)
 public class ClientLogic {
-
-    // key mappings
-    public static final KeyMapping takeOffKey = new KeyMapping(BetterFlight.MODID + ".keys.takeoff",
-            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_SPACE, BetterFlight.MODID);
-    public static final KeyMapping flapKey = new KeyMapping(BetterFlight.MODID + ".keys.flap",
-            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_SPACE, BetterFlight.MODID);
-    public static final KeyMapping flareKey = new KeyMapping(BetterFlight.MODID + ".keys.flare",
-            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, BetterFlight.MODID);
-    public static final KeyMapping widgetPosKey = new KeyMapping(BetterFlight.MODID + ".keys.widget",
-            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F10, BetterFlight.MODID);
 
     // state
     public static boolean isElytraEquipped = false;
@@ -62,16 +49,15 @@ public class ClientLogic {
         charge = BetterFlightCommonConfig.maxCharge;
     }
 
-    // key mapping registration
     @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
 
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-            event.register(takeOffKey);
-            event.register(flapKey);
-            event.register(flareKey);
-            event.register(widgetPosKey);
+            event.register(Keybinding.takeOffKey);
+            event.register(Keybinding.flapKey);
+            event.register(Keybinding.flareKey);
+            event.register(Keybinding.widgetPosKey);
         }
     }
 
@@ -86,18 +72,18 @@ public class ClientLogic {
         // don't react to key presses if a screen or chat is open
         if (mc.screen != null) return;
 
-        if (event.getKey() == takeOffKey.getKey().getValue()
+        if (event.getKey() == Keybinding.takeOffKey.getKey().getValue()
                 && (event.getAction() == GLFW.GLFW_PRESS)) {
             // && (event.getAction() == GLFW.GLFW_PRESS || event.getAction() == GLFW.GLFW_REPEAT)) {
             tryTakeOff(player);
         }
 
-        if (event.getKey() == flapKey.getKey().getValue()
+        if (event.getKey() == Keybinding.flapKey.getKey().getValue()
                 && event.getAction() == GLFW.GLFW_PRESS) {
             tryFlap(player);
         }
 
-        if (event.getKey() == widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
+        if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             cycleWidgetLocation();
         }
     }
@@ -185,7 +171,7 @@ public class ClientLogic {
 
     private static void handleFlare(LocalPlayer player) {
         if (isElytraEquipped
-                && flareKey.isDown()
+                && Keybinding.flareKey.isDown()
                 && (player.isCreative() || charge > 0)
                 && !player.isOnGround()
                 && player.isFallFlying()) {
