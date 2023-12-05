@@ -76,7 +76,7 @@ public class ClientLogic {
             // && (event.getAction() == GLFW.GLFW_PRESS || event.getAction() == GLFW.GLFW_REPEAT)) {
             tryTakeOff(instance.player);
         }
-
+        //FIXME somehow KeyConflictContext = IN_GAME is being ignored. Why???
         if (event.getKey() == Keybinding.flapKey.getKey().getValue()
                 && event.getAction() == GLFW.GLFW_PRESS) {
             tryFlap(instance.player);
@@ -107,7 +107,14 @@ public class ClientLogic {
         if (rechargeBorderTimer > 0) rechargeBorderTimer--;
         if (cooldownTimer > 0) cooldownTimer--;
 
-        isElytraEquipped = isPlayerWearingElytra(player);
+        ItemStack elytraStack = findEquippedElytra(player);
+        if(elytraStack != null)
+        {
+            isElytraEquipped = true;
+            elytraDurabilityLeft = elytraStack.getMaxDamage() - elytraStack.getDamageValue();
+            elytraDurability = (float) elytraStack.getDamageValue()/(float) elytraStack.getMaxDamage();
+        }
+        else { isElytraEquipped = false;}
         handleRecharge(player);
         handleFlare(player);
     }
@@ -218,16 +225,17 @@ public class ClientLogic {
     }
 
     /**
-     * Checks if the player is wearing a working elytra in their chest slot or curios
+     * Looks for an equipped elytra on the target player
      * @param player
-     * @return true if player is wearing a working elytra
+     * @return itemstack an elytra was found; null if not found
      */
-    private static boolean isPlayerWearingElytra(@NotNull LocalPlayer player) {
+    private static ItemStack findEquippedElytra(@NotNull LocalPlayer player) {
 
         // check the player's chest slot for elytra
         ItemStack elytraStack = player.getItemBySlot(EquipmentSlot.CHEST);
         if (BetterFlightCommonConfig.elytraItems.contains(elytraStack.getItem())) {
-            return isWorkingElytra(elytraStack);
+            isWorkingElytra(elytraStack);
+            return isWorkingElytra(elytraStack) ? elytraStack : null;
         }
 
         // if dependencies are present, check the curios slots as well
@@ -237,13 +245,13 @@ public class ClientLogic {
                     elytraStack = CuriosApi.getCuriosHelper().findFirstCurio(player, elytraItem)
                             .orElseThrow()
                             .stack();
-                    return isWorkingElytra(elytraStack);
+                    return isWorkingElytra(elytraStack) ? elytraStack : null;
                 }
                 catch(NoSuchElementException e) {
                 }
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -253,12 +261,7 @@ public class ClientLogic {
      */
     private static boolean isWorkingElytra(ItemStack elytraStack) {
         // even if we found an elytra, we can't use it if durability is too low
-        //TODO check if I still need these static variables for logic.
-        elytraDurabilityLeft = elytraStack.getMaxDamage() - elytraStack.getDamageValue();
-
-        if (elytraDurabilityLeft > 1) {
-            elytraDurability = (float) elytraStack.getItem().getDamage(elytraStack)
-                    / (float) elytraStack.getMaxDamage();
+        if (elytraStack.getMaxDamage() - elytraStack.getDamageValue() > 1) {
             return true;
         }
         else {
