@@ -30,6 +30,7 @@ public class ClientLogic {
 
     // state
     public static boolean isElytraEquipped = false;
+    public static boolean hasFlapped = false;
     public static boolean isFlaring = false;
     public static int charge = BetterFlightCommonConfig.maxCharge;
 
@@ -71,16 +72,18 @@ public class ClientLogic {
         Minecraft instance = Minecraft.getInstance();
         if (instance.player == null) return;
 
-        if (event.getKey() == Keybinding.takeOffKey.getKey().getValue()
-                && (event.getAction() == GLFW.GLFW_PRESS)) {
-            // && (event.getAction() == GLFW.GLFW_PRESS || event.getAction() == GLFW.GLFW_REPEAT)) {
+        if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying()) {
             tryTakeOff(instance.player);
         }
         //FIXME somehow KeyConflictContext = IN_GAME is being ignored. Why???
-        if (event.getKey() == Keybinding.flapKey.getKey().getValue()
-                && event.getAction() == GLFW.GLFW_PRESS) {
+        if (Keybinding.flapKey.isDown() && !hasFlapped) {
             tryFlap(instance.player);
+            hasFlapped = true;
         }
+
+        //TODO move this to clientTick events. This should be checked every tick, not every keypress.
+        if (!Keybinding.flapKey.isDown() && hasFlapped) {
+            hasFlapped = false;}
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             cycleWidgetLocation();
