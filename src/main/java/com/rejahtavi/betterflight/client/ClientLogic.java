@@ -19,8 +19,11 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import top.theillusivec4.curios.api.CuriosApi;
+
+import java.util.NoSuchElementException;
 
 @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT)
 public class ClientLogic {
@@ -65,22 +68,18 @@ public class ClientLogic {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
 
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
-        if (player == null) return;
-
-        // don't react to key presses if a screen or chat is open
-        if (mc.screen != null) return;
+        Minecraft instance = Minecraft.getInstance();
+        if (instance.player == null) return;
 
         if (event.getKey() == Keybinding.takeOffKey.getKey().getValue()
                 && (event.getAction() == GLFW.GLFW_PRESS)) {
             // && (event.getAction() == GLFW.GLFW_PRESS || event.getAction() == GLFW.GLFW_REPEAT)) {
-            tryTakeOff(player);
+            tryTakeOff(instance.player);
         }
-
+        //FIXME somehow KeyConflictContext = IN_GAME is being ignored. Why???
         if (event.getKey() == Keybinding.flapKey.getKey().getValue()
                 && event.getAction() == GLFW.GLFW_PRESS) {
-            tryFlap(player);
+            tryFlap(instance.player);
         }
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
@@ -108,7 +107,14 @@ public class ClientLogic {
         if (rechargeBorderTimer > 0) rechargeBorderTimer--;
         if (cooldownTimer > 0) cooldownTimer--;
 
-        updateElytraStatus(player);
+        ItemStack elytraStack = findEquippedElytra(player);
+        if(elytraStack != null)
+        {
+            isElytraEquipped = true;
+            elytraDurabilityLeft = elytraStack.getMaxDamage() - elytraStack.getDamageValue();
+            elytraDurability = (float) elytraStack.getDamageValue()/(float) elytraStack.getMaxDamage();
+        }
+        else { isElytraEquipped = false;}
         handleRecharge(player);
         handleFlare(player);
     }
@@ -218,45 +224,49 @@ public class ClientLogic {
         }
     }
 
-    private static void updateElytraStatus(LocalPlayer player) {
-
-        // assume no elytra, then search for one
-        isElytraEquipped = false;
-        elytraDurability = 0.0f;
-        elytraDurabilityLeft = 0;
+    /**
+     * Looks for an equipped elytra on the target player
+     * @param player
+     * @return itemstack an elytra was found; null if not found
+     */
+    private static ItemStack findEquippedElytra(@NotNull LocalPlayer player) {
 
         // check the player's chest slot for elytra
         ItemStack elytraStack = player.getItemBySlot(EquipmentSlot.CHEST);
         if (BetterFlightCommonConfig.elytraItems.contains(elytraStack.getItem())) {
-            // elytra is present in the chest slot
-            isElytraEquipped = true;
+            isWorkingElytra(elytraStack);
+            return isWorkingElytra(elytraStack) ? elytraStack : null;
         }
 
         // if dependencies are present, check the curios slots as well
         if (BetterFlight.isCuriousElytraLoaded) {
             for (Item elytraItem : BetterFlightCommonConfig.elytraItems) {
-                if (CuriosApi.getCuriosHelper().findEquippedCurio(elytraItem, player).isPresent()) {
-                    isElytraEquipped = true;
-                    elytraStack = CuriosApi.getCuriosHelper()
-                            .findEquippedCurio(elytraItem, player)
-                            .get().getRight();
+                try {
+                    elytraStack = CuriosApi.getCuriosHelper().findFirstCurio(player, elytraItem)
+                            .orElseThrow()
+                            .stack();
+                    return isWorkingElytra(elytraStack) ? elytraStack : null;
+                }
+                catch(NoSuchElementException e) {
                 }
             }
         }
+        return null;
+    }
 
+    /**
+     * Check if ItemStack is a usable elytra with durability left
+     * @param elytraStack ItemStack to check
+     * @return true if elytra is functional
+     */
+    private static boolean isWorkingElytra(ItemStack elytraStack) {
         // even if we found an elytra, we can't use it if durability is too low
-        if (isElytraEquipped) {
-
-            elytraDurabilityLeft = elytraStack.getMaxDamage() - elytraStack.getDamageValue();
-
-            if (elytraDurabilityLeft > 1) {
-                elytraDurability = (float) elytraStack.getItem().getDamage(elytraStack)
-                        / (float) elytraStack.getMaxDamage();
-            }
-            else {
-                // this elytra has broken
-                isElytraEquipped = false;
-            }
+        if (elytraStack.getMaxDamage() - elytraStack.getDamageValue() > 1) {
+            return true;
+        }
+        else {
+            // this elytra has broken
+            return false;
         }
     }
 

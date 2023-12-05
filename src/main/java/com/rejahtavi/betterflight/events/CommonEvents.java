@@ -29,7 +29,7 @@ public class CommonEvents {
     }
 
     // TODO: Possibly a 'get altitude' function, and an option to restrict
-    // elytra flap effectiveness based on distance above terrain.
-    // Perhaps add some sort of bonus for navigating close to the ground
-    // or other obstacles? could be fun :)
+    //  elytra flap effectiveness based on distance above terrain.
+    //  Perhaps add some sort of bonus for navigating close to the ground
+    //  or other obstacles? could be fun :)
 }

@@ -40,6 +40,8 @@ public class FlightHandler {
      */
     public static void handleFlap(Player player) {
         double ceilingFactor = getCeilingFactor(player);
+        //MAYBE Rework flap to propel user forward and up relative to their looking direction, like fireworks?
+        // Might allow for smoother flight
         Vec3 upwards = new Vec3(0.0D, BetterFlightCommonConfig.FLAP_THRUST,0.0D).scale(getCeilingFactor(player));
         Vec3 forwards = player.getDeltaMovement().normalize().scale(BetterFlightCommonConfig.FLAP_THRUST * 0.25).scale(ceilingFactor);
         Vec3 impulse = forwards.add(upwards);
