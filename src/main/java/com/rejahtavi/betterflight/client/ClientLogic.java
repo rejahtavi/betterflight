@@ -10,23 +10,35 @@ import com.rejahtavi.betterflight.network.STCElytraChargePacket;
 import com.rejahtavi.betterflight.util.FlightHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT)
 public class ClientLogic {
+
+    static Logger logger = LogManager.getLogger(BetterFlight.MODID);
 
     // state
     public static boolean isElytraEquipped = false;
@@ -76,7 +88,6 @@ public class ClientLogic {
             tryTakeOff(instance.player);
             //hasFlapped = true;
         }
-        //FIXME somehow KeyConflictContext = IN_GAME is being ignored. Why???
         if (Keybinding.flapKey.isDown() && instance.player.isFallFlying() && !hasFlapped) {
             tryFlap(instance.player);
             hasFlapped = true;
@@ -85,6 +96,12 @@ public class ClientLogic {
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             cycleWidgetLocation();
         }
+
+        //DEV remove this later. Just trying to check scanner
+        if (Keybinding.flareKey.isDown()) {
+            logger.info("isAir: " + checkAir(instance.player.blockPosition(),instance.player.level,instance.player));
+        }
+
     }
 
     @SubscribeEvent
@@ -120,6 +137,47 @@ public class ClientLogic {
 
         if (!Keybinding.flapKey.isDown() || !Keybinding.takeOffKey.isDown() && hasFlapped) {
             hasFlapped = false;}
+    }
+
+    private static boolean isAir (LivingEntity livingEntity) {
+        if (!livingEntity.isOnGround()
+                //&& livingEntity.level.getBlockState(livingEntity.blockPosition().below(2)).isAir()
+                && livingEntity.level.getBlockState(livingEntity.blockPosition().below()).isAir())
+        {
+            return true;
+        }
+        else {return false;}
+    }
+
+    private static boolean hasAirSpace (LivingEntity livingEntity) {
+        Iterator<BlockPos> iterator = BlockPos.withinManhattanStream(livingEntity.blockPosition(), 2, 3, 2).iterator(); iterator.hasNext();
+        BlockPos pos = iterator.next();
+        BlockState blockState = livingEntity.level.getBlockState(pos);
+        if (blockState.isAir()) {
+
+        }
+        return false;
+    }
+
+    //TODO Scan area around player for air
+    //Referencing https://github.com/VentureCraftMods/MC-Gliders/blob/2a2df716fd47f312e0b1c0b593cb43437019f53e/common/src/main/java/net/venturecraft/gliders/util/GliderUtil.java#L183
+    public static boolean checkAir(BlockPos playerPosition, Level world, LivingEntity player) {
+        AABB boundingBox = player.getBoundingBox().contract(2, 5, 2);
+        //FIXME Scanning box is not centered on the players feet. It starts at it. Example data below
+        // contract(2,5,2)
+        // /tp dev 432 75 -412
+        // 430 74 -414
+        // 432 71 -412
+        List<BlockState> blocks = world.getBlockStatesIfLoaded(boundingBox).toList();
+        for(BlockState n : blocks)
+            logger.debug(n);
+        //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
+        Stream<BlockState> filteredBlocks = blocks.stream().filter(blockState -> !blockState.isAir());
+        if (filteredBlocks.toList().size() == 0) {
+            //player.setDeltaMovement(0, 0.5, 0);
+            return true;
+        }
+        return false;
     }
 
     //TODO move logic for determining if player can takeoff/fly to event listener onKeyPress
