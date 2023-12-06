@@ -76,7 +76,7 @@ public class BetterFlight {
         NETWORK.registerMessage(1, STCElytraChargePacket.class,
                 STCElytraChargePacket::encode,
                 STCElytraChargePacket::decode,
-                STCElytraChargePacket::onPacketReceived);
+                STCElytraChargePacket::handle);
     }
 
     @SubscribeEvent

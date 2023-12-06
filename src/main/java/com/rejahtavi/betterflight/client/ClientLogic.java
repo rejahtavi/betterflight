@@ -6,7 +6,6 @@ import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
-import com.rejahtavi.betterflight.network.STCElytraChargePacket;
 import com.rejahtavi.betterflight.util.FlightHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -350,7 +349,4 @@ public class ClientLogic {
         ClientConfig.CLIENT.hudLocation.save();
     }
 
-    public static void handleSElytraChargePacket(STCElytraChargePacket message) {
-        charge = message.getCharge();
-    }
 }

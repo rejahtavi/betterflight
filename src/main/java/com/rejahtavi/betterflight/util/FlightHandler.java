@@ -25,6 +25,7 @@ public class FlightHandler {
         // take offs need no forward component, due to the player already sprinting.
         // they do need additional vertical thrust to reliably get the player
         // enough time to flap away before hitting the ground again.
+        //TODO This and in handleFlap(Player), rework the flight impulse to take into account player facing.
         Vec3 upwards = new Vec3(0.0D, BetterFlightCommonConfig.TAKE_OFF_THRUST,0.0D).scale(getCeilingFactor(player));
         player.startFallFlying();
         player.push(upwards.x,upwards.y,upwards.z);
