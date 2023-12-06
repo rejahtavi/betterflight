@@ -97,10 +97,10 @@ public class ClientLogic {
             cycleWidgetLocation();
         }
 
-        //DEV remove this later. Just trying to check scanner
-        if (Keybinding.flareKey.isDown()) {
-            logger.info("isAir: " + checkAir(instance.player.blockPosition(),instance.player.level,instance.player));
-        }
+        //INDEV remove this later. Just trying to check scanner
+//        if (Keybinding.flareKey.isDown()) {
+//            logger.info("isAir: " + checkAir(instance.player.blockPosition(),instance.player.level,instance.player));
+//        }
 
     }
 
@@ -139,6 +139,7 @@ public class ClientLogic {
             hasFlapped = false;}
     }
 
+    //region INDEV experimental blocks scanner
     private static boolean isAir (LivingEntity livingEntity) {
         if (!livingEntity.isOnGround()
                 //&& livingEntity.level.getBlockState(livingEntity.blockPosition().below(2)).isAir()
@@ -165,7 +166,7 @@ public class ClientLogic {
         AABB boundingBox = player.getBoundingBox().contract(2, 5, 2);
         //FIXME Scanning box is not centered on the players feet. It starts at it. Example data below
         // contract(2,5,2)
-        // /tp dev 432 75 -412
+        // tp dev 432 75 -412
         // 430 74 -414
         // 432 71 -412
         List<BlockState> blocks = world.getBlockStatesIfLoaded(boundingBox).toList();
@@ -179,7 +180,7 @@ public class ClientLogic {
         }
         return false;
     }
-
+  //endregion
     //TODO move logic for determining if player can takeoff/fly to event listener onKeyPress
     private static void tryTakeOff(LocalPlayer player) {
         if (isElytraEquipped
