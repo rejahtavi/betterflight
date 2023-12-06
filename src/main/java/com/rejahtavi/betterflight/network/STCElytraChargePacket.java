@@ -34,10 +34,10 @@ public class STCElytraChargePacket {
         return new STCElytraChargePacket(buffer.readInt());
     }
 
-    public static void onPacketReceived(STCElytraChargePacket message, Supplier<NetworkEvent.Context> context) {
+    public static void handle(STCElytraChargePacket message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                    () -> () -> ClientLogic.handleSElytraChargePacket(message));
+                    () -> () -> ClientLogic.charge = message.getCharge());
         });
         context.get().setPacketHandled(true);
     }
