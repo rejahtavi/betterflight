@@ -10,16 +10,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
 // Server->Client packet, sets player elytra charge upon login / respawn
-public class SElytraChargePacket {
+public class STCElytraChargePacket {
 
     private int charge;
 
-    public SElytraChargePacket(int charge) {
+    public STCElytraChargePacket(int charge) {
         this.charge = charge;
     }
 
@@ -31,11 +30,11 @@ public class SElytraChargePacket {
         return this.charge;
     }
 
-    public static SElytraChargePacket decode(FriendlyByteBuf buffer) {
-        return new SElytraChargePacket(buffer.readInt());
+    public static STCElytraChargePacket decode(FriendlyByteBuf buffer) {
+        return new STCElytraChargePacket(buffer.readInt());
     }
 
-    public static void onPacketReceived(SElytraChargePacket message, Supplier<NetworkEvent.Context> context) {
+    public static void onPacketReceived(STCElytraChargePacket message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
                     () -> () -> ClientLogic.handleSElytraChargePacket(message));
@@ -45,6 +44,6 @@ public class SElytraChargePacket {
     
     public static void send(Player recipient, int charge) {
         ServerPlayer player = (ServerPlayer) recipient;
-        BetterFlight.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new SElytraChargePacket(charge));
+        BetterFlight.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new STCElytraChargePacket(charge));
     }
 }

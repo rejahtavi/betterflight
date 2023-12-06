@@ -6,8 +6,8 @@ import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.events.CommonEvents;
 import com.rejahtavi.betterflight.common.Sounds;
-import com.rejahtavi.betterflight.network.CFlightActionPacket;
-import com.rejahtavi.betterflight.network.SElytraChargePacket;
+import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
+import com.rejahtavi.betterflight.network.STCElytraChargePacket;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -69,14 +69,14 @@ public class BetterFlight {
 
     @SubscribeEvent
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        NETWORK.registerMessage(0, CFlightActionPacket.class,
-                CFlightActionPacket::encode,
-                CFlightActionPacket::decode,
-                CFlightActionPacket::onPacketReceived);
-        NETWORK.registerMessage(1, SElytraChargePacket.class,
-                SElytraChargePacket::encode,
-                SElytraChargePacket::decode,
-                SElytraChargePacket::onPacketReceived);
+        NETWORK.registerMessage(0, CTSFlightActionPacket.class,
+                CTSFlightActionPacket::encode,
+                CTSFlightActionPacket::decode,
+                CTSFlightActionPacket::handle);
+        NETWORK.registerMessage(1, STCElytraChargePacket.class,
+                STCElytraChargePacket::encode,
+                STCElytraChargePacket::decode,
+                STCElytraChargePacket::onPacketReceived);
     }
 
     @SubscribeEvent

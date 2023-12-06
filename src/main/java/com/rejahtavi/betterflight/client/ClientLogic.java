@@ -5,8 +5,8 @@ import com.rejahtavi.betterflight.client.ClientConfig.HudLocation;
 import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
-import com.rejahtavi.betterflight.network.CFlightActionPacket;
-import com.rejahtavi.betterflight.network.SElytraChargePacket;
+import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
+import com.rejahtavi.betterflight.network.STCElytraChargePacket;
 import com.rejahtavi.betterflight.util.FlightHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -74,16 +74,13 @@ public class ClientLogic {
 
         if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying()) {
             tryTakeOff(instance.player);
+            //hasFlapped = true;
         }
         //FIXME somehow KeyConflictContext = IN_GAME is being ignored. Why???
-        if (Keybinding.flapKey.isDown() && !hasFlapped) {
+        if (Keybinding.flapKey.isDown() && instance.player.isFallFlying() && !hasFlapped) {
             tryFlap(instance.player);
             hasFlapped = true;
         }
-
-        //TODO move this to clientTick events. This should be checked every tick, not every keypress.
-        if (!Keybinding.flapKey.isDown() && hasFlapped) {
-            hasFlapped = false;}
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             cycleWidgetLocation();
@@ -120,6 +117,9 @@ public class ClientLogic {
         else { isElytraEquipped = false;}
         handleRecharge(player);
         handleFlare(player);
+
+        if (!Keybinding.flapKey.isDown() || !Keybinding.takeOffKey.isDown() && hasFlapped) {
+            hasFlapped = false;}
     }
 
     //TODO move logic for determining if player can takeoff/fly to event listener onKeyPress
@@ -131,11 +131,12 @@ public class ClientLogic {
                 && player.getDeltaMovement().length() > BetterFlightCommonConfig.TAKE_OFF_SPEED) {
 
             if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
-                CFlightActionPacket.send(FlightActionType.TAKEOFF);
+                CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
                 FlightHandler.handleTakeoff(player);
                 // player.playSound(Sounds.SOUND_FLAP.get(), (float) ClientConfig.takeOffVolume,
                 // ClientConfig.FLAP_SOUND_PITCH);
                 player.playSound(Sounds.FLAP.get(), (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
+                //TODO playSounds only from servers perspective, instead of playing the sound twice, once at the client, and at the server?
             }
         }
     }
@@ -147,7 +148,7 @@ public class ClientLogic {
                 && player.isFallFlying()) {
 
             if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
-                CFlightActionPacket.send(FlightActionType.FLAP);
+                CTSFlightActionPacket.send(FlightActionType.FLAP);
                 FlightHandler.handleFlap(player);
                 player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
             }
@@ -173,12 +174,13 @@ public class ClientLogic {
                 charge++;
                 rechargeTickCounter = 0;
                 rechargeBorderTimer = ClientConfig.BORDER_FLASH_TICKS;
-                CFlightActionPacket.send(FlightActionType.RECHARGE);
+                CTSFlightActionPacket.send(FlightActionType.RECHARGE);
                 player.causeFoodExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
             }
         }
     }
 
+    //MAYBE rework flare or introduce a new method to "glide"? Like being able to hold one's position while in the air like a bird.
     private static void handleFlare(LocalPlayer player) {
         if (isElytraEquipped
                 && Keybinding.flareKey.isDown()
@@ -186,7 +188,7 @@ public class ClientLogic {
                 && !player.isOnGround()
                 && player.isFallFlying()) {
 
-            CFlightActionPacket.send(FlightActionType.FLARE);
+            CTSFlightActionPacket.send(FlightActionType.FLARE);
             FlightHandler.handleFlare(player);
 
             flareTickCounter++;
@@ -289,7 +291,7 @@ public class ClientLogic {
         ClientConfig.CLIENT.hudLocation.save();
     }
 
-    public static void handleSElytraChargePacket(SElytraChargePacket message) {
+    public static void handleSElytraChargePacket(STCElytraChargePacket message) {
         charge = message.getCharge();
     }
 }

@@ -3,7 +3,7 @@ package com.rejahtavi.betterflight.util;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
-import com.rejahtavi.betterflight.network.CFlightActionPacket;
+import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
@@ -90,22 +90,5 @@ public class FlightHandler {
         }
         // flying in between, scale power accordingly
         return (altitude - BetterFlightCommonConfig.softCeiling) / BetterFlightCommonConfig.ceilingRange;
-    }
-
-    public static void handleCFlightActionPacket(CFlightActionPacket message, Supplier<NetworkEvent.Context> context) {
-        switch (message.getUpdateType()) {
-            case TAKEOFF:
-                handleTakeoff(context.get().getSender());
-                break;
-            case FLAP:
-                handleFlap(context.get().getSender());
-                break;
-            case FLARE:
-                handleFlare(context.get().getSender());
-                break;
-            case RECHARGE:
-                handleFlightStaminaExhaustion(context.get().getSender());
-                break;
-        }
     }
 }
