@@ -7,6 +7,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 
+import com.rejahtavi.betterflight.events.ClientEvents;
+import com.rejahtavi.betterflight.util.ActionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.resources.ResourceLocation;
@@ -47,6 +49,8 @@ public class HUDOverlay {
 
     public static final ResourceLocation elytraIcons = new ResourceLocation(
             BetterFlight.MODID, "textures/elytraicons.png");
+    private static int rechargeBorderTimer = 0;
+    private static int depletionBorderTimer = 0;
 
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
@@ -58,8 +62,8 @@ public class HUDOverlay {
     public static void renderOverlay(PoseStack stack) {
 
         // only draw hud element when elytra is both equipped and functional
-        if (ClientLogic.isElytraEquipped == false) return;
-        if (ClientLogic.elytraDurabilityLeft <= 1) return;
+        if (ClientEvents.isElytraEquipped == false) return;
+        if (ClientEvents.elytraDurabilityLeft <= 1) return;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc == null) return;
@@ -113,16 +117,16 @@ public class HUDOverlay {
 
         // determine which damage variant to show
         int durabilityOffset = SPRITE_DURABILITY_FULL;
-        if (ClientLogic.elytraDurability > 0.50f) durabilityOffset = SPRITE_DURABILITY_HALF;
-        if (ClientLogic.elytraDurability > 0.75f) durabilityOffset = SPRITE_DURABILITY_QUARTER;
-        if (ClientLogic.elytraDurability > 0.90f) durabilityOffset = SPRITE_DURABILITY_LOW;
+        if (ClientEvents.elytraDurability > 0.50f) durabilityOffset = SPRITE_DURABILITY_HALF;
+        if (ClientEvents.elytraDurability > 0.75f) durabilityOffset = SPRITE_DURABILITY_QUARTER;
+        if (ClientEvents.elytraDurability > 0.90f) durabilityOffset = SPRITE_DURABILITY_LOW;
 
         // determine which border to show
         int borderOffset = SPRITE_BORDER_BLACK;
 
         // critical durability takes precedence over all other borders
         // elytraDurability works backwards, this triggers when 5% use is left.
-        if (ClientLogic.elytraDurability > 0.95) {
+        if (ClientEvents.elytraDurability > 0.95) {
 
             if (mc.level != null) {
                 long thisTick = mc.level.getGameTime();
@@ -144,23 +148,23 @@ public class HUDOverlay {
         }
 
         // second priority is flaring. this is the yellow border when the meter is being drained to slow down
-        else if (ClientLogic.isFlaring) {
+        else if (ClientEvents.isFlaring) {
             borderOffset = SPRITE_BORDER_FLARE;
         }
 
         // third priority is depletion. this is the red flash for losing a meter tick
-        else if (ClientLogic.depletionBorderTimer > 0) {
+        else if (depletionBorderTimer > 0) {
             borderOffset = SPRITE_BORDER_DEPLETION;
         }
 
         // lowest priority is recharge. this is the white flash gaining a meter tick
-        else if (ClientLogic.rechargeBorderTimer > 0) {
+        else if (rechargeBorderTimer > 0) {
             borderOffset = SPRITE_BORDER_RECHARGE;
         }
 
         // determine how much of the meter has been emptied
         int drainedPixels = (int) Math.floor(
-                (1.0f - (float) ClientLogic.charge / (float) BetterFlightCommonConfig.maxCharge) * ICON_SIZE);
+                (1.0f - (float) ActionHandler.charge / (float) BetterFlightCommonConfig.maxCharge) * ICON_SIZE);
 
         // finally, we are ready to draw the
 
@@ -191,11 +195,40 @@ public class HUDOverlay {
         //mc.getTextureManager().getTexture(Gui.GUI_ICONS_LOCATION).bind();
         RenderSystem.setShaderTexture(0, Gui.GUI_ICONS_LOCATION);
 
-        // mc.font.drawShadow(stack, "charge: " + ClientLogic.charge, 0, 0, 0xFFFFFFFF);
+        // mc.font.drawShadow(stack, "charge: " + ClientEvents.charge, 0, 0, 0xFFFFFFFF);
         // mc.font.drawShadow(stack, "drainPixels: " + drainedPixels, 0, mc.font.lineHeight, 0xFFFFFFFF);
-        // mc.font.drawShadow(stack, "charge: " + InputHandler.charge, 0, mc.font.lineHeight * 2, 0xFFFFFFFF);
+        // mc.font.drawShadow(stack, "charge: " + ActionHandler.charge, 0, mc.font.lineHeight * 2, 0xFFFFFFFF);
         // mc.font.drawShadow(stack, "max: " + Config.elytraMaxCharge, 0, mc.font.lineHeight * 3, 0xFFFFFFFF);
     }
+    public static void borderTick() {
+        if (depletionBorderTimer > 0) depletionBorderTimer--;
+        if (rechargeBorderTimer > 0) rechargeBorderTimer--;
+    }
+
+    public static void setDepletionBorderTimer(int ticks) {
+        depletionBorderTimer = ticks;
+    }
+
+    public static void setRechargeBorderTimer(int ticks) {
+        rechargeBorderTimer = ticks;
+    }
+
+    public static void cycleWidgetLocation() {
+
+        switch (ClientConfig.hudLocation) {
+            case BAR_CENTER -> ClientConfig.hudLocation = ClientConfig.HudLocation.BAR_LEFT;
+            case BAR_LEFT -> ClientConfig.hudLocation = ClientConfig.HudLocation.BAR_RIGHT;
+            case BAR_RIGHT -> ClientConfig.hudLocation = ClientConfig.HudLocation.CURSOR_ABOVE;
+            case CURSOR_ABOVE -> ClientConfig.hudLocation = ClientConfig.HudLocation.CURSOR_RIGHT;
+            case CURSOR_RIGHT -> ClientConfig.hudLocation = ClientConfig.HudLocation.CURSOR_BELOW;
+            case CURSOR_BELOW -> ClientConfig.hudLocation = ClientConfig.HudLocation.CURSOR_LEFT;
+            case CURSOR_LEFT -> ClientConfig.hudLocation = ClientConfig.HudLocation.BAR_CENTER;
+        }
+
+        ClientConfig.CLIENT.hudLocation.set(ClientConfig.hudLocation);
+        ClientConfig.CLIENT.hudLocation.save();
+    }
+
 
     // TODO: Add speedometer and/or optimal glide slope indicator?
     //  Perhaps 'flight googles' as a helmet / curio to show them?
