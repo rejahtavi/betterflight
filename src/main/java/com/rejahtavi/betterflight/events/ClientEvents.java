@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
@@ -72,6 +73,8 @@ public class ClientEvents {
         Minecraft instance = Minecraft.getInstance();
         if (instance.player == null) return;
 
+        //TODO This works as a check for close to ground. Might be worth adding some coyote time so the player can take off smoother
+        //if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying() && !checkForAir(instance.level, instance.player)) {
         if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying()) {
             ActionHandler.tryTakeOff(instance.player);
             //hasFlapped = true;
@@ -86,9 +89,9 @@ public class ClientEvents {
         }
 
         //INDEV remove this later. Just trying to check scanner
-//        if (Keybinding.flareKey.isDown()) {
-//            logger.info("isAir: " + checkAir(instance.player.blockPosition(),instance.player.level,instance.player));
-//        }
+        if (Keybinding.flareKey.isDown()) {
+            logger.info("isAir: " + checkForAir(instance.player.level,instance.player));
+        }
 
     }
 
@@ -149,16 +152,18 @@ public class ClientEvents {
 
     //TODO Scan area around player for air
     //Referencing https://github.com/VentureCraftMods/MC-Gliders/blob/2a2df716fd47f312e0b1c0b593cb43437019f53e/common/src/main/java/net/venturecraft/gliders/util/GliderUtil.java#L183
-    public static boolean checkAir(BlockPos playerPosition, Level world, LivingEntity player) {
-        AABB boundingBox = player.getBoundingBox().contract(2, 5, 2);
-        //FIXME Scanning box is not centered on the players feet. It starts at it. Example data below
+    public static boolean checkForAir(Level world, LivingEntity player) {
+        AABB boundingBox = player.getBoundingBox().move(0, -2, 0);
         // contract(2,5,2)
         // tp dev 432 75 -412
         // 430 74 -414
         // 432 71 -412
+        //
+        //contract(0,2,0) captures block at players feet and the block below.
         List<BlockState> blocks = world.getBlockStatesIfLoaded(boundingBox).toList();
         for(BlockState n : blocks)
             logger.debug(n);
+        //Block.isShapeFullBlock();
         //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
         Stream<BlockState> filteredBlocks = blocks.stream().filter(blockState -> !blockState.isAir());
         if (filteredBlocks.toList().size() == 0) {
