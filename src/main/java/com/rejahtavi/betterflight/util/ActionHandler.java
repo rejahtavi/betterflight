@@ -19,8 +19,8 @@ import top.theillusivec4.curios.api.CuriosApi;
 import java.util.NoSuchElementException;
 
 public class ActionHandler {
-    public static int rechargeTickCounter = 0;
-    public static int flareTickCounter = 0;
+    private static int rechargeTickCounter = 0;
+    private static int flareTickCounter = 0;
     public static int charge = BetterFlightCommonConfig.maxCharge;
 
       public static void tryTakeOff(LocalPlayer player) {
@@ -156,7 +156,7 @@ public class ActionHandler {
                             .stack();
                     return isWorkingElytra(elytraStack) ? elytraStack : null;
                 }
-                catch(NoSuchElementException e) {
+                catch(NoSuchElementException ignored) {
                 }
             }
         }
@@ -169,13 +169,6 @@ public class ActionHandler {
      * @return true if elytra is functional
      */
     private static boolean isWorkingElytra(ItemStack elytraStack) {
-        // even if we found an elytra, we can't use it if durability is too low
-        if (elytraStack.getMaxDamage() - elytraStack.getDamageValue() > 1) {
-            return true;
-        }
-        else {
-            // this elytra has broken
-            return false;
-        }
+        return elytraStack.getMaxDamage() - elytraStack.getDamageValue() > 1;
     }
 }

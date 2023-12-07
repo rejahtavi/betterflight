@@ -216,13 +216,13 @@ public class HUDOverlay {
     public static void cycleWidgetLocation() {
 
         switch (ClientConfig.hudLocation) {
-            case BAR_CENTER -> ClientConfig.hudLocation = ClientConfig.HudLocation.BAR_LEFT;
-            case BAR_LEFT -> ClientConfig.hudLocation = ClientConfig.HudLocation.BAR_RIGHT;
-            case BAR_RIGHT -> ClientConfig.hudLocation = ClientConfig.HudLocation.CURSOR_ABOVE;
-            case CURSOR_ABOVE -> ClientConfig.hudLocation = ClientConfig.HudLocation.CURSOR_RIGHT;
-            case CURSOR_RIGHT -> ClientConfig.hudLocation = ClientConfig.HudLocation.CURSOR_BELOW;
-            case CURSOR_BELOW -> ClientConfig.hudLocation = ClientConfig.HudLocation.CURSOR_LEFT;
-            case CURSOR_LEFT -> ClientConfig.hudLocation = ClientConfig.HudLocation.BAR_CENTER;
+            case BAR_CENTER -> ClientConfig.hudLocation = HudLocation.BAR_LEFT;
+            case BAR_LEFT -> ClientConfig.hudLocation = HudLocation.BAR_RIGHT;
+            case BAR_RIGHT -> ClientConfig.hudLocation = HudLocation.CURSOR_ABOVE;
+            case CURSOR_ABOVE -> ClientConfig.hudLocation = HudLocation.CURSOR_RIGHT;
+            case CURSOR_RIGHT -> ClientConfig.hudLocation = HudLocation.CURSOR_BELOW;
+            case CURSOR_BELOW -> ClientConfig.hudLocation = HudLocation.CURSOR_LEFT;
+            case CURSOR_LEFT -> ClientConfig.hudLocation = HudLocation.BAR_CENTER;
         }
 
         ClientConfig.CLIENT.hudLocation.set(ClientConfig.hudLocation);

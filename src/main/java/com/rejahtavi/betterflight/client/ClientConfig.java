@@ -14,18 +14,6 @@ public class ClientConfig {
     // constants, might make some of these configurable later
     public static final int BORDER_FLASH_TICKS = 5;
     public static final float FLAP_SOUND_PITCH = 2.0f;
-
-    // HUD icon position
-    public enum HudLocation {
-        BAR_CENTER,
-        BAR_LEFT,
-        BAR_RIGHT,
-        CURSOR_ABOVE,
-        CURSOR_RIGHT,
-        CURSOR_BELOW,
-        CURSOR_LEFT
-    }
-
     public static HudLocation hudLocation = HudLocation.BAR_CENTER;
     public static double takeOffVolume;
     public static double flapVolume;
