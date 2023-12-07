@@ -7,11 +7,9 @@ import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.ActionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,7 +22,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,7 +33,7 @@ public class ClientEvents {
 
     // Player state
     public static boolean isElytraEquipped = false;
-    public static boolean hasFlapped = false;
+    private static boolean hasFlapped = false;
     public static boolean isFlaring = false;
     public static int offGroundTicks = 0;
 
@@ -89,9 +86,9 @@ public class ClientEvents {
         }
 
         //INDEV remove this later. Just trying to check scanner
-        if (Keybinding.flareKey.isDown()) {
-            logger.info("isAir: " + checkForAir(instance.player.level,instance.player));
-        }
+//        if (Keybinding.flareKey.isDown()) {
+//            logger.info("isAir: " + checkForAir(instance.player.level,instance.player));
+//        }
 
     }
 
@@ -130,25 +127,6 @@ public class ClientEvents {
     }
 
     //region INDEV experimental blocks scanner
-    private static boolean isAir (LivingEntity livingEntity) {
-        if (!livingEntity.isOnGround()
-                //&& livingEntity.level.getBlockState(livingEntity.blockPosition().below(2)).isAir()
-                && livingEntity.level.getBlockState(livingEntity.blockPosition().below()).isAir())
-        {
-            return true;
-        }
-        else {return false;}
-    }
-
-    private static boolean hasAirSpace (LivingEntity livingEntity) {
-        Iterator<BlockPos> iterator = BlockPos.withinManhattanStream(livingEntity.blockPosition(), 2, 3, 2).iterator(); iterator.hasNext();
-        BlockPos pos = iterator.next();
-        BlockState blockState = livingEntity.level.getBlockState(pos);
-        if (blockState.isAir()) {
-
-        }
-        return false;
-    }
 
     //TODO Scan area around player for air
     //Referencing https://github.com/VentureCraftMods/MC-Gliders/blob/2a2df716fd47f312e0b1c0b593cb43437019f53e/common/src/main/java/net/venturecraft/gliders/util/GliderUtil.java#L183
@@ -166,8 +144,7 @@ public class ClientEvents {
         //Block.isShapeFullBlock();
         //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
         Stream<BlockState> filteredBlocks = blocks.stream().filter(blockState -> !blockState.isAir());
-        if (filteredBlocks.toList().size() == 0) {
-            //player.setDeltaMovement(0, 0.5, 0);
+        if (filteredBlocks.toList().isEmpty()) {
             return true;
         }
         return false;

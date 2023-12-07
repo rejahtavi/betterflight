@@ -3,12 +3,8 @@ package com.rejahtavi.betterflight.util;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
-import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class FlightHandler {
 
@@ -79,7 +75,7 @@ public class FlightHandler {
      * @param player
      * @return 1.0d-0.0d based on distance between hard limit and player
      */
-    public static double getCeilingFactor(Player player) {
+    private static double getCeilingFactor(Player player) {
         double altitude = player.getY();
         // flying low, full power
         if (altitude < BetterFlightCommonConfig.softCeiling) {
