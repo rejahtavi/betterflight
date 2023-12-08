@@ -5,6 +5,7 @@ import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.ActionHandler;
+import com.rejahtavi.betterflight.util.FlightHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,6 +44,7 @@ public class ClientEvents {
 
     // timers
     public static int cooldown = 0;
+    private static boolean boosted = false;
 
     /**
      * default to full elytra meter on startup
@@ -72,23 +74,28 @@ public class ClientEvents {
 
         //TODO This works as a check for close to ground. Might be worth adding some coyote time so the player can take off smoother
         //if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying() && !checkForAir(instance.level, instance.player)) {
-        if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying()) {
-            ActionHandler.tryTakeOff(instance.player);
-            //hasFlapped = true;
-        }
-        if (Keybinding.flapKey.isDown() && instance.player.isFallFlying() && !hasFlapped) {
-            ActionHandler.tryFlap(instance.player);
-            hasFlapped = true;
-        }
+//        if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying()) {
+//            ActionHandler.tryTakeOff(instance.player);
+//            //hasFlapped = true;
+//        }
+//        if (Keybinding.flapKey.isDown() && instance.player.isFallFlying() && !hasFlapped) {
+//            ActionHandler.tryFlap(instance.player);
+//            hasFlapped = true;
+//            instance.player.jumpFromGround();
+//        }
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             HUDOverlay.cycleWidgetLocation();
         }
 
         //INDEV remove this later. Just trying to check scanner
-//        if (Keybinding.flareKey.isDown()) {
-//            logger.info("isAir: " + checkForAir(instance.player.level,instance.player));
-//        }
+        if (Keybinding.flapKey.isDown() && !boosted && instance.player.isFallFlying()) {
+            //logger.info("isAir: " + checkForAir(instance.player.level,instance.player));
+            //logger.info("Looking: " + instance.player.getLookAngle());
+            //logger.info("Moving: " + instance.player.getDeltaMovement());
+            FlightHandler.handleTestingImpulse(instance.player);
+            boosted = true;
+        }
 
     }
 
@@ -98,6 +105,9 @@ public class ClientEvents {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null) return;
+
+        logger.info("Speed:" + player.getDeltaMovement().length());
+
 
         // track ground state for takeoff logic
         if (player.isOnGround()) {
@@ -124,6 +134,8 @@ public class ClientEvents {
 
         if (!Keybinding.flapKey.isDown() || !Keybinding.takeOffKey.isDown() && hasFlapped) {
             hasFlapped = false;}
+        if (!Keybinding.flapKey.isDown() && boosted) {
+            boosted = false;}
     }
 
     //region INDEV experimental blocks scanner

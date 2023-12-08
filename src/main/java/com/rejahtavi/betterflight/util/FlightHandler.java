@@ -88,4 +88,26 @@ public class FlightHandler {
         // flying in between, scale power accordingly
         return (altitude - BetterFlightCommonConfig.softCeiling) / BetterFlightCommonConfig.ceilingRange;
     }
+
+    //INDEV
+    public static void handleTestingImpulse(Player player) {
+        double  x1=0,
+                y1=1,
+                z1=0;
+        double  x2=1,
+                y2=0,
+                z2=0;
+
+        double d0 = 1.5; //delta coefficient. Influenced by difference between d0 and current delta
+        double d1 = 0.1; //boost coefficient
+        //Vec3 looking = new Vec3(x1,y1,z1);
+        Vec3 looking = player.getLookAngle();
+        Vec3 delta = player.getDeltaMovement();
+
+        Vec3 impulse = (delta.add(
+                looking.x * d1 + (looking.x * d0 - delta.x) * 0.5,
+                looking.y * d1 + (looking.y * d0 - delta.y) * 0.5,
+                looking.z * d1 + (looking.z * d0 - delta.z) * 0.5));
+        player.push(impulse.x,impulse.y,impulse.z);
+    }
 }
