@@ -70,18 +70,19 @@ public class ClientEvents {
     public static void onKeyInput(InputEvent.Key event) {
 
         Minecraft instance = Minecraft.getInstance();
-        if (instance.player == null) return;
+        LocalPlayer player = instance.player;
+        if (player == null) return;
 
         //TODO This works as a check for close to ground. Might be worth adding some coyote time so the player can take off smoother
-        //if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying() && !checkForAir(instance.level, instance.player)) {
-//        if (Keybinding.takeOffKey.isDown() && !instance.player.isFallFlying()) {
-//            ActionHandler.tryTakeOff(instance.player);
+        //if (Keybinding.takeOffKey.isDown() && !player.isFallFlying() && !checkForAir(level, player)) {
+//        if (Keybinding.takeOffKey.isDown() && !player.isFallFlying()) {
+//            ActionHandler.tryTakeOff(player);
 //            //hasFlapped = true;
 //        }
-//        if (Keybinding.flapKey.isDown() && instance.player.isFallFlying() && !hasFlapped) {
-//            ActionHandler.tryFlap(instance.player);
+//        if (Keybinding.flapKey.isDown() && player.isFallFlying() && !hasFlapped) {
+//            ActionHandler.tryFlap(player);
 //            hasFlapped = true;
-//            instance.player.jumpFromGround();
+//            player.jumpFromGround();
 //        }
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
@@ -89,12 +90,17 @@ public class ClientEvents {
         }
 
         //INDEV remove this later. Just trying to check scanner
-        if (Keybinding.flapKey.isDown() && !boosted && instance.player.isFallFlying()) {
-            //logger.info("isAir: " + checkForAir(instance.player.level,instance.player));
-            //logger.info("Looking: " + instance.player.getLookAngle());
-            //logger.info("Moving: " + instance.player.getDeltaMovement());
-            FlightHandler.handleTestingImpulse(instance.player);
+        //if (Keybinding.flapKey.isDown() && !boosted && player.isFallFlying()) {
+        if (Keybinding.flapKey.isDown() && !boosted) {
+            //logger.info("isAir: " + checkForAir(player.level,player));
+            //logger.info("Looking: " + player.getLookAngle());
+            //logger.info("Moving: " + player.getDeltaMovement());
+            FlightHandler.handleTestingImpulse(player);
             boosted = true;
+        }
+
+        if (Keybinding.flareKey.consumeClick())
+        {
         }
 
     }
@@ -106,8 +112,7 @@ public class ClientEvents {
         LocalPlayer player = mc.player;
         if (player == null) return;
 
-        logger.info("Speed:" + player.getDeltaMovement().length());
-
+        //logger.info("Speed:" + player.getDeltaMovement().length());
 
         // track ground state for takeoff logic
         if (player.isOnGround()) {

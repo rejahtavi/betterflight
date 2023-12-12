@@ -3,6 +3,7 @@ package com.rejahtavi.betterflight.util;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -91,23 +92,31 @@ public class FlightHandler {
 
     //INDEV
     public static void handleTestingImpulse(Player player) {
-        double  x1=0,
-                y1=1,
-                z1=0;
-        double  x2=1,
-                y2=0,
-                z2=0;
-
         double d0 = .1; //delta coefficient. Influenced by difference between d0 and current delta
-        double d1 = 1; //boost coefficient
-        //Vec3 looking = new Vec3(x1,y1,z1);
+        double d1 = 0.5; //boost coefficient
         Vec3 looking = player.getLookAngle();
         Vec3 delta = player.getDeltaMovement();
+
 
         Vec3 impulse = (delta.add(
                 looking.x * d1 + (looking.x * d0 - delta.x) * 1.5,
                 looking.y * d1 + (looking.y * d0 - delta.y) * 1.5,
                 looking.z * d1 + (looking.z * d0 - delta.z) * 1.5));
+        impulse = impulse.add(getUpVector(player).scale(0.15));
         player.push(impulse.x,impulse.y,impulse.z);
+        player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+    }
+
+    /**
+     * Returns a unit vector normal to the player's looking vector.
+     * @param player
+     * @return Vec3 normal
+     */
+    private static Vec3 getUpVector(Player player) {
+        float yaw = player.getYRot()%360;
+        double rads = yaw*(Math.PI/180);
+        Vec3 left = new Vec3(Math.cos(rads),0,Math.sin(rads));
+        Vec3 up = player.getLookAngle().cross(left);
+        return up;
     }
 }
