@@ -75,15 +75,15 @@ public class ClientEvents {
 
         //TODO This works as a check for close to ground. Might be worth adding some coyote time so the player can take off smoother
         //if (Keybinding.takeOffKey.isDown() && !player.isFallFlying() && !checkForAir(level, player)) {
-//        if (Keybinding.takeOffKey.isDown() && !player.isFallFlying()) {
-//            ActionHandler.tryTakeOff(player);
-//            //hasFlapped = true;
-//        }
-//        if (Keybinding.flapKey.isDown() && player.isFallFlying() && !hasFlapped) {
-//            ActionHandler.tryFlap(player);
-//            hasFlapped = true;
-//            player.jumpFromGround();
-//        }
+/*        if (Keybinding.takeOffKey.isDown() && !player.isFallFlying()) {
+            ActionHandler.tryTakeOff(player);
+            //hasFlapped = true;
+        }
+        if (Keybinding.flapKey.isDown() && player.isFallFlying() && !hasFlapped) {
+            ActionHandler.tryFlap(player);
+            hasFlapped = true;
+            player.jumpFromGround();
+        }*/
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             HUDOverlay.cycleWidgetLocation();
@@ -91,16 +91,22 @@ public class ClientEvents {
 
         //INDEV remove this later. Just trying to check scanner
         //if (Keybinding.flapKey.isDown() && !boosted && player.isFallFlying()) {
+        //TODO This is really messy logic. Please don't use this to determine flap vs boost
+        // Don't forget take off and flapping should be a double jump, not from standing.
+        //TODO standardize the names between the normal flap and the stronger one
         if (Keybinding.flapKey.isDown() && !boosted) {
-            //logger.info("isAir: " + checkForAir(player.level,player));
-            //logger.info("Looking: " + player.getLookAngle());
-            //logger.info("Moving: " + player.getDeltaMovement());
-            FlightHandler.handleTestingImpulse(player);
+            if(checkForAir(instance.level,player)&&!player.isOnGround())
+                FlightHandler.handleTestingImpulse(player);
+            else if(player.isOnGround()&&player.isSprinting() || player.isFallFlying() && !checkForAir(instance.level,player))
+                FlightHandler.handleTestingTakeOff(player);
+            else FlightHandler.handleTestingImpulse(player);
             boosted = true;
         }
 
         if (Keybinding.flareKey.consumeClick())
         {
+            logger.info("X: "+ player.getXRot());
+            logger.info("Y: "+ player.getYRot());
         }
 
     }
@@ -112,7 +118,7 @@ public class ClientEvents {
         LocalPlayer player = mc.player;
         if (player == null) return;
 
-        //logger.info("Speed:" + player.getDeltaMovement().length());
+        logger.info("Speed:" + player.getDeltaMovement().length());
 
         // track ground state for takeoff logic
         if (player.isOnGround()) {
@@ -139,7 +145,7 @@ public class ClientEvents {
 
         if (!Keybinding.flapKey.isDown() || !Keybinding.takeOffKey.isDown() && hasFlapped) {
             hasFlapped = false;}
-        if (!Keybinding.flapKey.isDown() && boosted) {
+        if (!Keybinding.flapKey.isDown() && boosted && cooldown <= 0) {
             boosted = false;}
     }
 
@@ -148,7 +154,7 @@ public class ClientEvents {
     //TODO Scan area around player for air
     //Referencing https://github.com/VentureCraftMods/MC-Gliders/blob/2a2df716fd47f312e0b1c0b593cb43437019f53e/common/src/main/java/net/venturecraft/gliders/util/GliderUtil.java#L183
     public static boolean checkForAir(Level world, LivingEntity player) {
-        AABB boundingBox = player.getBoundingBox().move(0, -2, 0);
+        AABB boundingBox = player.getBoundingBox().move(0, -1.5, 0);
         // contract(2,5,2)
         // tp dev 432 75 -412
         // 430 74 -414

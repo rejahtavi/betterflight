@@ -6,5 +6,7 @@ public enum FlightActionType {
     TAKEOFF,
     FLAP,
     FLARE,
-    RECHARGE
+    RECHARGE,
+
+    FLYING
 }
