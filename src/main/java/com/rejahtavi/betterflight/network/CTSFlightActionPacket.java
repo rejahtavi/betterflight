@@ -47,6 +47,8 @@ public class CTSFlightActionPacket {
                 case RECHARGE:
                     FlightHandler.handleFlightStaminaExhaustion(context.get().getSender());
                     break;
+                case FLYING:
+                    FlightHandler.toggleFlight(context.get().getSender());
             }
         });
         context.get().setPacketHandled(true);
