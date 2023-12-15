@@ -49,8 +49,7 @@ public class ActionHandler {
           {
               if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
                   CTSFlightActionPacket.send(FlightActionType.FLAP);
-                  FlightHandler.handleFlap(player);
-                  player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+                  FlightHandler.handleClassicFlap(player);
               }
           }
       }

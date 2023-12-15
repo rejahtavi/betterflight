@@ -75,7 +75,7 @@ public class ClientEvents {
 
         //TODO This works as a check for close to ground. Might be worth adding some coyote time so the player can take off smoother
         //if (Keybinding.takeOffKey.isDown() && !player.isFallFlying() && !checkForAir(level, player)) {
-/*        if (Keybinding.takeOffKey.isDown() && !player.isFallFlying()) {
+        if (Keybinding.takeOffKey.isDown() && !player.isFallFlying()) {
             ActionHandler.tryTakeOff(player);
             //hasFlapped = true;
         }
@@ -83,7 +83,7 @@ public class ClientEvents {
             ActionHandler.tryFlap(player);
             hasFlapped = true;
             player.jumpFromGround();
-        }*/
+        }
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             HUDOverlay.cycleWidgetLocation();

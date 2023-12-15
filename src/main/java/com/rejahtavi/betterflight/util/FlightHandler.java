@@ -4,9 +4,9 @@ import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.common.Sounds;
-import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -39,7 +39,7 @@ public class FlightHandler {
      * grant a small amount of forward thrust along with each vertical boost
      * @param player
      */
-    public static void handleFlap(Player player) {
+    public static void handleClassicFlap(Player player) {
         double ceilingFactor = getCeilingFactor(player);
         //MAYBE Rework flap to propel user forward and up relative to their looking direction, like fireworks?
         // Might allow for smoother flight
@@ -48,9 +48,8 @@ public class FlightHandler {
         Vec3 impulse = forwards.add(upwards);
         player.push(impulse.x,impulse.y,impulse.z);
 
-        // this plays the sound to everyone EXCEPT the player it is invoked on.
-        // the player's copy of the sound is handled on the client side.
-        player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+        player.level.playSound(null,new BlockPos(player.position()),Sounds.FLAP.get(), SoundSource.PLAYERS,(float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+        //player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
     }
 
     /**

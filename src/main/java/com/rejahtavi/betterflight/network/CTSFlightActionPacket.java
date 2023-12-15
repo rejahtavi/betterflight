@@ -39,7 +39,7 @@ public class CTSFlightActionPacket {
                     FlightHandler.handleTakeoff(context.get().getSender());
                     break;
                 case FLAP:
-                    FlightHandler.handleFlap(context.get().getSender());
+                    FlightHandler.handleClassicFlap(context.get().getSender());
                     break;
                 case FLARE:
                     FlightHandler.handleFlare(context.get().getSender());
