@@ -27,9 +27,4 @@ public class CommonEvents {
     public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event) {
         STCElytraChargePacket.send(event.getEntity(), BetterFlightCommonConfig.maxCharge);
     }
-
-    // TODO: Possibly a 'get altitude' function, and an option to restrict
-    //  elytra flap effectiveness based on distance above terrain.
-    //  Perhaps add some sort of bonus for navigating close to the ground
-    //  or other obstacles? could be fun :)
 }

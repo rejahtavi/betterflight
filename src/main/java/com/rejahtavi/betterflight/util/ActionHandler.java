@@ -33,8 +33,6 @@ public class ActionHandler {
               if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
                   CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
                   FlightHandler.handleTakeoff(player);
-                  // player.playSound(Sounds.SOUND_FLAP.get(), (float) ClientConfig.takeOffVolume,
-                  // ClientConfig.FLAP_SOUND_PITCH);
                   player.playSound(Sounds.FLAP.get(), (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
                   //TODO playSounds only from servers perspective, instead of playing the sound twice, once at the client, and at the server?
               }
