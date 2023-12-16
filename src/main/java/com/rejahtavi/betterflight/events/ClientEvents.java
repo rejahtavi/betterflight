@@ -94,7 +94,7 @@ public class ClientEvents {
         //TODO This is really messy logic. Please don't use this to determine flap vs boost
         // Don't forget take off and flapping should be a double jump, not from standing.
         //TODO standardize the names between the normal flap and the stronger one
-        if (Keybinding.flapKey.isDown() && !boosted) {
+/*        if (Keybinding.flapKey.isDown() && !boosted) {
             if(checkForAir(instance.level,player)&&!player.isOnGround())
                 FlightHandler.handleModernFlap(player);
             else if(player.isOnGround()&&player.isSprinting() || player.isFallFlying() && !checkForAir(instance.level,player))
@@ -107,7 +107,7 @@ public class ClientEvents {
         {
             logger.info("X: "+ player.getXRot());
             logger.info("Y: "+ player.getYRot());
-        }
+        }*/
 
     }
 
