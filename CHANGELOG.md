@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+
+## [1.19.2 - 1.1.3] - December 16th, 2023
+
+### Added
+
+- New flight impulse for modern system. Still in development.
+
 ## [1.19.2 - 1.1.2] - December 7th, 2023
 
 ### Changed
