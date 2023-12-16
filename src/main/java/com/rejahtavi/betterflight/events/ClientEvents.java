@@ -96,10 +96,10 @@ public class ClientEvents {
         //TODO standardize the names between the normal flap and the stronger one
         if (Keybinding.flapKey.isDown() && !boosted) {
             if(checkForAir(instance.level,player)&&!player.isOnGround())
-                FlightHandler.handleTestingImpulse(player);
+                FlightHandler.handleModernFlap(player);
             else if(player.isOnGround()&&player.isSprinting() || player.isFallFlying() && !checkForAir(instance.level,player))
-                FlightHandler.handleTestingTakeOff(player);
-            else FlightHandler.handleTestingImpulse(player);
+                FlightHandler.handleModernTakeoff(player);
+            else FlightHandler.handleModernFlap(player);
             boosted = true;
         }
 

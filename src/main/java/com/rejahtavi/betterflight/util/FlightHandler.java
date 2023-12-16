@@ -92,11 +92,9 @@ public class FlightHandler {
         return (altitude - BetterFlightCommonConfig.softCeiling) / BetterFlightCommonConfig.ceilingRange;
     }
 
-    //INDEV
-    public static void handleTestingImpulse(Player player) {
-        double d0 = .1; //delta coefficient. Influenced by difference between d0 and current delta
+    public static void handleModernFlap(Player player) {
+        double d0 = 0.1; //delta coefficient. Influenced by difference between d0 and current delta
         double d1 = 0.5; //boost coefficient
-        double d2 = d1*2;
         Vec3 looking = player.getLookAngle();
         Vec3 delta = player.getDeltaMovement();
 
@@ -110,20 +108,19 @@ public class FlightHandler {
         player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
     }
 
-    public static void handleTestingTakeOff(Player player) {
-        double d0 = .1; //delta coefficient. Influenced by difference between d0 and current delta
-        double d1 = 0.5; //boost coefficient
-        double d2 = d1*2;
+    public static void handleModernTakeoff(Player player) {
+        double d0 = 0.1; //delta coefficient. Influenced by difference between d0 and current delta
+        double d1 = 1.0; //boost coefficient
         Vec3 looking = player.getLookAngle();
         Vec3 delta = player.getDeltaMovement();
 
         Vec3 impulse = (delta.add(
-                looking.x * d2 + (looking.x * d0 - delta.x) * 1.5,
-                looking.y * d2 + (looking.y * d0 - delta.y) * 1.5,
-                looking.z * d2 + (looking.z * d0 - delta.z) * 1.5));
+                looking.x * d1 + (looking.x * d0 - delta.x) * 1.5,
+                looking.y * d1 + (looking.y * d0 - delta.y) * 1.5,
+                looking.z * d1 + (looking.z * d0 - delta.z) * 1.5));
 
         impulse = impulse.add(getUpVector(player).scale(0.3));
-        toggleFlight(player);
+        toggleFlight(player); //TODO improve toggle consistency
         CTSFlightActionPacket.send(FlightActionType.FLYING);
         player.push(impulse.x,impulse.y,impulse.z);
         player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
