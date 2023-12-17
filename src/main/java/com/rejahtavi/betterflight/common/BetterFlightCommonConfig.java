@@ -39,6 +39,7 @@ public class BetterFlightCommonConfig {
     public static int softCeiling;
     public static int hardCeiling;
     public static int ceilingRange;
+    public static boolean classicMode;
 
     // list of items that count as elytra
     public static List<Item> elytraItems;
@@ -75,6 +76,7 @@ public class BetterFlightCommonConfig {
                 elytraItems.add(item);
             }
         }
+        classicMode = SERVER.classicMode.get();
 
         // ensure that soft ceiling is always below or equal to the hard ceiling
         if (softCeiling > hardCeiling) {
@@ -99,6 +101,7 @@ public class BetterFlightCommonConfig {
         public final ForgeConfigSpec.IntValue softCeiling;
         public final ForgeConfigSpec.IntValue hardCeiling;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> elytraItems;
+        public final ForgeConfigSpec.BooleanValue classicMode;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push(BetterFlight.MODID);
@@ -157,7 +160,8 @@ public class BetterFlightCommonConfig {
                                     "tconstruct:slime_chestplate",
                                     "customizableelytra:customizable_elytra")),
                             s -> s instanceof String);
-
+            classicMode = builder.comment("If True, enable pre-2.0.0 flight system")
+                            .define("classicMode",true);
             builder.pop();
         }
     }
