@@ -5,7 +5,6 @@ import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.ActionHandler;
-import com.rejahtavi.betterflight.util.FlightHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,10 +30,11 @@ public class ClientEvents {
 
     //INDEV
     static Logger logger = LogManager.getLogger(BetterFlight.MODID);
+    private static boolean devMode = true;
 
     // Player state
     public static boolean isElytraEquipped = false;
-    private static boolean hasFlapped = false;
+    private static boolean isKeyPressed = false;
     public static boolean isFlaring = false;
     public static int offGroundTicks = 0;
 
@@ -73,17 +73,14 @@ public class ClientEvents {
         LocalPlayer player = instance.player;
         if (player == null) return;
 
-        //TODO This works as a check for close to ground. Might be worth adding some coyote time so the player can take off smoother
-        //if (Keybinding.takeOffKey.isDown() && !player.isFallFlying() && !checkForAir(level, player)) {
-        if (Keybinding.takeOffKey.isDown() && !player.isFallFlying()) {
-            ActionHandler.tryTakeOff(player);
-            //hasFlapped = true;
+
+        if (Keybinding.flapKey.isDown() && cooldown <= 0 && !isKeyPressed) {
+            if(BetterFlightCommonConfig.classicMode) {
+                isKeyPressed = ActionHandler.classicFlight(player);
+            }
+            else isKeyPressed = ActionHandler.modernFlight(player);
         }
-        if (Keybinding.flapKey.isDown() && player.isFallFlying() && !hasFlapped) {
-            ActionHandler.tryFlap(player);
-            hasFlapped = true;
-            player.jumpFromGround();
-        }
+        else isKeyPressed = true;
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             HUDOverlay.cycleWidgetLocation();
@@ -118,8 +115,9 @@ public class ClientEvents {
         LocalPlayer player = mc.player;
         if (player == null) return;
 
-        logger.info("Speed:" + player.getDeltaMovement().length());
-
+        if (devMode) {
+            logger.info("Speed:" + player.getDeltaMovement().length());
+        }
         // track ground state for takeoff logic
         if (player.isOnGround()) {
             offGroundTicks = 0;
@@ -143,8 +141,8 @@ public class ClientEvents {
         ActionHandler.handleRecharge(player);
         ActionHandler.tryFlare(player);
 
-        if (!Keybinding.flapKey.isDown() || !Keybinding.takeOffKey.isDown() && hasFlapped) {
-            hasFlapped = false;}
+        if (!Keybinding.flapKey.isDown() && isKeyPressed) {
+            isKeyPressed = false;}
         if (!Keybinding.flapKey.isDown() && boosted && cooldown <= 0) {
             boosted = false;}
     }

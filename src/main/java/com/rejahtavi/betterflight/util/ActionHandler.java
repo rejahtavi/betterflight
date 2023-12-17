@@ -23,34 +23,51 @@ public class ActionHandler {
     private static int flareTickCounter = 0;
     public static int charge = BetterFlightCommonConfig.maxCharge;
 
-      public static void tryTakeOff(LocalPlayer player) {
-          if (ClientEvents.isElytraEquipped
-                  && ClientEvents.offGroundTicks > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
-                  && player.isSprinting()
-                  && !player.isFallFlying()
-                  && player.getDeltaMovement().length() > BetterFlightCommonConfig.TAKE_OFF_SPEED)
-          {
-              if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
-                  CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
-                  FlightHandler.handleTakeoff(player);
-                  player.playSound(Sounds.FLAP.get(), (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
-                  //TODO playSounds only from servers perspective, instead of playing the sound twice, once at the client, and at the server?
-              }
-          }
-      }
+    public static boolean classicFlight(LocalPlayer player) {
+        if (canTakeOff(player))
+            return classicTakeOff(player);
+        else if (canFlap(player))
+            return tryClassicFlap(player);
+        return false;
+    }
 
-    public static void tryFlap(LocalPlayer player) {
-          if (ClientEvents.isElytraEquipped
-                  && ClientEvents.cooldown <= 0
-                  && !player.isOnGround()
-                  && player.isFallFlying())
-          {
-              if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
-                  CTSFlightActionPacket.send(FlightActionType.FLAP);
-                  FlightHandler.handleClassicFlap(player);
-              }
+    private static boolean canFlap(LocalPlayer player) {
+        return ClientEvents.isElytraEquipped && !player.isOnGround() && player.isFallFlying();
+    }
+
+    private static boolean canTakeOff(LocalPlayer player) {
+        return ClientEvents.isElytraEquipped
+                && ClientEvents.offGroundTicks > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
+                && player.isSprinting()
+                && !player.isFallFlying()
+                && player.getDeltaMovement().length() > BetterFlightCommonConfig.TAKE_OFF_SPEED;
+    }
+
+    public static boolean modernFlight(LocalPlayer player) {
+
+        return false;
+    }
+
+
+    public static boolean classicTakeOff(LocalPlayer player) {
+          if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
+              CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
+              FlightHandler.handleClassicTakeoff(player);
+              player.playSound(Sounds.FLAP.get(), (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
+              //TODO playSounds only from servers perspective, instead of playing the sound twice, once at the client, and at the server?
+              return true;
           }
-      }
+        return false;
+    }
+
+    public static boolean tryClassicFlap(LocalPlayer player) {
+          if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
+              CTSFlightActionPacket.send(FlightActionType.FLAP);
+              FlightHandler.handleClassicFlap(player);
+              return true;
+          }
+        return false;
+    }
 
     /**
      * Handles recharging flight stamina if player is touching the ground.

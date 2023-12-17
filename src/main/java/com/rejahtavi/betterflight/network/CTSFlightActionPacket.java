@@ -36,7 +36,7 @@ public class CTSFlightActionPacket {
         context.get().enqueueWork(() -> {
             switch (message.getUpdateType()) {
                 case TAKEOFF:
-                    FlightHandler.handleTakeoff(context.get().getSender());
+                    FlightHandler.handleClassicTakeoff(context.get().getSender());
                     break;
                 case FLAP:
                     FlightHandler.handleClassicFlap(context.get().getSender());
