@@ -34,7 +34,7 @@ public class ClientEvents {
 
     // Player state
     public static boolean isElytraEquipped = false;
-    private static boolean isKeyPressed = false;
+    private static boolean isKeyDown = false;
     public static boolean isFlaring = false;
     public static int offGroundTicks = 0;
 
@@ -58,7 +58,7 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-            event.register(Keybinding.takeOffKey);
+            //event.register(Keybinding.takeOffKey);
             event.register(Keybinding.flapKey);
             event.register(Keybinding.flareKey);
             event.register(Keybinding.widgetPosKey);
@@ -72,15 +72,6 @@ public class ClientEvents {
         Minecraft instance = Minecraft.getInstance();
         LocalPlayer player = instance.player;
         if (player == null) return;
-
-
-        if (Keybinding.flapKey.isDown() && cooldown <= 0 && !isKeyPressed) {
-            if(BetterFlightCommonConfig.classicMode) {
-                isKeyPressed = ActionHandler.classicFlight(player);
-            }
-            else isKeyPressed = ActionHandler.modernFlight(player);
-        }
-        else isKeyPressed = true;
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             HUDOverlay.cycleWidgetLocation();
@@ -111,40 +102,53 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
 
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
-        if (player == null) return;
 
-        if (devMode) {
-            logger.info("Speed:" + player.getDeltaMovement().length());
-        }
-        // track ground state for takeoff logic
-        if (player.isOnGround()) {
-            offGroundTicks = 0;
-        }
-        else {
-            offGroundTicks++;
-        }
+        //Phase.START runs before vanilla handles client tick. Phase.END runs after vanilla
+        if(event.phase == TickEvent.Phase.END) {
 
-        // decrement timers
-        HUDOverlay.borderTick();
-        if (cooldown > 0) cooldown--;
+            Minecraft mc = Minecraft.getInstance();
+            LocalPlayer player = mc.player;
+            if (player == null) return;
 
-        ItemStack elytraStack = ActionHandler.findEquippedElytra(player);
-        if(elytraStack != null)
-        {
-            isElytraEquipped = true;
-            elytraDurabilityLeft = elytraStack.getMaxDamage() - elytraStack.getDamageValue();
-            elytraDurability = (float) elytraStack.getDamageValue()/(float) elytraStack.getMaxDamage();
+            if (devMode) {
+                logger.info("Speed:" + player.getDeltaMovement().length());
+            }
+            ItemStack elytraStack = ActionHandler.findEquippedElytra(player);
+            if(elytraStack != null)
+            {
+                isElytraEquipped = true;
+                elytraDurabilityLeft = elytraStack.getMaxDamage() - elytraStack.getDamageValue();
+                elytraDurability = (float) elytraStack.getDamageValue()/(float) elytraStack.getMaxDamage();
+            }
+            else { isElytraEquipped = false;}
+
+            // track ground state for takeoff logic
+            if (player.isOnGround()) {
+                offGroundTicks = 0;
+            }
+            else {
+                offGroundTicks++;
+            }
+
+            // decrement timers
+            HUDOverlay.borderTick();
+            if (cooldown > 0) cooldown--;
+
+            ActionHandler.handleRecharge(player);
+            ActionHandler.tryFlare(player);
+
+            while(Keybinding.flapKey.consumeClick()) {
+                if(cooldown <= 0 && !isKeyDown){
+                    if(BetterFlightCommonConfig.classicMode) {
+                        ActionHandler.classicFlight(player);
+                    }
+                    else ActionHandler.modernFlight(player);
+                }
+                isKeyDown = true;
+            }
+            if (!Keybinding.flapKey.isDown()) {
+                isKeyDown = false;}
         }
-        else { isElytraEquipped = false;}
-        ActionHandler.handleRecharge(player);
-        ActionHandler.tryFlare(player);
-
-        if (!Keybinding.flapKey.isDown() && isKeyPressed) {
-            isKeyPressed = false;}
-        if (!Keybinding.flapKey.isDown() && boosted && cooldown <= 0) {
-            boosted = false;}
     }
 
     //region INDEV experimental blocks scanner
