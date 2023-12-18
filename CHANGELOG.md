@@ -8,10 +8,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Added
 
 - Classic Flight mode: Turns on the original flight system by Rehjah
+- 
 ### Changed
 
 - More refactors for project readability
-
+- Client Tick events fire once per tick instead of twice
+- Tick events tweaked to compensate for event changes.
 ## [1.19.2 - 1.1.3] - December 16th, 2023
 
 ### Added
@@ -23,6 +25,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Changed
 
 - Improved project structure for better readability and cohesion
+
 
 ## [1.19.2 - 1.1.1] - December 6th, 2023
 
