@@ -11,12 +11,18 @@ import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 public class ActionHandler {
     private static int rechargeTickCounter = 0;
@@ -184,5 +190,27 @@ public class ActionHandler {
      */
     private static boolean isWorkingElytra(ItemStack elytraStack) {
         return elytraStack.getMaxDamage() - elytraStack.getDamageValue() > 1;
+    }
+
+    //TODO Scan area around player for air
+    //Referencing https://github.com/VentureCraftMods/MC-Gliders/blob/2a2df716fd47f312e0b1c0b593cb43437019f53e/common/src/main/java/net/venturecraft/gliders/util/GliderUtil.java#L183
+    public static boolean checkForAir(Level world, LivingEntity player) {
+        AABB boundingBox = player.getBoundingBox().move(0, -1.5, 0);
+        // contract(2,5,2)
+        // tp dev 432 75 -412
+        // 430 74 -414
+        // 432 71 -412
+        //
+        //contract(0,2,0) captures block at players feet and the block below.
+        List<BlockState> blocks = world.getBlockStatesIfLoaded(boundingBox).toList();
+        //for(BlockState n : blocks)
+            //ClientEvents.logger.debug(n);
+        //Block.isShapeFullBlock();
+        //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
+        Stream<BlockState> filteredBlocks = blocks.stream().filter(blockState -> !blockState.isAir());
+        if (filteredBlocks.toList().isEmpty()) {
+            return true;
+        }
+        return false;
     }
 }
