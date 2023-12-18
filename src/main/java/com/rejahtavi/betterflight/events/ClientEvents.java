@@ -7,11 +7,7 @@ import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.ActionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -21,9 +17,6 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -103,12 +96,9 @@ public class ClientEvents {
             else { isElytraEquipped = false;}
 
             // track ground state for takeoff logic
-            if (player.isOnGround()) {
-                offGroundTicks = 0;
-            }
-            else {
-                offGroundTicks++;
-            }
+
+            if (player.isOnGround()) {offGroundTicks = 0;}
+            else {offGroundTicks++;}
 
             // decrement timers
             HUDOverlay.borderTick();
@@ -132,27 +122,5 @@ public class ClientEvents {
     }
 
     //region INDEV experimental blocks scanner
-
-    //TODO Scan area around player for air
-    //Referencing https://github.com/VentureCraftMods/MC-Gliders/blob/2a2df716fd47f312e0b1c0b593cb43437019f53e/common/src/main/java/net/venturecraft/gliders/util/GliderUtil.java#L183
-    public static boolean checkForAir(Level world, LivingEntity player) {
-        AABB boundingBox = player.getBoundingBox().move(0, -1.5, 0);
-        // contract(2,5,2)
-        // tp dev 432 75 -412
-        // 430 74 -414
-        // 432 71 -412
-        //
-        //contract(0,2,0) captures block at players feet and the block below.
-        List<BlockState> blocks = world.getBlockStatesIfLoaded(boundingBox).toList();
-        for(BlockState n : blocks)
-            logger.debug(n);
-        //Block.isShapeFullBlock();
-        //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
-        Stream<BlockState> filteredBlocks = blocks.stream().filter(blockState -> !blockState.isAir());
-        if (filteredBlocks.toList().isEmpty()) {
-            return true;
-        }
-        return false;
-    }
 
 }
