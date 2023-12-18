@@ -140,7 +140,7 @@ public class BetterFlightCommonConfig {
 
             cooldownTicks = builder
                     .comment("Time, in ticks, players must wait between wing flaps.")
-                    .defineInRange("CooldownTicks", 20, 5, 200);
+                    .defineInRange("CooldownTicks", 10, 5, 200);
 
             softCeiling = builder
                     .comment("Height above which flapping begins to be less effective. (Must be less than hardCeiling).")
