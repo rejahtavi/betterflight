@@ -4,7 +4,7 @@ import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
-import com.rejahtavi.betterflight.util.ActionHandler;
+import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +43,7 @@ public class ClientEvents {
      * default to full elytra meter on startup
      */
     public static void init() {
-        ActionHandler.charge = BetterFlightCommonConfig.maxCharge;
+        InputHandler.charge = BetterFlightCommonConfig.maxCharge;
     }
 
     @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -86,7 +86,7 @@ public class ClientEvents {
             if (devMode) {
                 logger.info("Speed:" + player.getDeltaMovement().length());
             }
-            ItemStack elytraStack = ActionHandler.findEquippedElytra(player);
+            ItemStack elytraStack = InputHandler.findEquippedElytra(player);
             if(elytraStack != null)
             {
                 isElytraEquipped = true;
@@ -104,15 +104,18 @@ public class ClientEvents {
             HUDOverlay.borderTick();
             if (cooldown > 0) cooldown--;
 
-            ActionHandler.handleRecharge(player);
-            ActionHandler.tryFlare(player);
+            InputHandler.handleRecharge(player);
+            while(Keybinding.flareKey.consumeClick())
+            {
+                InputHandler.tryFlare(player);
+            }
 
             while(Keybinding.flapKey.consumeClick()) {
                 if(cooldown <= 0 && !isKeyDown){
                     if(BetterFlightCommonConfig.classicMode) {
-                        ActionHandler.classicFlight(player);
+                        InputHandler.classicFlight(player);
                     }
-                    else ActionHandler.modernFlight(player);
+                    else InputHandler.modernFlight(player);
                 }
                 isKeyDown = true;
             }
@@ -120,7 +123,5 @@ public class ClientEvents {
                 isKeyDown = false;}
         }
     }
-
-    //region INDEV experimental blocks scanner
 
 }

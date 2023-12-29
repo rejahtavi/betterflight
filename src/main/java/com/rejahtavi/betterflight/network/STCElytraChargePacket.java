@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import com.rejahtavi.betterflight.BetterFlight;
 
-import com.rejahtavi.betterflight.util.ActionHandler;
+import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +37,7 @@ public class STCElytraChargePacket {
     public static void handle(STCElytraChargePacket message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                    () -> () -> ActionHandler.charge = message.getCharge());
+                    () -> () -> InputHandler.charge = message.getCharge());
         });
         context.get().setPacketHandled(true);
     }
