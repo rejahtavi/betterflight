@@ -8,7 +8,7 @@ import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 
 import com.rejahtavi.betterflight.events.ClientEvents;
-import com.rejahtavi.betterflight.util.ActionHandler;
+import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.resources.ResourceLocation;
@@ -164,7 +164,7 @@ public class HUDOverlay {
 
         // determine how much of the meter has been emptied
         int drainedPixels = (int) Math.floor(
-                (1.0f - (float) ActionHandler.charge / (float) BetterFlightCommonConfig.maxCharge) * ICON_SIZE);
+                (1.0f - (float) InputHandler.charge / (float) BetterFlightCommonConfig.maxCharge) * ICON_SIZE);
 
         // finally, we are ready to draw the
 

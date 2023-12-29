@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
-public class ActionHandler {
+public class InputHandler {
     private static int rechargeTickCounter = 0;
     private static int flareTickCounter = 0;
     public static int charge = BetterFlightCommonConfig.maxCharge;
@@ -107,7 +107,6 @@ public class ActionHandler {
     //MAYBE rework flare or introduce a new method to "glide"? Like being able to hold one's position while in the air like a bird.
     public static void tryFlare(LocalPlayer player) {
         if (ClientEvents.isElytraEquipped
-                && Keybinding.flareKey.isDown()
                 && (player.isCreative() || charge > 0)
                 && !player.isOnGround()
                 && player.isFallFlying()) {
