@@ -12,6 +12,7 @@ import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -29,7 +30,7 @@ public class InputHandler {
     private static int flareTickCounter = 0;
     public static int charge = BetterFlightCommonConfig.maxCharge;
 
-    public static boolean classicFlight(LocalPlayer player) {
+    public static boolean classicFlight(Player player) {
         if (canTakeOff(player))
             return classicTakeOff(player);
         else if (canFlap(player))
@@ -37,11 +38,11 @@ public class InputHandler {
         return false;
     }
 
-    private static boolean canFlap(LocalPlayer player) {
+    private static boolean canFlap(Player player) {
         return ClientEvents.isElytraEquipped && !player.isOnGround() && player.isFallFlying();
     }
 
-    private static boolean canTakeOff(LocalPlayer player) {
+    private static boolean canTakeOff(Player player) {
         return ClientEvents.isElytraEquipped
                 && ClientEvents.offGroundTicks > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
                 && player.isSprinting()
@@ -49,13 +50,13 @@ public class InputHandler {
                 && player.getDeltaMovement().length() > BetterFlightCommonConfig.TAKE_OFF_SPEED;
     }
 
-    public static boolean modernFlight(LocalPlayer player) {
+    public static boolean modernFlight(Player player) {
 
         return false;
     }
 
 
-    public static boolean classicTakeOff(LocalPlayer player) {
+    public static boolean classicTakeOff(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
               CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
               FlightHandler.handleClassicTakeoff(player);
@@ -64,7 +65,7 @@ public class InputHandler {
         return false;
     }
 
-    public static boolean tryClassicFlap(LocalPlayer player) {
+    public static boolean tryClassicFlap(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
               CTSFlightActionPacket.send(FlightActionType.FLAP);
               FlightHandler.handleClassicFlap(player);
@@ -77,7 +78,7 @@ public class InputHandler {
      * Handles recharging flight stamina if player is touching the ground.
      * @param player
      */
-    public static void handleRecharge(LocalPlayer player) {
+    public static void handleRecharge(Player player) {
 
           if (player.isCreative()) {
               charge = BetterFlightCommonConfig.maxCharge;
@@ -103,7 +104,7 @@ public class InputHandler {
       }
 
     //MAYBE rework flare or introduce a new method to "glide"? Like being able to hold one's position while in the air like a bird.
-    public static void tryFlare(LocalPlayer player) {
+    public static void tryFlare(Player player) {
         if (ClientEvents.isElytraEquipped
                 && (player.isCreative() || charge > 0)
                 && !player.isOnGround()
@@ -134,7 +135,7 @@ public class InputHandler {
      * @param points how much stamina to spend
      * @return true if creative mode or action was successful
      */
-    private static boolean spendCharge(LocalPlayer player, int points) {
+    private static boolean spendCharge(Player player, int points) {
 
         if (player.isCreative()) return true;
 
@@ -155,7 +156,7 @@ public class InputHandler {
      * @param player
      * @return itemstack an elytra was found; null if not found
      */
-    public static ItemStack findEquippedElytra(@NotNull LocalPlayer player) {
+    public static ItemStack findEquippedElytra(@NotNull Player player) {
 
         // check the player's chest slot for elytra
         ItemStack elytraStack = player.getItemBySlot(EquipmentSlot.CHEST);

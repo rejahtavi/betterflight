@@ -7,6 +7,7 @@ import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -63,7 +64,7 @@ public class ClientEvents {
     public static void onKeyInput(InputEvent.Key event) {
 
         Minecraft instance = Minecraft.getInstance();
-        LocalPlayer player = instance.player;
+        Player player = instance.player;
         if (player == null) return;
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
@@ -80,7 +81,7 @@ public class ClientEvents {
         if(event.phase == TickEvent.Phase.END) {
 
             Minecraft mc = Minecraft.getInstance();
-            LocalPlayer player = mc.player;
+            Player player = mc.player;
             if (player == null) return;
 
             if (devMode) {
