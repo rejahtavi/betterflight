@@ -59,8 +59,6 @@ public class InputHandler {
           if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
               CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
               FlightHandler.handleClassicTakeoff(player);
-              player.playSound(Sounds.FLAP.get(), (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
-              //TODO playSounds only from servers perspective, instead of playing the sound twice, once at the client, and at the server?
               return true;
           }
         return false;

@@ -45,8 +45,7 @@ public class FlightHandler {
         Vec3 impulse = forwards.add(upwards);
         player.push(impulse.x,impulse.y,impulse.z);
 
-        player.level.playSound(null,new BlockPos(player.position()),Sounds.FLAP.get(), SoundSource.PLAYERS,(float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
-        //player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+        player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
     }
 
     /**
