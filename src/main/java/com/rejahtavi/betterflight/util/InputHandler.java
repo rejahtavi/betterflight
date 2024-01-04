@@ -4,12 +4,9 @@ import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.events.ClientEvents;
-import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
-import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +31,7 @@ public class InputHandler {
         if (canTakeOff(player))
             return classicTakeOff(player);
         else if (canFlap(player))
-            return tryClassicFlap(player);
+            return classicFlap(player);
         return false;
     }
 
@@ -56,6 +53,11 @@ public class InputHandler {
     }
 
 
+    /**
+     * Coordinates client-server classic take off action if player has enough charge
+     * @param player
+     * @return true if action was successful
+     */
     public static boolean classicTakeOff(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
               CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
@@ -65,7 +67,12 @@ public class InputHandler {
         return false;
     }
 
-    public static boolean tryClassicFlap(Player player) {
+    /**
+     * Coordinates client-server classic flap action if player has enough charge
+     * @param player
+     * @return true if action was successful
+     */
+    public static boolean classicFlap(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
               CTSFlightActionPacket.send(FlightActionType.FLAP);
               FlightHandler.handleClassicFlap(player);
@@ -75,7 +82,7 @@ public class InputHandler {
     }
 
     /**
-     * Handles recharging flight stamina if player is touching the ground.
+     * Handles recharging flight stamina if player is touching the ground and not flaring. Triggers per tick.
      * @param player
      */
     public static void handleRecharge(Player player) {
