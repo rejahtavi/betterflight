@@ -7,6 +7,8 @@ import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -201,21 +203,42 @@ public class InputHandler {
     //Referencing https://github.com/VentureCraftMods/MC-Gliders/blob/2a2df716fd47f312e0b1c0b593cb43437019f53e/common/src/main/java/net/venturecraft/gliders/util/GliderUtil.java#L183
     public static boolean checkForAir(Level world, LivingEntity player) {
         AABB boundingBox = player.getBoundingBox().move(0, -1.5, 0);
+//        AABB boundingBox = new AABB(player.blockPosition());
         // contract(2,5,2)
         // tp dev 432 75 -412
         // 430 74 -414
         // 432 71 -412
         //
         //contract(0,2,0) captures block at players feet and the block below.
-        List<BlockState> blocks = world.getBlockStatesIfLoaded(boundingBox).toList();
-        //for(BlockState n : blocks)
-            //ClientEvents.logger.debug(n);
-        //Block.isShapeFullBlock();
+        ClientEvents.logger.debug("Xsize: "+ boundingBox.getXsize());
+        ClientEvents.logger.debug("Ysize: "+ boundingBox.getYsize());
+        ClientEvents.logger.debug("Zsize: "+ boundingBox.getZsize());
+
+        Stream<BlockPos> blocks = getBlockPosIfLoaded(world,boundingBox);
+        List<BlockState> blockStates = blocks.map(world::getBlockState).toList();
         //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
-        Stream<BlockState> filteredBlocks = blocks.stream().filter(blockState -> !blockState.isAir());
+
+        Stream<BlockState> filteredBlocks = blockStates.stream().filter(blockState -> !blockState.isCollisionShapeFullBlock(world,blocks.));
         if (filteredBlocks.toList().isEmpty()) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns stream of BlockPos in given AABB, if the chunks are already loaded.
+     * @param world
+     * @param boundingBox
+     * @return Stream of BlockPos found
+     */
+    private static Stream<BlockPos> getBlockPosIfLoaded(Level world, AABB boundingBox)
+    {
+        int i = Mth.floor(boundingBox.minX);
+        int j = Mth.floor(boundingBox.maxX);
+        int k = Mth.floor(boundingBox.minY);
+        int l = Mth.floor(boundingBox.maxY);
+        int i1 = Mth.floor(boundingBox.minZ);
+        int j1 = Mth.floor(boundingBox.maxZ);
+        return world.hasChunksAt(i, k, i1, j, l, j1) ? BlockPos.betweenClosedStream(boundingBox) : Stream.empty();
     }
 }

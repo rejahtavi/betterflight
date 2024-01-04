@@ -23,7 +23,7 @@ import org.lwjgl.glfw.GLFW;
 public class ClientEvents {
 
     //INDEV
-    static Logger logger = LogManager.getLogger(BetterFlight.MODID);
+    public static Logger logger = LogManager.getLogger(BetterFlight.MODID);
     private static boolean devMode = true;
 
     // Player state
@@ -70,6 +70,9 @@ public class ClientEvents {
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             HUDOverlay.cycleWidgetLocation();
         }
+        if(Keybinding.flareKey.isDown())
+            InputHandler.checkForAir(instance.level,player);
+
 
     }
 
@@ -85,7 +88,7 @@ public class ClientEvents {
             if (player == null) return;
 
             if (devMode) {
-                logger.info("Speed:" + player.getDeltaMovement().length());
+                //logger.info("Speed:" + player.getDeltaMovement().length());
             }
             ItemStack elytraStack = InputHandler.findEquippedElytra(player);
             if(elytraStack != null)
