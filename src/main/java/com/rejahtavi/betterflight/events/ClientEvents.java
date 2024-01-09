@@ -24,7 +24,7 @@ public class ClientEvents {
 
     //INDEV
     public static Logger logger = LogManager.getLogger(BetterFlight.MODID);
-    private static boolean devMode = true;
+    public static boolean devMode = true;
 
     // Player state
     public static boolean isElytraEquipped = false;
