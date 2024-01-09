@@ -22,6 +22,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InputHandler {
@@ -215,10 +216,16 @@ public class InputHandler {
         ClientEvents.logger.debug("Zsize: "+ boundingBox.getZsize());
 
         Stream<BlockPos> blocks = getBlockPosIfLoaded(world,boundingBox);
-        List<BlockState> blockStates = blocks.map(world::getBlockState).toList();
+        //List<BlockState> blockStates = blocks.map(world::getBlockState).toList();
         //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
-
-        Stream<BlockState> filteredBlocks = blockStates.stream().filter(blockState -> !blockState.isCollisionShapeFullBlock(world,blocks.));
+        //blocks.filter(pos -> world.getBlockState(pos).isCollisionShapeFullBlock(world,pos));
+        //Stream<BlockState> filteredBlocks = blockStates.stream().filter(blockState -> !blockState.isAir());
+        Stream<BlockPos> filteredBlocks = blocks.filter(
+                pos -> {
+                    if(ClientEvents.devMode)
+                        ClientEvents.logger.debug(pos.toString() + world.getBlockState(pos));
+                    return world.getBlockState(pos).isCollisionShapeFullBlock(world,pos);
+                });
         if (filteredBlocks.toList().isEmpty()) {
             return true;
         }
