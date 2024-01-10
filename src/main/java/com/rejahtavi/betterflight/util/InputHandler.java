@@ -199,19 +199,8 @@ public class InputHandler {
     private static boolean isWorkingElytra(ItemStack elytraStack) {
         return elytraStack.getMaxDamage() - elytraStack.getDamageValue() > 1;
     }
-
-    //TODO Scan area around player for air
-    //Referencing https://github.com/VentureCraftMods/MC-Gliders/blob/2a2df716fd47f312e0b1c0b593cb43437019f53e/common/src/main/java/net/venturecraft/gliders/util/GliderUtil.java#L183
-    public static boolean  checkForAir(Level world, LivingEntity player) {
+    public static boolean checkForAir(Level world, LivingEntity player) {
         AABB boundingBox = player.getBoundingBox().move(0, -1.5, 0).inflate(0.1D,0D,0.1D);
-//        AABB boundingBox = new AABB(player.blockPosition());
-        // contract(2,5,2)
-        // tp dev 432 75 -412
-        // 430 74 -414
-        // 432 71 -412
-        //
-        //contract(0,2,0) captures block at players feet and the block below.
-
         Stream<BlockPos> blocks = getBlockPosIfLoaded(world,boundingBox);
         //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
         Stream<BlockPos> filteredBlocks = blocks.filter(
