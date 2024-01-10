@@ -211,19 +211,11 @@ public class InputHandler {
         // 432 71 -412
         //
         //contract(0,2,0) captures block at players feet and the block below.
-        ClientEvents.logger.debug("Xsize: "+ boundingBox.getXsize());
-        ClientEvents.logger.debug("Ysize: "+ boundingBox.getYsize());
-        ClientEvents.logger.debug("Zsize: "+ boundingBox.getZsize());
 
         Stream<BlockPos> blocks = getBlockPosIfLoaded(world,boundingBox);
-        //List<BlockState> blockStates = blocks.map(world::getBlockState).toList();
         //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
-        //blocks.filter(pos -> world.getBlockState(pos).isCollisionShapeFullBlock(world,pos));
-        //Stream<BlockState> filteredBlocks = blockStates.stream().filter(blockState -> !blockState.isAir());
         Stream<BlockPos> filteredBlocks = blocks.filter(
                 pos -> {
-                    if(ClientEvents.devMode)
-                        ClientEvents.logger.debug(pos.toString() + world.getBlockState(pos));
                     return world.getBlockState(pos).isCollisionShapeFullBlock(world,pos);
                 });
         if (filteredBlocks.toList().isEmpty()) {
