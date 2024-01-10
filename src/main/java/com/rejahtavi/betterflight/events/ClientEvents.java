@@ -24,8 +24,6 @@ public class ClientEvents {
 
     //INDEV
     public static Logger logger = LogManager.getLogger(BetterFlight.MODID);
-    public static boolean devMode = true;
-
     // Player state
     public static boolean isElytraEquipped = false;
     private static boolean isKeyDown = false;
@@ -38,7 +36,7 @@ public class ClientEvents {
 
     // timers
     public static int cooldown = 0;
-    private static boolean boosted = false;
+    private static boolean isDebugButtonDown = false;
 
     /**
      * default to full elytra meter on startup
@@ -70,9 +68,6 @@ public class ClientEvents {
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
             HUDOverlay.cycleWidgetLocation();
         }
-        if(Keybinding.flareKey.isDown())
-            InputHandler.checkForAir(instance.level,player);
-
 
     }
 
@@ -87,9 +82,7 @@ public class ClientEvents {
             Player player = mc.player;
             if (player == null) return;
 
-            if (devMode) {
-                //logger.info("Speed:" + player.getDeltaMovement().length());
-            }
+            //logger.info("Speed:" + player.getDeltaMovement().length());
             ItemStack elytraStack = InputHandler.findEquippedElytra(player);
             if(elytraStack != null)
             {
@@ -112,6 +105,13 @@ public class ClientEvents {
             while(Keybinding.flareKey.consumeClick())
             {
                 InputHandler.tryFlare(player);
+
+                if(!isDebugButtonDown)
+                {
+                    InputHandler.checkForAir(mc.level,player);
+                    isDebugButtonDown = true;
+                }
+
             }
 
             while(Keybinding.flapKey.consumeClick()) {
@@ -125,6 +125,8 @@ public class ClientEvents {
             }
             if (!Keybinding.flapKey.isDown()) {
                 isKeyDown = false;}
+            if (!Keybinding.flareKey.isDown()) {
+                isDebugButtonDown = false;}
         }
     }
 
