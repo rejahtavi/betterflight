@@ -111,6 +111,7 @@ dependencies {
     implementation fg.deobf("curse.maven:caelus-308989:3929284") //elytraslot dependency
     implementation fg.deobf("curse.maven:airhop-323071:3961936")
     implementation fg.deobf("curse.maven:puzzleslib-495476:4600775")
+    implementation fg.deobf("curse.maven:goprone-327968:3884694")
 
 }
 
