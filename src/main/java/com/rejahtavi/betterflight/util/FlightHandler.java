@@ -104,7 +104,7 @@ public class FlightHandler {
         player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
     }
 
-    public static void handleModernTakeoff(Player player) {
+    public static void handleModernBoost(Player player) {
         double d0 = 0.1; //delta coefficient. Influenced by difference between d0 and current delta
         double d1 = 1.0; //boost coefficient
         Vec3 looking = player.getLookAngle();
@@ -116,8 +116,6 @@ public class FlightHandler {
                 looking.z * d1 + (looking.z * d0 - delta.z) * 1.5));
 
         impulse = impulse.add(getUpVector(player).scale(0.3));
-        toggleFlight(player); //TODO improve toggle consistency
-        CTSFlightActionPacket.send(FlightActionType.FLYING);
         player.push(impulse.x,impulse.y,impulse.z);
         player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
     }

@@ -15,14 +15,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InputHandler {
@@ -39,7 +36,7 @@ public class InputHandler {
     }
 
     private static boolean canFlap(Player player) {
-        return ClientEvents.isElytraEquipped && !player.isOnGround() && player.isFallFlying();
+          return ClientEvents.isElytraEquipped && !player.isOnGround() && player.isFallFlying();
     }
 
     private static boolean canTakeOff(Player player) {
@@ -51,7 +48,23 @@ public class InputHandler {
     }
 
     public static boolean modernFlight(Player player) {
-
+        if (canFlap(player))
+        {
+            if(spendCharge(player, BetterFlightCommonConfig.flapCost))
+            {
+                if(!checkForAir(player.level,player))
+                {
+                    CTSFlightActionPacket.send(FlightActionType.BOOST);
+                    FlightHandler.handleModernBoost(player);
+                }
+                else
+                {
+                    CTSFlightActionPacket.send(FlightActionType.MODERN_FLAP);
+                    FlightHandler.handleModernFlap(player);
+                }
+                return true;
+            }
+        }
         return false;
     }
 
@@ -77,7 +90,7 @@ public class InputHandler {
      */
     public static boolean classicFlap(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
-              CTSFlightActionPacket.send(FlightActionType.FLAP);
+              CTSFlightActionPacket.send(FlightActionType.CLASSIC_FLAP);
               FlightHandler.handleClassicFlap(player);
               return true;
           }
