@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -215,10 +216,10 @@ public class InputHandler {
     public static boolean checkForAir(Level world, LivingEntity player) {
         AABB boundingBox = player.getBoundingBox().move(0, -1.5, 0).inflate(0.1D,0D,0.1D);
         Stream<BlockPos> blocks = getBlockPosIfLoaded(world,boundingBox);
-        //TODO Exclude non-solid, non-cube blocks in the filter, like minecraft:grass and minecraft:torch
         Stream<BlockPos> filteredBlocks = blocks.filter(
                 pos -> {
-                    return world.getBlockState(pos).isCollisionShapeFullBlock(world,pos);
+                    BlockState block = world.getBlockState(pos);
+                    return block.isCollisionShapeFullBlock(world,pos) || block.getMaterial().isLiquid();
                 });
         if (filteredBlocks.toList().isEmpty()) {
             return true;
