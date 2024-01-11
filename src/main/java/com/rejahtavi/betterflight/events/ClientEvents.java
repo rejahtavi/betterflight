@@ -6,7 +6,6 @@ import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -76,7 +75,7 @@ public class ClientEvents {
 
 
         //Phase.START runs before vanilla handles client tick. Phase.END runs after vanilla
-        if(event.phase == TickEvent.Phase.END) {
+        if(event.phase == TickEvent.Phase.START) {
 
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;

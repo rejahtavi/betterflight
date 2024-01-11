@@ -35,10 +35,16 @@ public class CTSFlightActionPacket {
     public static void handle(CTSFlightActionPacket message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             switch (message.getUpdateType()) {
+                case MODERN_FLAP:
+                    FlightHandler.handleModernFlap(context.get().getSender());
+                    break;
+                case BOOST:
+                    FlightHandler.handleModernBoost(context.get().getSender());
+                    break;
                 case TAKEOFF:
                     FlightHandler.handleClassicTakeoff(context.get().getSender());
                     break;
-                case FLAP:
+                case CLASSIC_FLAP:
                     FlightHandler.handleClassicFlap(context.get().getSender());
                     break;
                 case FLARE:
@@ -47,8 +53,6 @@ public class CTSFlightActionPacket {
                 case RECHARGE:
                     FlightHandler.handleFlightStaminaExhaustion(context.get().getSender());
                     break;
-                case FLYING:
-                    FlightHandler.toggleFlight(context.get().getSender());
             }
         });
         context.get().setPacketHandled(true);

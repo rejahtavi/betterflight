@@ -4,9 +4,9 @@ package com.rejahtavi.betterflight.common;
 // Lets us send multiple messages with a single universal packet format.
 public enum FlightActionType {
     TAKEOFF,
-    FLAP,
+    CLASSIC_FLAP,
     FLARE,
     RECHARGE,
-
-    FLYING
+    MODERN_FLAP,
+    BOOST
 }
