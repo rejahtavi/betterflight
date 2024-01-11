@@ -22,7 +22,7 @@ public class BetterFlightCommonConfig {
     // constants, might make some of these configurable later
     public static final double TAKE_OFF_SPEED = 0.170D;
     public static final double TAKE_OFF_THRUST = 1.0D;
-    public static final double FLAP_THRUST = 0.65D;
+    public static final double CLASSIC_FLAP_THRUST = 0.65D;
     public static final double FLARE_DRAG = 0.05D;
     public static final int TAKE_OFF_JUMP_DELAY = 4;
 

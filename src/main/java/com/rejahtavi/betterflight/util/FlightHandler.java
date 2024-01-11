@@ -2,11 +2,7 @@ package com.rejahtavi.betterflight.util;
 
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
-import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.common.Sounds;
-import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
-import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -40,8 +36,8 @@ public class FlightHandler {
      */
     public static void handleClassicFlap(Player player) {
         double ceilingFactor = getCeilingFactor(player);
-        Vec3 upwards = new Vec3(0.0D, BetterFlightCommonConfig.FLAP_THRUST,0.0D).scale(getCeilingFactor(player));
-        Vec3 forwards = player.getDeltaMovement().normalize().scale(BetterFlightCommonConfig.FLAP_THRUST * 0.25).scale(ceilingFactor);
+        Vec3 upwards = new Vec3(0.0D, BetterFlightCommonConfig.CLASSIC_FLAP_THRUST,0.0D).scale(getCeilingFactor(player));
+        Vec3 forwards = player.getDeltaMovement().normalize().scale(BetterFlightCommonConfig.CLASSIC_FLAP_THRUST * 0.25).scale(ceilingFactor);
         Vec3 impulse = forwards.add(upwards);
         player.push(impulse.x,impulse.y,impulse.z);
 
