@@ -32,7 +32,7 @@ public class ClientConfig {
     //@formatter:off
     public static void bake() {
         takeOffVolume               = CLIENT.takeOffVolume.get();
-        flapVolume                  = CLIENT.flapVolume.get();
+        flapVolume                  = CLIENT.classicFlapVolume.get();
         hudLocation                 = CLIENT.hudLocation.get();
     }
 
@@ -40,7 +40,7 @@ public class ClientConfig {
     public static class Client {
 
         public final ForgeConfigSpec.DoubleValue takeOffVolume;
-        public final ForgeConfigSpec.DoubleValue flapVolume;
+        public final ForgeConfigSpec.DoubleValue classicFlapVolume;
         public final ForgeConfigSpec.EnumValue<HudLocation> hudLocation;
 
         public Client(ForgeConfigSpec.Builder builder) {
@@ -50,7 +50,7 @@ public class ClientConfig {
                     .comment("Loudness of the flap sound on takeoff.")
                     .defineInRange("TakeOffVolume", 1.0D, 0.0D, 1.0D);
 
-            flapVolume = builder
+            classicFlapVolume = builder
                     .comment("Loudness of the flap sound when flapping wings.")
                     .defineInRange("FlapVolume", 0.5D, 0.0D, 1.0D);
             

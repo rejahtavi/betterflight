@@ -13,6 +13,7 @@ public class Sounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, BetterFlight.MODID);
 
     public static final RegistryObject<SoundEvent> FLAP = createEvent("betterflight.flap");
+    public static final RegistryObject<SoundEvent> BOOST = createEvent("betterflight.boost");
 
     private static RegistryObject<SoundEvent> createEvent(String sound) {
         return SOUNDS.register(sound, () -> new SoundEvent(new ResourceLocation(BetterFlight.MODID, sound)));
