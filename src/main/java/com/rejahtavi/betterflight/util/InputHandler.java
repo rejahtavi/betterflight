@@ -216,7 +216,10 @@ public class InputHandler {
         return elytraStack.getMaxDamage() - elytraStack.getDamageValue() > 1;
     }
     public static boolean checkForAir(Level world, LivingEntity player) {
-        AABB boundingBox = player.getBoundingBox().move(0, -1.5, 0).inflate(0.1D,0D,0.1D);
+        AABB boundingBox = player.getBoundingBox()
+                .setMaxY(player.getBoundingBox().minY+3.5)
+                .inflate(1D,0D,1D)
+                .move(0,-1.5D,0);
         Stream<BlockPos> blocks = getBlockPosIfLoaded(world,boundingBox);
         Stream<BlockPos> filteredBlocks = blocks.filter(
                 pos -> {
