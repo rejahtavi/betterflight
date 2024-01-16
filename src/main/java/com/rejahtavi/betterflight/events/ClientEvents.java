@@ -101,16 +101,14 @@ public class ClientEvents {
             if (cooldown > 0) cooldown--;
 
             InputHandler.handleRecharge(player);
+            InputHandler.tryFlare(player);
             while(Keybinding.flareKey.consumeClick())
             {
-                InputHandler.tryFlare(player);
-
                 if(!isDebugButtonDown)
                 {
                     InputHandler.checkForAir(mc.level,player);
                     isDebugButtonDown = true;
                 }
-
             }
 
             while(Keybinding.flapKey.consumeClick()) {
@@ -125,7 +123,8 @@ public class ClientEvents {
             if (!Keybinding.flapKey.isDown()) {
                 isKeyDown = false;}
             if (!Keybinding.flareKey.isDown()) {
-                isDebugButtonDown = false;}
+                isDebugButtonDown = false;
+            }
         }
     }
 

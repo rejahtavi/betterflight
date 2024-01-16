@@ -3,6 +3,7 @@ package com.rejahtavi.betterflight.util;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.HUDOverlay;
+import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
@@ -130,6 +131,7 @@ public class InputHandler {
     //MAYBE rework flare or introduce a new method to "glide"? Like being able to hold one's position while in the air like a bird.
     public static void tryFlare(Player player) {
         if (ClientEvents.isElytraEquipped
+                && Keybinding.flareKey.isDown()
                 && (player.isCreative() || charge > 0)
                 && !player.isOnGround()
                 && player.isFallFlying()) {
