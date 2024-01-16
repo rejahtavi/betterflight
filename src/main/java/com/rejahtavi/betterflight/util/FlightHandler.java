@@ -86,7 +86,7 @@ public class FlightHandler {
 
     public static void handleModernFlap(Player player) {
         double d0 = 0.1; //delta coefficient. Influenced by difference between d0 and current delta
-        double d1 = 0.5; //boost coefficient
+        double d1 = 0.65; //boost coefficient
         Vec3 looking = player.getLookAngle();
         Vec3 delta = player.getDeltaMovement();
 
@@ -113,7 +113,7 @@ public class FlightHandler {
 
         impulse = impulse.add(getUpVector(player).scale(0.3));
         player.push(impulse.x,impulse.y,impulse.z);
-        player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+        player.playSound(Sounds.BOOST.get(), 2F, 1F);
     }
 
     /**

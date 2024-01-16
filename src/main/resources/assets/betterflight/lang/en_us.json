@@ -3,5 +3,6 @@
     "betterflight.keys.flap": "Flap",
     "betterflight.keys.flare": "Flare",
     "betterflight.keys.widget": "Move HUD",
-    "betterflight.subtitles.flap": "Elytra flap"
+    "betterflight.subtitles.flap": "Elytra flap",
+    "betterflight.subtitles.boost": "Elytra boost"
 }
