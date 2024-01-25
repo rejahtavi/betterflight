@@ -128,8 +128,4 @@ public class FlightHandler {
         Vec3 up = player.getLookAngle().cross(left);
         return up;
     }
-
-    public static void toggleFlight(Player player) {
-        player.startFallFlying();
-    }
 }
