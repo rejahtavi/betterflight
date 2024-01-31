@@ -131,6 +131,7 @@ public class InputHandler {
     //MAYBE rework flare or introduce a new method to "glide"? Like being able to hold one's position while in the air like a bird.
     public static void tryFlare(Player player) {
         if (ClientEvents.isElytraEquipped
+                && ClientEvents.isFlightEnabled
                 && Keybinding.flareKey.isDown()
                 && (player.isCreative() || charge > 0)
                 && !player.isOnGround()

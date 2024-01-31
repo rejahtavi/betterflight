@@ -25,9 +25,11 @@ public class ClientEvents {
     public static Logger logger = LogManager.getLogger(BetterFlight.MODID);
     // Player state
     public static boolean isElytraEquipped = false;
-    private static boolean isKeyDown = false;
+    private static boolean isFlapKeyDown = false;
+    private static boolean isToggleKeyDown = false;
     public static boolean isFlaring = false;
     public static int offGroundTicks = 0;
+    public static boolean isFlightEnabled = true;
 
     // elytra damage
     public static double elytraDurability = 0.5D;
@@ -49,7 +51,7 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-            //event.register(Keybinding.takeOffKey);
+            event.register(Keybinding.toggleKey);
             event.register(Keybinding.flapKey);
             event.register(Keybinding.flareKey);
             event.register(Keybinding.widgetPosKey);
@@ -112,17 +114,33 @@ public class ClientEvents {
 //                }
 //            }
 
+            while(Keybinding.toggleKey.consumeClick()) {
+                if(isFlightEnabled && !isToggleKeyDown)
+                {
+                    isFlightEnabled = false;
+                    isToggleKeyDown = true;
+                }
+                else if (!isToggleKeyDown)
+                {
+                    isFlightEnabled = true;
+                    isToggleKeyDown = true;
+                }
+            }
+
             while(Keybinding.flapKey.consumeClick()) {
-                if(cooldown <= 0 && !isKeyDown){
+                if(cooldown <= 0 && !isFlapKeyDown && isFlightEnabled){
                     if(BetterFlightCommonConfig.classicMode) {
                         InputHandler.classicFlight(player);
                     }
                     else InputHandler.modernFlight(player);
                 }
-                isKeyDown = true;
+                isFlapKeyDown = true;
+            }
+            if (!Keybinding.toggleKey.isDown()) {
+                isToggleKeyDown = false;
             }
             if (!Keybinding.flapKey.isDown()) {
-                isKeyDown = false;}
+                isFlapKeyDown = false;}
 //            if (!Keybinding.flareKey.isDown()) {
 //                isDebugButtonDown = false;
 //            }
