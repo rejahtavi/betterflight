@@ -23,7 +23,7 @@ public class BetterFlightCommonConfig {
     public static final double TAKE_OFF_SPEED = 0.170D;
     public static final double TAKE_OFF_THRUST = 1.0D;
     public static final double CLASSIC_FLAP_THRUST = 0.65D;
-    public static final double FLARE_DRAG = 0.05D;
+    public static final double FLARE_DRAG = 0.08D;
     public static final int TAKE_OFF_JUMP_DELAY = 4;
 
     // elytra costs
@@ -108,7 +108,7 @@ public class BetterFlightCommonConfig {
 
             maxCharge = builder
                     .comment("Maximum points of charge in a 'full' elytra meter.")
-                    .defineInRange("MaxCharge", 15, 3, 255);
+                    .defineInRange("MaxCharge", 20, 3, 255);
 
             takeOffCost = builder
                     .comment("Meter point cost to take off.")
@@ -120,11 +120,11 @@ public class BetterFlightCommonConfig {
 
             rechargeTicksInAir = builder
                     .comment("Time, in ticks, it takes to recharge 1 point on the meter while in the air.")
-                    .defineInRange("RechargeTicksInAir", 100, 5, 600);
+                    .defineInRange("RechargeTicksInAir", 80, 5, 600);
 
             rechargeTicksOnGround = builder
                     .comment("Time, in ticks, it takes to recharge 1 point on the meter while on the ground.")
-                    .defineInRange("RechargeTicksOnGround", 20, 5, 600);
+                    .defineInRange("RechargeTicksOnGround", 10, 5, 600);
 
             flareTicksPerChargePoint = builder
                     .comment("Time, in ticks, players can flare per point on the meter.")
@@ -161,7 +161,7 @@ public class BetterFlightCommonConfig {
                                     "customizableelytra:customizable_elytra")),
                             s -> s instanceof String);
             classicMode = builder.comment("If True, enable pre-2.0.0 flight system")
-                            .define("classicMode",true);
+                            .define("classicMode",false);
             builder.pop();
         }
     }
