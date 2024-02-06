@@ -144,7 +144,7 @@ public class BetterFlightCommonConfig {
 
             softCeiling = builder
                     .comment("Height above which flapping begins to be less effective. (Must be less than hardCeiling).")
-                    .defineInRange("softCeiling", 320, 0, 10000);
+                    .defineInRange("softCeiling", 256, 0, 10000);
 
             hardCeiling = builder
                     .comment("Height above which flapping no longer provides any thrust.")
