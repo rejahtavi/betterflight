@@ -93,9 +93,9 @@ public class FlightHandler {
         Vec3 impulse = (delta.add(
                 looking.x * d1 + (looking.x * d0 - delta.x) * 1.5,
                 looking.y * d1 + (looking.y * d0 - delta.y) * 1.5,
-                looking.z * d1 + (looking.z * d0 - delta.z) * 1.5));
-
-        impulse = impulse.add(getUpVector(player).scale(0.3));
+                looking.z * d1 + (looking.z * d0 - delta.z) * 1.5))
+                .scale(getCeilingFactor(player))                //scale to ceiling limit
+                .add(getUpVector(player).scale(0.25));  //add slight up vector
         player.push(impulse.x,impulse.y,impulse.z);
         player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
     }
@@ -109,9 +109,10 @@ public class FlightHandler {
         Vec3 impulse = (delta.add(
                 looking.x * d1 + (looking.x * d0 - delta.x) * 1.5,
                 looking.y * d1 + (looking.y * d0 - delta.y) * 1.5,
-                looking.z * d1 + (looking.z * d0 - delta.z) * 1.5));
+                looking.z * d1 + (looking.z * d0 - delta.z) * 1.5))
+                .scale(getCeilingFactor(player))                //scale to ceiling limit
+                .add(getUpVector(player).scale(0.25));  //add slight up vector
 
-        impulse = impulse.add(getUpVector(player).scale(0.3));
         player.push(impulse.x,impulse.y,impulse.z);
         player.playSound(Sounds.BOOST.get(), 2F, 1F);
     }
