@@ -3,17 +3,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## [Unreleased]
+## [1.19.2 - 2.0.0]
 
 ### Added
 
 - Classic Flight mode: Turns on the original flight system by Rehjah
-- 
+- Modern Flight mode: New flight system that provides forward propulsion while flying.
+- Toggle for enabling/disabling Better Flight mod.
+- New sounds for new flight modes in modern system.
 ### Changed
 
 - More refactors for project readability
 - Client Tick events fire once per tick instead of twice
 - Tick events tweaked to compensate for event changes.
+- Flap and Takeoff key for Classic Flight combined. 
+- Adjusted default range for Ceiling cap
+- Adjusted default configs for flight stamina regen and usage
+
 ## [1.19.2 - 1.1.3] - December 16th, 2023
 
 ### Added
