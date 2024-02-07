@@ -34,7 +34,7 @@ public class BetterFlight {
     // Mod identification data
     public static final String MODID = "betterflight";
     public static final String MODNAME = "Better Flight";
-    public static final String VERSION = "2.0.0";
+    public static final String VERSION = "2.0.1";
 
     // Network Channel
     public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder
