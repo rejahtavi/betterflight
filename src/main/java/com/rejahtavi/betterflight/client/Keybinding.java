@@ -19,7 +19,7 @@ public class Keybinding {
     public static final KeyMapping flapKey = new KeyMapping(KEY_FLAP,
             KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_SPACE, KEY_CATEGORY_BETTERFLIGHT);
     public static final KeyMapping flareKey = new KeyMapping(KEY_FLARE,
-            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, KEY_CATEGORY_BETTERFLIGHT);
+            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_SHIFT, KEY_CATEGORY_BETTERFLIGHT);
     public static final KeyMapping widgetPosKey = new KeyMapping(KEY_WIDGET_POS,
             KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F10, KEY_CATEGORY_BETTERFLIGHT);
 }

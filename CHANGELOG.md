@@ -3,11 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [1.19.2 - 2.0.2]
+
+### Changed
+
+- Default hotkey for Flare changed to Shift.
+
 ## [1.19.2 - 2.0.1]
 
 ### Fix
 
-- Bug: Conflicing keybinds broke detection of input
+- Bug: Conflicting keybinds broke detection of input
 
 ## [1.19.2 - 2.0.0]
 
