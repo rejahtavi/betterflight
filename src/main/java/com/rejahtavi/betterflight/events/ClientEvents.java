@@ -73,6 +73,16 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if(event.phase == TickEvent.Phase.END) {
+            Minecraft mc = Minecraft.getInstance();
+            Player player = mc.player;
+            if (player == null) return;
+            InputHandler.handleRecharge(player);
+        }
+    }
+
+    @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
 
 
@@ -102,7 +112,7 @@ public class ClientEvents {
             HUDOverlay.borderTick();
             if (cooldown > 0) cooldown--;
 
-            InputHandler.handleRecharge(player);
+
             InputHandler.tryFlare(player);
 
 //            while(Keybinding.flareKey.consumeClick())
