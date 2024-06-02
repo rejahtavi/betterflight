@@ -1,6 +1,7 @@
 package com.rejahtavi.betterflight.events;
 
 import com.rejahtavi.betterflight.BetterFlight;
+import com.rejahtavi.betterflight.client.ClientData;
 import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
@@ -24,19 +25,14 @@ public class ClientEvents {
     //INDEV
     public static Logger logger = LogManager.getLogger(BetterFlight.MODID);
     // Player state
-    public static boolean isElytraEquipped = false;
     private static boolean wasFlapKeyDown = false;
     private static boolean wasToggleKeyDown = false;
-    public static boolean isFlaring = false;
-    public static int offGroundTicks = 0;
-    public static boolean isFlightEnabled = true;
 
     // elytra damage
     public static double elytraDurability = 0.5D;
     public static int elytraDurabilityLeft = 1;
 
     // timers
-    public static int cooldown = 0;
     private static boolean isDebugButtonDown = false;
 
     /**
@@ -97,20 +93,22 @@ public class ClientEvents {
             ItemStack elytraStack = InputHandler.findEquippedElytra(player);
             if(elytraStack != null)
             {
-                isElytraEquipped = true;
+                ClientData.setElytraEquipped(true);
                 elytraDurabilityLeft = elytraStack.getMaxDamage() - elytraStack.getDamageValue();
                 elytraDurability = (float) elytraStack.getDamageValue()/(float) elytraStack.getMaxDamage();
             }
-            else { isElytraEquipped = false;}
+            else { ClientData.setElytraEquipped(false);}
 
             // track ground state for takeoff logic
 
-            if (player.isOnGround()) {offGroundTicks = 0;}
-            else {offGroundTicks++;}
+            if (player.isOnGround()) {
+                ClientData.setOffGroundTicks(0);}
+            else {
+                ClientData.tickOffGround();}
 
             // decrement timers
             HUDOverlay.borderTick();
-            if (cooldown > 0) cooldown--;
+            if (ClientData.getCooldown() > 0) ClientData.subCooldown(1);
 
 
             InputHandler.tryFlare(player);
@@ -127,7 +125,7 @@ public class ClientEvents {
 
 
             if(Keybinding.flapKey.isDown() && wasFlapKeyDown == false) {
-                if(cooldown <= 0 && isFlightEnabled){
+                if(ClientData.getCooldown() <= 0 && ClientData.isFlightEnabled()){
                     if(BetterFlightCommonConfig.classicMode) {
                         InputHandler.classicFlight(player);
                     }
@@ -139,13 +137,13 @@ public class ClientEvents {
                 wasFlapKeyDown = false;
 
             if(Keybinding.toggleKey.isDown() && wasToggleKeyDown == false) {
-                if(isFlightEnabled)
+                if(ClientData.isFlightEnabled())
                 {
-                    isFlightEnabled = false;
+                    ClientData.setFlightEnabled(false);
                 }
                 else
                 {
-                    isFlightEnabled = true;
+                    ClientData.setFlightEnabled(true);
                 }
                 wasToggleKeyDown = true;
             }

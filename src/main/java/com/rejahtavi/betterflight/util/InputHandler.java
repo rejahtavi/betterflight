@@ -2,9 +2,9 @@ package com.rejahtavi.betterflight.util;
 
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig;
+import com.rejahtavi.betterflight.client.ClientData;
 import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
-import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
@@ -38,12 +38,12 @@ public class InputHandler {
     }
 
     private static boolean canFlap(Player player) {
-          return ClientEvents.isElytraEquipped && !player.isOnGround() && player.isFallFlying();
+          return ClientData.isElytraEquipped() && !player.isOnGround() && player.isFallFlying();
     }
 
     private static boolean canTakeOff(Player player) {
-        return ClientEvents.isElytraEquipped
-                && ClientEvents.offGroundTicks > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
+        return ClientData.isElytraEquipped()
+                && ClientData.getOffGroundTicks() > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
                 && player.isSprinting()
                 && !player.isFallFlying()
                 && player.getDeltaMovement().length() > BetterFlightCommonConfig.TAKE_OFF_SPEED;
@@ -56,12 +56,12 @@ public class InputHandler {
             {
                 if(!checkForAir(player.level,player))
                 {
-                    CTSFlightActionPacket.send(FlightActionType.BOOST);
+                    //CTSFlightActionPacket.send(FlightActionType.BOOST);
                     FlightHandler.handleModernBoost(player);
                 }
                 else
                 {
-                    CTSFlightActionPacket.send(FlightActionType.MODERN_FLAP);
+                    //CTSFlightActionPacket.send(FlightActionType.MODERN_FLAP);
                     FlightHandler.handleModernFlap(player);
                 }
                 return true;
@@ -78,7 +78,7 @@ public class InputHandler {
      */
     public static boolean classicTakeOff(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
-              CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
+              //CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
               FlightHandler.handleClassicTakeoff(player);
               return true;
           }
@@ -92,7 +92,7 @@ public class InputHandler {
      */
     public static boolean classicFlap(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
-              CTSFlightActionPacket.send(FlightActionType.CLASSIC_FLAP);
+              //CTSFlightActionPacket.send(FlightActionType.CLASSIC_FLAP);
               FlightHandler.handleClassicFlap(player);
               return true;
           }
@@ -104,7 +104,6 @@ public class InputHandler {
      * @param player
      */
     public static void handleRecharge(Player player) {
-
           if (player.isCreative()) {
               charge = BetterFlightCommonConfig.maxCharge;
               return;
@@ -116,22 +115,22 @@ public class InputHandler {
               rechargeTickCounter++;
           }
 
-          if (!ClientEvents.isFlaring && rechargeTickCounter >= chargeThreshold && charge < BetterFlightCommonConfig.maxCharge) {
+          if (!ClientData.isFlaring() && rechargeTickCounter >= chargeThreshold && charge < BetterFlightCommonConfig.maxCharge) {
 
               if (player.getFoodData().getFoodLevel() > BetterFlightCommonConfig.minFood) {
                   charge++;
                   rechargeTickCounter = 0;
                   HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
                   CTSFlightActionPacket.send(FlightActionType.RECHARGE);
-                  player.getFoodData().addExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
+                  //player.causeFoodExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
               }
           }
       }
 
     //MAYBE rework flare or introduce a new method to "glide"? Like being able to hold one's position while in the air like a bird.
     public static void tryFlare(Player player) {
-        if (ClientEvents.isElytraEquipped
-                && ClientEvents.isFlightEnabled
+        if (ClientData.isElytraEquipped()
+                && ClientData.isFlightEnabled()
                 && Keybinding.flareKey.isDown()
                 && (player.isCreative() || charge > 0)
                 && !player.isOnGround()
@@ -141,7 +140,7 @@ public class InputHandler {
             FlightHandler.handleFlare(player);
 
             flareTickCounter++;
-            ClientEvents.isFlaring = true;
+            ClientData.setIsFlaring(true);
 
             if (flareTickCounter >= BetterFlightCommonConfig.flareTicksPerChargePoint) {
                 spendCharge(player, 1);
@@ -152,7 +151,7 @@ public class InputHandler {
             if (flareTickCounter > 0) {
                 flareTickCounter--;
             }
-            ClientEvents.isFlaring = false;
+            ClientData.setIsFlaring(false);
         }
     }
 
@@ -169,7 +168,7 @@ public class InputHandler {
         if (charge >= points) {
             charge -= points;
             rechargeTickCounter = 0;
-            ClientEvents.cooldown = BetterFlightCommonConfig.cooldownTicks;
+            ClientData.setCooldown(BetterFlightCommonConfig.cooldownTicks);
             HUDOverlay.setDepletionBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
             return true;
         }

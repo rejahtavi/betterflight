@@ -62,9 +62,9 @@ public class HUDOverlay {
     public static void renderOverlay(PoseStack stack) {
 
         // only draw hud element when elytra is both equipped and functional
-        if (ClientEvents.isElytraEquipped == false) return;
+        if (ClientData.isFlightEnabled() == false) return;
+        if (ClientData.isElytraEquipped() == false) return;
         if (ClientEvents.elytraDurabilityLeft <= 1) return;
-        if (ClientEvents.isFlightEnabled == false) return;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc == null) return;
@@ -149,7 +149,7 @@ public class HUDOverlay {
         }
 
         // second priority is flaring. this is the yellow border when the meter is being drained to slow down
-        else if (ClientEvents.isFlaring) {
+        else if (ClientData.isFlaring()) {
             borderOffset = SPRITE_BORDER_FLARE;
         }
 
