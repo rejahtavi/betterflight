@@ -72,9 +72,14 @@ public class ClientEvents {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.phase == TickEvent.Phase.END) {
             Minecraft mc = Minecraft.getInstance();
+            Player test = event.player;
             Player player = mc.player;
             if (player == null) return;
             InputHandler.handleRecharge(player);
+
+//            if(!test.level.isClientSide())
+//                test.causeFoodExhaustion(1);
+
         }
     }
 

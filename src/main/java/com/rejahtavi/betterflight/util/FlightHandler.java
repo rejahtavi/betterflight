@@ -62,7 +62,7 @@ public class FlightHandler {
      * @param player
      */
     public static void handleFlightStaminaExhaustion(Player player) {
-        player.getFoodData().addExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
+        player.causeFoodExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
     }
 
     /**
