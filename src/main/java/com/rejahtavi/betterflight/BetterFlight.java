@@ -7,10 +7,6 @@ import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.events.CommonEvents;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.network.BetterFlightMessages;
-import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
-import com.rejahtavi.betterflight.network.STCElytraChargePacket;
-
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -26,8 +22,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+
 
 @Mod(BetterFlight.MODID)
 public class BetterFlight {

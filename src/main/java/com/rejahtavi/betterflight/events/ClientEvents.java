@@ -13,6 +13,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -68,23 +70,17 @@ public class ClientEvents {
 
     }
 
+    //ticks when world is running
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if(event.phase == TickEvent.Phase.END) {
-            Minecraft mc = Minecraft.getInstance();
-            Player test = event.player;
-            Player player = mc.player;
-            if (player == null) return;
-            InputHandler.handleRecharge(player);
-
-//            if(!test.level.isClientSide())
-//                test.causeFoodExhaustion(1);
-
+    public static void onPlayerTick(PlayerTickEvent event) {
+        if(event.phase == TickEvent.Phase.START) {
+            if (event.player == null) return;
+            InputHandler.handleRecharge(event);
         }
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTick(ClientTickEvent event) {
 
 
         //Phase.START runs before vanilla handles client tick. Phase.END runs after vanilla

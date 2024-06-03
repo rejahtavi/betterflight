@@ -18,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -101,9 +103,12 @@ public class InputHandler {
 
     /**
      * Handles recharging flight stamina if player is touching the ground and not flaring. Triggers per tick.
-     * @param player
+     * @side both
+     * @param event
      */
-    public static void handleRecharge(Player player) {
+    //TODO Neoforge 1.21 break this up to client and server logical
+    public static void handleRecharge(PlayerTickEvent event) {
+        Player player = event.player;
           if (player.isCreative()) {
               charge = BetterFlightCommonConfig.maxCharge;
               return;
@@ -121,7 +126,10 @@ public class InputHandler {
                   charge++;
                   rechargeTickCounter = 0;
                   HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
-                  CTSFlightActionPacket.send(FlightActionType.RECHARGE);
+                  if(event.side == LogicalSide.SERVER)
+                  {
+                      CTSFlightActionPacket.send(FlightActionType.RECHARGE);
+                  }
                   //player.causeFoodExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
               }
           }

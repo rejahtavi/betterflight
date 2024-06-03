@@ -1,12 +1,12 @@
 package com.rejahtavi.betterflight.client;
 
 public class ClientData {
-//Client Data is static.
-    private static boolean isElytraEquipped = false;
-    private static boolean isFlaring = false;
-    private static int offGroundTicks = 0;
-    private static boolean isFlightEnabled = true;
-    private static int cooldown = 0;
+    private static boolean  isElytraEquipped = false;
+    private static boolean  isFlaring = false;
+    private static int      offGroundTicks = 0;
+    private static boolean  isFlightEnabled = true;
+    private static int      cooldown = 0;
+
     public static boolean isElytraEquipped() {
         return isElytraEquipped;
     }
@@ -26,6 +26,7 @@ public class ClientData {
     public static int getOffGroundTicks() {
         return offGroundTicks;
     }
+
     public static void setOffGroundTicks(int offGroundTicks)
     {
         ClientData.offGroundTicks = offGroundTicks;
