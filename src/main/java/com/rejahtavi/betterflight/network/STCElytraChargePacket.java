@@ -44,6 +44,6 @@ public class STCElytraChargePacket {
     
     public static void send(Player recipient, int charge) {
         ServerPlayer player = (ServerPlayer) recipient;
-        BetterFlight.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new STCElytraChargePacket(charge));
+        BetterFlightMessages.sendToPlayer(new STCElytraChargePacket(charge),player);
     }
 }

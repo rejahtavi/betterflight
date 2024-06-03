@@ -27,4 +27,8 @@ public class CommonEvents {
     public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event) {
         STCElytraChargePacket.send(event.getEntity(), BetterFlightCommonConfig.maxCharge);
     }
+    @SubscribeEvent
+    public void onCommonSetupEvent(FMLCommonSetupEvent event) {
+        BetterFlightMessages.register();
+    }
 }

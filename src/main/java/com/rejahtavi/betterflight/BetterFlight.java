@@ -6,6 +6,7 @@ import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.events.CommonEvents;
 import com.rejahtavi.betterflight.common.Sounds;
+import com.rejahtavi.betterflight.network.BetterFlightMessages;
 import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
 import com.rejahtavi.betterflight.network.STCElytraChargePacket;
 
@@ -36,11 +37,6 @@ public class BetterFlight {
     public static final String MODNAME = "Better Flight";
     public static final String VERSION = "2.0.1";
 
-    // Network Channel
-    public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(MODID, "networking")).clientAcceptedVersions(s -> true)
-            .serverAcceptedVersions(s -> true).networkProtocolVersion(() -> VERSION).simpleChannel();
-
     // Optional dependencies state
     public static boolean isCuriousElytraLoaded = false;
 
@@ -69,14 +65,7 @@ public class BetterFlight {
 
     @SubscribeEvent
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        NETWORK.registerMessage(0, CTSFlightActionPacket.class,
-                CTSFlightActionPacket::encode,
-                CTSFlightActionPacket::decode,
-                CTSFlightActionPacket::handle);
-        NETWORK.registerMessage(1, STCElytraChargePacket.class,
-                STCElytraChargePacket::encode,
-                STCElytraChargePacket::decode,
-                STCElytraChargePacket::handle);
+        BetterFlightMessages.register();
     }
 
     @SubscribeEvent

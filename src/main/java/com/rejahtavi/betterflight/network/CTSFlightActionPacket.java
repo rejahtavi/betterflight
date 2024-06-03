@@ -59,6 +59,6 @@ public class CTSFlightActionPacket {
     }
     
     public static void send(FlightActionType action) {
-        BetterFlight.NETWORK.sendToServer(new CTSFlightActionPacket(action));
+        BetterFlightMessages.sendToServer(new CTSFlightActionPacket(action));
     }
 }
