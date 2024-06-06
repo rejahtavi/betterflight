@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [1.19.2 - 2.0.3]
+
+### Changed
+- Flaring slows downward movement more, allowing a more controlled glide
+- Reorganizing logic between client and server
+
+### Fixed
+- Stamina regen handled per player tick, instead of the client. This stops stamina from regening while the world is paused.
+- Bug: Classic mode take off properly puts player into fall flying state
+
 ## [1.19.2 - 2.0.2]
 
 ### Changed
