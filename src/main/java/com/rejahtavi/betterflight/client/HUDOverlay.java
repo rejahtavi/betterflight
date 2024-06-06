@@ -1,3 +1,4 @@
+/*
 package com.rejahtavi.betterflight.client;
 
 import java.util.Random;
@@ -11,6 +12,7 @@ import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -55,7 +57,8 @@ public class HUDOverlay {
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
         if (event.getOverlay() == GuiOverlayManager.findOverlay(VanillaGuiOverlay.HOTBAR.id())) {
-            renderOverlay(event.getPoseStack());
+            renderOverlay(event.getGuiGraphics().pose());
+
         }
     }
 
@@ -235,3 +238,4 @@ public class HUDOverlay {
     //  Perhaps 'flight googles' as a helmet / curio to show them?
 
 }
+*/
