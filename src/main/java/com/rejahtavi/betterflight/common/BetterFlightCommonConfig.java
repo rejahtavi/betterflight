@@ -108,7 +108,7 @@ public class BetterFlightCommonConfig {
 
             maxCharge = builder
                     .comment("Maximum points of charge in a 'full' elytra meter.")
-                    .defineInRange("MaxCharge", 20, 3, 255);
+                    .defineInRange("MaxCharge", 15, 3, 255);
 
             takeOffCost = builder
                     .comment("Meter point cost to take off.")

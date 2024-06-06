@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Changed
 - Flaring slows downward movement more, allowing a more controlled glide
 - Reorganizing logic between client and server
+- Modern Flap speed reduced
+- Default stamina max reduced
 
 ### Fixed
 - Stamina regen handled per player tick, instead of the client. This stops stamina from regening while the world is paused.

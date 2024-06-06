@@ -101,7 +101,7 @@ public class FlightHandler {
      */
     public static void handleModernFlap(Player player) {
         double d0 = 0.1; //delta coefficient. Influenced by difference between d0 and current delta
-        double d1 = 0.65; //boost coefficient
+        double d1 = 0.55; //boost coefficient
         Vec3 looking = player.getLookAngle();
         Vec3 delta = player.getDeltaMovement();
 
