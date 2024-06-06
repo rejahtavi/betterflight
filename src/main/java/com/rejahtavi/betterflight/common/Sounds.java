@@ -16,7 +16,7 @@ public class Sounds {
     public static final RegistryObject<SoundEvent> BOOST = createEvent("betterflight.boost");
 
     private static RegistryObject<SoundEvent> createEvent(String sound) {
-        return SOUNDS.register(sound, () -> new SoundEvent(new ResourceLocation(BetterFlight.MODID, sound)));
+        return SOUNDS.register(sound, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(BetterFlight.MODID, sound)));
     }
     
 }

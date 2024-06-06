@@ -3,7 +3,7 @@ package com.rejahtavi.betterflight.util;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.ClientData;
-import com.rejahtavi.betterflight.client.HUDOverlay;
+//import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
@@ -22,7 +22,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.CuriosApi;
+//import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
@@ -41,7 +41,7 @@ public class InputHandler {
     }
 
     private static boolean canFlap(Player player) {
-          return ClientData.isElytraEquipped() && !player.isOnGround() && player.isFallFlying();
+          return ClientData.isElytraEquipped() && !player.onGround() && player.isFallFlying();
     }
 
     private static boolean canTakeOff(Player player) {
@@ -57,7 +57,7 @@ public class InputHandler {
         {
             if(spendCharge(player, BetterFlightCommonConfig.flapCost))
             {
-                if(!checkForAir(player.level,player))
+                if(!checkForAir(player.level(),player))
                 {
                     FlightHandler.handleModernBoost(player);
                 }
@@ -111,7 +111,7 @@ public class InputHandler {
               return;
           }
 
-          int chargeThreshold = player.isOnGround() ? BetterFlightCommonConfig.rechargeTicksOnGround : BetterFlightCommonConfig.rechargeTicksInAir;
+          int chargeThreshold = player.onGround() ? BetterFlightCommonConfig.rechargeTicksOnGround : BetterFlightCommonConfig.rechargeTicksInAir;
 
           if (rechargeTickCounter < chargeThreshold) {
               rechargeTickCounter++;
@@ -122,7 +122,7 @@ public class InputHandler {
               if (player.getFoodData().getFoodLevel() > BetterFlightCommonConfig.minFood) {
                   charge++;
                   rechargeTickCounter = 0;
-                  HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
+                 // HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
                   FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.RECHARGE));
               }
           }
@@ -134,7 +134,7 @@ public class InputHandler {
                 && ClientData.isFlightEnabled()
                 && Keybinding.flareKey.isDown()
                 && (player.isCreative() || charge > 0)
-                && !player.isOnGround()
+                && !player.onGround()
                 && player.isFallFlying()) {
 
             //BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.FLARE));
@@ -170,7 +170,7 @@ public class InputHandler {
             charge -= points;
             rechargeTickCounter = 0;
             ClientData.setCooldown(BetterFlightCommonConfig.cooldownTicks);
-            HUDOverlay.setDepletionBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
+            //HUDOverlay.setDepletionBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
             return true;
         }
         else {
@@ -193,7 +193,7 @@ public class InputHandler {
         }
 
         // if dependencies are present, check the curios slots as well
-        if (BetterFlight.isCuriousElytraLoaded) {
+        /*if (BetterFlight.isCuriousElytraLoaded) {
             for (Item elytraItem : BetterFlightCommonConfig.elytraItems) {
                 try {
                     elytraStack = CuriosApi.getCuriosHelper().findFirstCurio(player, elytraItem)
@@ -204,7 +204,7 @@ public class InputHandler {
                 catch(NoSuchElementException ignored) {
                 }
             }
-        }
+        }*/
         return null;
     }
 
@@ -225,7 +225,7 @@ public class InputHandler {
         Stream<BlockPos> filteredBlocks = blocks.filter(
                 pos -> {
                     BlockState block = world.getBlockState(pos);
-                    return block.isCollisionShapeFullBlock(world,pos) || block.getMaterial().isLiquid();
+                    return block.isCollisionShapeFullBlock(world,pos) || block.liquid(); //checks if block is solid or fluid
                 });
         if (filteredBlocks.toList().isEmpty()) {
             return true;

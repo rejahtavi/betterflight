@@ -2,7 +2,7 @@ package com.rejahtavi.betterflight.events;
 
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientData;
-import com.rejahtavi.betterflight.client.HUDOverlay;
+//import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.InputHandler;
@@ -66,7 +66,7 @@ public class ClientEvents {
         if (player == null) return;
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS) {
-            HUDOverlay.cycleWidgetLocation();
+            //HUDOverlay.cycleWidgetLocation();
         }
 
     }
@@ -104,13 +104,13 @@ public class ClientEvents {
 
             // track ground state for takeoff logic
 
-            if (player.isOnGround()) {
+            if (player.onGround()) {
                 ClientData.setOffGroundTicks(0);}
             else {
                 ClientData.tickOffGround();}
 
             // decrement timers
-            HUDOverlay.borderTick();
+            //HUDOverlay.borderTick();
             if (ClientData.getCooldown() > 0) ClientData.subCooldown(1);
 
 

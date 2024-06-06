@@ -44,16 +44,16 @@ public class CTSFlightEffectsPacket
             switch (message.getUpdateType()) {
                 //Movement logic handled on client. This packet tells the server to play the sound.
                 case MODERN_FLAP, CLASSIC_FLAP:
-                    player.level.playSound(null, new BlockPos(player.position()), Sounds.FLAP.get(),
+                    player.level().playSound(null, BlockPos.containing(player.position()), Sounds.FLAP.get(),
                             SoundSource.PLAYERS, (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
                     break;
                 case BOOST:
-                    player.level.playSound(null, new BlockPos(player.position()), Sounds.BOOST.get(),
+                    player.level().playSound(null, BlockPos.containing(player.position()), Sounds.BOOST.get(),
                             SoundSource.PLAYERS,2F, 1F);
                     break;
                 case TAKEOFF:
                     player.startFallFlying();
-                    player.level.playSound(null, new BlockPos(player.position()), Sounds.FLAP.get(),
+                    player.level().playSound(null, BlockPos.containing(player.position()), Sounds.FLAP.get(),
                             SoundSource.PLAYERS, (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
                     break;
                 case RECHARGE: //Action is actually handled by server
