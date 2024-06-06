@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [1.19.2 - 2.0.4] June 6th, 2023
+
+### Fixed
+- Bug: Fail to start due to methods being called at the wrong time
+- Bug: stamina drains hunger again
+
 ## [1.19.2 - 2.0.3]
 
 ### Changed

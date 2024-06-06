@@ -16,6 +16,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -73,7 +74,8 @@ public class ClientEvents {
     //ticks when world is running
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent event) {
-        if(event.phase == TickEvent.Phase.START) {
+        if(event.phase == TickEvent.Phase.START && event.side == LogicalSide.CLIENT)
+        {
             if (event.player == null) return;
             InputHandler.handleRecharge(event);
         }
@@ -138,14 +140,7 @@ public class ClientEvents {
                 wasFlapKeyDown = false;
 
             if(Keybinding.toggleKey.isDown() && wasToggleKeyDown == false) {
-                if(ClientData.isFlightEnabled())
-                {
-                    ClientData.setFlightEnabled(false);
-                }
-                else
-                {
-                    ClientData.setFlightEnabled(true);
-                }
+                ClientData.setFlightEnabled(!ClientData.isFlightEnabled());
                 wasToggleKeyDown = true;
             }
             if (!Keybinding.toggleKey.isDown() && wasToggleKeyDown) {

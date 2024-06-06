@@ -123,10 +123,7 @@ public class InputHandler {
                   charge++;
                   rechargeTickCounter = 0;
                   HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
-                  if(event.side == LogicalSide.SERVER)
-                  {
-                      FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.RECHARGE));
-                  }
+                  FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.RECHARGE));
               }
           }
       }
