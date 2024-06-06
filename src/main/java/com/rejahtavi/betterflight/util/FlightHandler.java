@@ -56,6 +56,15 @@ public class FlightHandler {
         double velocitySquared = player.getDeltaMovement().lengthSqr();
         Vec3 dragThrust = dragDirection.scale(velocitySquared * BetterFlightCommonConfig.FLARE_DRAG);
         player.push(dragThrust.x,dragThrust.y,dragThrust.z);
+
+        double fallingSpeed = player.getDeltaMovement().y();
+        if(fallingSpeed < 0)
+        {
+            player.push(dragThrust.x,dragThrust.y - (fallingSpeed*.10),dragThrust.z);
+        }
+        else {
+            player.push(dragThrust.x,dragThrust.y,dragThrust.z);
+        }
     }
 
     /**
