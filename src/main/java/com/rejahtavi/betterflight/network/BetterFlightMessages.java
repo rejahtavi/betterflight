@@ -24,10 +24,10 @@ public class BetterFlightMessages
                 .serverAcceptedVersions(s -> true).networkProtocolVersion(() -> BetterFlight.VERSION).simpleChannel();
         NETWORK = channel;
 
-        NETWORK.messageBuilder(CTSFlightActionPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(CTSFlightActionPacket::decode)
-                .encoder(CTSFlightActionPacket::encode)
-                .consumerMainThread(CTSFlightActionPacket::handle)
+        NETWORK.messageBuilder(CTSFlightEffectsPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(CTSFlightEffectsPacket::decode)
+                .encoder(CTSFlightEffectsPacket::encode)
+                .consumerMainThread(CTSFlightEffectsPacket::handle)
                 .add();
 
         NETWORK.messageBuilder(STCElytraChargePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)

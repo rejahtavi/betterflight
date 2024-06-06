@@ -1,8 +1,9 @@
 package com.rejahtavi.betterflight.util;
 
-import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
-import com.rejahtavi.betterflight.common.Sounds;
+import com.rejahtavi.betterflight.common.FlightActionType;
+import com.rejahtavi.betterflight.network.BetterFlightMessages;
+import com.rejahtavi.betterflight.network.CTSFlightEffectsPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -27,7 +28,7 @@ public class FlightHandler {
 
         // this plays the sound to everyone EXCEPT the player it is invoked on.
         // the player's copy of the sound is handled on the client side.
-        player.playSound(Sounds.FLAP.get(), (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
+        BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.TAKEOFF));
     }
 
     /**
@@ -40,13 +41,13 @@ public class FlightHandler {
         Vec3 forwards = player.getDeltaMovement().normalize().scale(BetterFlightCommonConfig.CLASSIC_FLAP_THRUST * 0.25).scale(ceilingFactor);
         Vec3 impulse = forwards.add(upwards);
         player.push(impulse.x,impulse.y,impulse.z);
-
-        player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+        BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.CLASSIC_FLAP));
     }
 
     /**
      * simplified drag equation = (a bunch of constants) * velocity squared
      * ignore all the constants and just use a single coefficient from config
+     * @side client
      * @param player
      */
     public static void handleFlare(Player player) {
@@ -59,6 +60,7 @@ public class FlightHandler {
 
     /**
      * converts food into flight stamina by adding exhaustion to the player
+     * @side server
      * @param player
      */
     public static void handleFlightStaminaExhaustion(Player player) {
@@ -84,6 +86,11 @@ public class FlightHandler {
         return (altitude - BetterFlightCommonConfig.softCeiling) / BetterFlightCommonConfig.ceilingRange;
     }
 
+    /**
+     * Pushes player in looking vector weakly, mimicking wings. Tells server to play sound at player position
+     * @side client
+     * @param player
+     */
     public static void handleModernFlap(Player player) {
         double d0 = 0.1; //delta coefficient. Influenced by difference between d0 and current delta
         double d1 = 0.65; //boost coefficient
@@ -97,9 +104,14 @@ public class FlightHandler {
                 .scale(getCeilingFactor(player))                //scale to ceiling limit
                 .add(getUpVector(player).scale(0.25));  //add slight up vector
         player.push(impulse.x,impulse.y,impulse.z);
-        player.playSound(Sounds.FLAP.get(), (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+        BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.MODERN_FLAP));
     }
 
+    /**
+     * Pushes player in looking vector strongly. Tells server to play sound at player position
+     * @side client
+     * @param player
+     */
     public static void handleModernBoost(Player player) {
         double d0 = 0.1; //delta coefficient. Influenced by difference between d0 and current delta
         double d1 = 1.0; //boost coefficient
@@ -114,7 +126,7 @@ public class FlightHandler {
                 .add(getUpVector(player).scale(0.25));  //add slight up vector
 
         player.push(impulse.x,impulse.y,impulse.z);
-        player.playSound(Sounds.BOOST.get(), 2F, 1F);
+        BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.BOOST));
     }
 
     /**

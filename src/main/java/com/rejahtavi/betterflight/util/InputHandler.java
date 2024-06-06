@@ -7,7 +7,8 @@ import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
-import com.rejahtavi.betterflight.network.CTSFlightActionPacket;
+import com.rejahtavi.betterflight.network.BetterFlightMessages;
+import com.rejahtavi.betterflight.network.CTSFlightEffectsPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -58,7 +59,6 @@ public class InputHandler {
             {
                 if(!checkForAir(player.level,player))
                 {
-                    //CTSFlightActionPacket.send(FlightActionType.BOOST);
                     FlightHandler.handleModernBoost(player);
                 }
                 else
@@ -128,9 +128,8 @@ public class InputHandler {
                   HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
                   if(event.side == LogicalSide.SERVER)
                   {
-                      CTSFlightActionPacket.send(FlightActionType.RECHARGE);
+                      BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.RECHARGE));
                   }
-                  //player.causeFoodExhaustion((float) BetterFlightCommonConfig.exhaustionPerChargePoint);
               }
           }
       }
@@ -144,7 +143,7 @@ public class InputHandler {
                 && !player.isOnGround()
                 && player.isFallFlying()) {
 
-            CTSFlightActionPacket.send(FlightActionType.FLARE);
+            //BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.FLARE));
             FlightHandler.handleFlare(player);
 
             flareTickCounter++;
