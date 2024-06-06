@@ -8,7 +8,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-public class BetterFlightMessages
+public class FlightMessages
 {
     private static SimpleChannel NETWORK;
     private static int packetID = 0;

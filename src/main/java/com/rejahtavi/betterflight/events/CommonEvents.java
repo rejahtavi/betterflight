@@ -2,7 +2,7 @@ package com.rejahtavi.betterflight.events;
 
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
-import com.rejahtavi.betterflight.network.BetterFlightMessages;
+import com.rejahtavi.betterflight.network.FlightMessages;
 import com.rejahtavi.betterflight.network.STCElytraChargePacket;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,6 +31,6 @@ public class CommonEvents {
     }
     @SubscribeEvent
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        BetterFlightMessages.register();
+        FlightMessages.register();
     }
 }

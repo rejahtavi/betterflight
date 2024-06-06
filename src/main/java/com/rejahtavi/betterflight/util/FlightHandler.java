@@ -2,7 +2,7 @@ package com.rejahtavi.betterflight.util;
 
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
-import com.rejahtavi.betterflight.network.BetterFlightMessages;
+import com.rejahtavi.betterflight.network.FlightMessages;
 import com.rejahtavi.betterflight.network.CTSFlightEffectsPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -28,7 +28,7 @@ public class FlightHandler {
 
         // this plays the sound to everyone EXCEPT the player it is invoked on.
         // the player's copy of the sound is handled on the client side.
-        BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.TAKEOFF));
+        FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.TAKEOFF));
     }
 
     /**
@@ -41,7 +41,7 @@ public class FlightHandler {
         Vec3 forwards = player.getDeltaMovement().normalize().scale(BetterFlightCommonConfig.CLASSIC_FLAP_THRUST * 0.25).scale(ceilingFactor);
         Vec3 impulse = forwards.add(upwards);
         player.push(impulse.x,impulse.y,impulse.z);
-        BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.CLASSIC_FLAP));
+        FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.CLASSIC_FLAP));
     }
 
     /**
@@ -55,7 +55,6 @@ public class FlightHandler {
         Vec3 dragDirection = player.getDeltaMovement().normalize().reverse();
         double velocitySquared = player.getDeltaMovement().lengthSqr();
         Vec3 dragThrust = dragDirection.scale(velocitySquared * BetterFlightCommonConfig.FLARE_DRAG);
-        player.push(dragThrust.x,dragThrust.y,dragThrust.z);
 
         double fallingSpeed = player.getDeltaMovement().y();
         if(fallingSpeed < 0)
@@ -113,7 +112,7 @@ public class FlightHandler {
                 .scale(getCeilingFactor(player))                //scale to ceiling limit
                 .add(getUpVector(player).scale(0.25));  //add slight up vector
         player.push(impulse.x,impulse.y,impulse.z);
-        BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.MODERN_FLAP));
+        FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.MODERN_FLAP));
     }
 
     /**
@@ -135,7 +134,7 @@ public class FlightHandler {
                 .add(getUpVector(player).scale(0.25));  //add slight up vector
 
         player.push(impulse.x,impulse.y,impulse.z);
-        BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.BOOST));
+        FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.BOOST));
     }
 
     /**

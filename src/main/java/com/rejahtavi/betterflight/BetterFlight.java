@@ -6,7 +6,7 @@ import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.events.CommonEvents;
 import com.rejahtavi.betterflight.common.Sounds;
-import com.rejahtavi.betterflight.network.BetterFlightMessages;
+import com.rejahtavi.betterflight.network.FlightMessages;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -60,7 +60,7 @@ public class BetterFlight {
 
     @SubscribeEvent
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        BetterFlightMessages.register();
+        FlightMessages.register();
     }
 
     @SubscribeEvent

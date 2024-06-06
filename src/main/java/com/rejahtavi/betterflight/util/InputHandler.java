@@ -7,7 +7,7 @@ import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
-import com.rejahtavi.betterflight.network.BetterFlightMessages;
+import com.rejahtavi.betterflight.network.FlightMessages;
 import com.rejahtavi.betterflight.network.CTSFlightEffectsPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -63,7 +63,6 @@ public class InputHandler {
                 }
                 else
                 {
-                    //CTSFlightActionPacket.send(FlightActionType.MODERN_FLAP);
                     FlightHandler.handleModernFlap(player);
                 }
                 return true;
@@ -80,7 +79,6 @@ public class InputHandler {
      */
     public static boolean classicTakeOff(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.takeOffCost)) {
-              //CTSFlightActionPacket.send(FlightActionType.TAKEOFF);
               FlightHandler.handleClassicTakeoff(player);
               return true;
           }
@@ -94,7 +92,6 @@ public class InputHandler {
      */
     public static boolean classicFlap(Player player) {
           if (spendCharge(player, BetterFlightCommonConfig.flapCost)) {
-              //CTSFlightActionPacket.send(FlightActionType.CLASSIC_FLAP);
               FlightHandler.handleClassicFlap(player);
               return true;
           }
@@ -128,7 +125,7 @@ public class InputHandler {
                   HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
                   if(event.side == LogicalSide.SERVER)
                   {
-                      BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.RECHARGE));
+                      FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.RECHARGE));
                   }
               }
           }

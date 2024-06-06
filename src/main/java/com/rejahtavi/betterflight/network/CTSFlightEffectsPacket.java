@@ -56,9 +56,6 @@ public class CTSFlightEffectsPacket
                     player.level.playSound(null, new BlockPos(player.position()), Sounds.FLAP.get(),
                             SoundSource.PLAYERS, (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
                     break;
-                case FLARE:
-                    //FlightHandler.handleFlare(context.get().getSender());
-                    break;
                 case RECHARGE: //Action is actually handled by server
                     FlightHandler.handleFlightStaminaExhaustion(context.getSender());
                     break;
