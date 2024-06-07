@@ -3,7 +3,7 @@ package com.rejahtavi.betterflight.util;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.ClientData;
-//import com.rejahtavi.betterflight.client.HUDOverlay;
+import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
@@ -22,7 +22,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
-//import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
@@ -122,7 +122,7 @@ public class InputHandler {
               if (player.getFoodData().getFoodLevel() > BetterFlightCommonConfig.minFood) {
                   charge++;
                   rechargeTickCounter = 0;
-                 // HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
+                  HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
                   FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.RECHARGE));
               }
           }
@@ -170,7 +170,7 @@ public class InputHandler {
             charge -= points;
             rechargeTickCounter = 0;
             ClientData.setCooldown(BetterFlightCommonConfig.cooldownTicks);
-            //HUDOverlay.setDepletionBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
+            HUDOverlay.setDepletionBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
             return true;
         }
         else {
@@ -193,7 +193,8 @@ public class InputHandler {
         }
 
         // if dependencies are present, check the curios slots as well
-        /*if (BetterFlight.isCuriousElytraLoaded) {
+        //TODO Replace deprecated methods
+        if (BetterFlight.isCuriousElytraLoaded) {
             for (Item elytraItem : BetterFlightCommonConfig.elytraItems) {
                 try {
                     elytraStack = CuriosApi.getCuriosHelper().findFirstCurio(player, elytraItem)
@@ -204,7 +205,7 @@ public class InputHandler {
                 catch(NoSuchElementException ignored) {
                 }
             }
-        }*/
+        }
         return null;
     }
 
