@@ -1,4 +1,3 @@
-/*
 package com.rejahtavi.betterflight.client;
 
 import java.util.Random;
@@ -57,12 +56,12 @@ public class HUDOverlay {
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
         if (event.getOverlay() == GuiOverlayManager.findOverlay(VanillaGuiOverlay.HOTBAR.id())) {
-            renderOverlay(event.getGuiGraphics().pose());
+            renderOverlay(event.getGuiGraphics());
 
         }
     }
 
-    public static void renderOverlay(PoseStack stack) {
+    public static void renderOverlay(GuiGraphics guiGraphics) {
 
         // only draw hud element when elytra is both equipped and functional
         if (ClientData.isFlightEnabled() == false) return;
@@ -177,19 +176,19 @@ public class HUDOverlay {
         RenderSystem.setShaderTexture(0, elytraIcons);
 
         // draw the full meter as the background
-        ForgeGui.blit(stack, widgetPosX + shakeX, widgetPosY + shakeY,
+        guiGraphics.blit(elytraIcons, widgetPosX + shakeX, widgetPosY + shakeY,
                 SPRITE_METER_FULL, durabilityOffset,
                 ICON_SIZE, ICON_SIZE,
                 TEXTURE_SIZE, TEXTURE_SIZE);
 
         // draw the elytra meter drain level on top
-        ForgeGui.blit(stack, widgetPosX + shakeX, widgetPosY + shakeY,
+        guiGraphics.blit(elytraIcons, widgetPosX + shakeX, widgetPosY + shakeY,
                 SPRITE_METER_EMPTY, durabilityOffset,
                 ICON_SIZE, drainedPixels,
                 TEXTURE_SIZE, TEXTURE_SIZE);
 
         // finally, draw the border
-        ForgeGui.blit(stack, widgetPosX + shakeX, widgetPosY + shakeY,
+        guiGraphics.blit(elytraIcons, widgetPosX + shakeX, widgetPosY + shakeY,
                 borderOffset, durabilityOffset,
                 ICON_SIZE, ICON_SIZE,
                 TEXTURE_SIZE, TEXTURE_SIZE);
@@ -197,7 +196,7 @@ public class HUDOverlay {
         // switch back to the normal HUD icons texture before we give
         // control back to the HUD renderer, so we don't corrupt the HUD
         //mc.getTextureManager().getTexture(Gui.GUI_ICONS_LOCATION).bind();
-        RenderSystem.setShaderTexture(0, Gui.GUI_ICONS_LOCATION);
+        RenderSystem.setShaderTexture(0, elytraIcons);
 
         // mc.font.drawShadow(stack, "charge: " + ClientEvents.charge, 0, 0, 0xFFFFFFFF);
         // mc.font.drawShadow(stack, "drainPixels: " + drainedPixels, 0, mc.font.lineHeight, 0xFFFFFFFF);
@@ -238,4 +237,3 @@ public class HUDOverlay {
     //  Perhaps 'flight googles' as a helmet / curio to show them?
 
 }
-*/

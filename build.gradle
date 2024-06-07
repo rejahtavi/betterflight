@@ -106,8 +106,8 @@ dependencies {
     //compileOnly fg.deobf("curse.maven:curios-309927:3924518") //Optional Dependency for curios
 
     // inDev dependencies. Be sure to turn off when publishing
-    /*implementation fg.deobf("curse.maven:curios-309927:3924518")
-    implementation fg.deobf("curse.maven:elytraslot-317716:4519258")
+    implementation fg.deobf("curse.maven:curios-309927:5367944")
+    /*implementation fg.deobf("curse.maven:elytraslot-317716:4519258")
     implementation fg.deobf("curse.maven:caelus-308989:3929284") //elytraslot dependency
     implementation fg.deobf("curse.maven:airhop-323071:3961936")
     implementation fg.deobf("curse.maven:puzzleslib-495476:4600775")

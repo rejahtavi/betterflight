@@ -2,7 +2,7 @@ package com.rejahtavi.betterflight;
 
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.events.ClientEvents;
-//import com.rejahtavi.betterflight.client.HUDOverlay;
+import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.events.CommonEvents;
 import com.rejahtavi.betterflight.common.Sounds;
@@ -50,7 +50,7 @@ public class BetterFlight {
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             MinecraftForge.EVENT_BUS.register(ClientEvents.class);
-            //MinecraftForge.EVENT_BUS.register(HUDOverlay.class);
+            MinecraftForge.EVENT_BUS.register(HUDOverlay.class);
             eventBus.addListener(this::onClientSetupEvent);
         }
 
