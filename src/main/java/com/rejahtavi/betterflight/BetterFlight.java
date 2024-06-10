@@ -34,6 +34,7 @@ public class BetterFlight {
 
     // Optional dependencies state
     public static boolean isCuriousElytraLoaded = false;
+    public static boolean isBeanBackpackLoaded = false;
 
     // Constructor & initialization
     public BetterFlight() {
@@ -83,6 +84,10 @@ public class BetterFlight {
         if ((ModList.get().isLoaded("elytraslot")
                 && ModList.get().isLoaded("curios"))) {
             isCuriousElytraLoaded = true;
+        }
+        if (ModList.get().isLoaded("beansbackpacks"))
+        {
+            isBeanBackpackLoaded = true;
         }
     }
 }

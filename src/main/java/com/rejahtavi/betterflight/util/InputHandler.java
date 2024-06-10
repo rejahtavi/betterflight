@@ -7,24 +7,23 @@ import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
+import com.rejahtavi.betterflight.compat.BeansCompat;
+import com.rejahtavi.betterflight.compat.CuriosCompat;
 import com.rejahtavi.betterflight.network.FlightMessages;
 import com.rejahtavi.betterflight.network.CTSFlightEffectsPacket;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.CuriosApi;
 
-import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 public class InputHandler {
@@ -38,18 +37,6 @@ public class InputHandler {
         else if (canFlap(player))
             return classicFlap(player);
         return false;
-    }
-
-    private static boolean canFlap(Player player) {
-          return ClientData.isElytraEquipped() && !player.onGround() && player.isFallFlying();
-    }
-
-    private static boolean canTakeOff(Player player) {
-        return ClientData.isElytraEquipped()
-                && ClientData.getOffGroundTicks() > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
-                && player.isSprinting()
-                && !player.isFallFlying()
-                && player.getDeltaMovement().length() > BetterFlightCommonConfig.TAKE_OFF_SPEED;
     }
 
     public static boolean modernFlight(Player player) {
@@ -69,6 +56,18 @@ public class InputHandler {
             }
         }
         return false;
+    }
+
+    private static boolean canFlap(Player player) {
+        return ClientData.isElytraEquipped() && !player.onGround() && player.isFallFlying();
+    }
+
+    private static boolean canTakeOff(Player player) {
+        return ClientData.isElytraEquipped()
+                && ClientData.getOffGroundTicks() > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
+                && player.isSprinting()
+                && !player.isFallFlying()
+                && player.getDeltaMovement().length() > BetterFlightCommonConfig.TAKE_OFF_SPEED;
     }
 
 
@@ -183,39 +182,34 @@ public class InputHandler {
      * @param player
      * @return itemstack an elytra was found; null if not found
      */
-    public static ItemStack findEquippedElytra(@NotNull Player player) {
+    public static ItemStack findEquippedElytra(@NotNull LocalPlayer player) {
 
         // check the player's chest slot for elytra
         ItemStack elytraStack = player.getItemBySlot(EquipmentSlot.CHEST);
         if (BetterFlightCommonConfig.elytraItems.contains(elytraStack.getItem())) {
-            isWorkingElytra(elytraStack);
-            return isWorkingElytra(elytraStack) ? elytraStack : null;
+            return hasDurabilityLeft(elytraStack) ? elytraStack : null;
         }
-
-        // if dependencies are present, check the curios slots as well
-        //TODO Replace deprecated methods
         if (BetterFlight.isCuriousElytraLoaded) {
-            for (Item elytraItem : BetterFlightCommonConfig.elytraItems) {
-                try {
-                    elytraStack = CuriosApi.getCuriosHelper().findFirstCurio(player, elytraItem)
-                            .orElseThrow()
-                            .stack();
-                    return isWorkingElytra(elytraStack) ? elytraStack : null;
-                }
-                catch(NoSuchElementException ignored) {
-                }
-            }
+            elytraStack = CuriosCompat.getCurioWings(player);
+            return hasDurabilityLeft(elytraStack) ? elytraStack : null;
+
+        }
+        if (BetterFlight.isBeanBackpackLoaded)
+        {
+            elytraStack = BeansCompat.getBeanWings(player);
+            if (elytraStack!= null)
+                return hasDurabilityLeft(elytraStack) ? elytraStack : null;
         }
         return null;
     }
 
     /**
-     * Check if ItemStack is a usable elytra with durability left
-     * @param elytraStack ItemStack to check
+     * Check if ItemStack has durability left and is not in a broken state of 0 or 1
+     * @param itemStack ItemStack to check
      * @return true if elytra is functional
      */
-    private static boolean isWorkingElytra(ItemStack elytraStack) {
-        return elytraStack.getMaxDamage() - elytraStack.getDamageValue() > 1;
+    private static boolean hasDurabilityLeft(ItemStack itemStack) {
+        return itemStack.getMaxDamage() - itemStack.getDamageValue() > 1;
     }
     public static boolean checkForAir(Level world, LivingEntity player) {
         AABB boundingBox = player.getBoundingBox()

@@ -7,6 +7,7 @@ import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -89,7 +90,7 @@ public class ClientEvents {
         if(event.phase == TickEvent.Phase.START) {
 
             Minecraft mc = Minecraft.getInstance();
-            Player player = mc.player;
+            LocalPlayer player = mc.player;
             if (player == null) return;
 
             //logger.info("Speed:" + player.getDeltaMovement().length());
