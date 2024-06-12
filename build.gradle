@@ -118,7 +118,7 @@ dependencies {
 }
 
 jar {
-    classifier "beta"
+    classifier ""
     /*manifest {
         attributes([
             "Specification-Title": "${mod_id}",
