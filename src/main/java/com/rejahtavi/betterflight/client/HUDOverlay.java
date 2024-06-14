@@ -70,6 +70,7 @@ public class HUDOverlay {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc == null) return;
+        if (mc.player.isPassenger()) return;
 
         int shakeX = 0;
         int shakeY = 0;
