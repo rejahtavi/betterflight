@@ -1,7 +1,6 @@
 package com.rejahtavi.betterflight.common;
 
 import com.rejahtavi.betterflight.BetterFlight;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;

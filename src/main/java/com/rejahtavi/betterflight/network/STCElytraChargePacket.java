@@ -1,14 +1,12 @@
 package com.rejahtavi.betterflight.network;
 
-import java.util.function.Supplier;
-
 import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 // Server->Client packet, sets player elytra charge upon login / respawn
 public class STCElytraChargePacket {

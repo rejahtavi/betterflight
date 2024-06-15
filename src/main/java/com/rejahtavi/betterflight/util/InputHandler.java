@@ -10,7 +10,6 @@ import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.compat.BeansCompat;
 import com.rejahtavi.betterflight.compat.CuriosCompat;
 import com.rejahtavi.betterflight.network.FlightMessages;
-import com.rejahtavi.betterflight.network.CTSFlightEffectsPacket;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;

@@ -1,6 +1,5 @@
 package com.rejahtavi.betterflight.network;
 
-import java.util.function.Supplier;
 import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.util.FlightHandler;
@@ -10,6 +9,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 /**
  * Client->Server packet, keeps server up to date when a client flaps an elytra
