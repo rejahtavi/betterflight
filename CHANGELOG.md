@@ -5,8 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## unreleased
 
+### Added
+- Ability to stop fall flying by flaring when in Water or Lava
+
 ### Changed
 - Flight meter hides when player is riding something.
+
+### Fixed
+- Flap sound event not triggering on dedicated server
 
 ## [1.20.1 - 2.1.1] June 12th, 2023
 
