@@ -41,6 +41,8 @@ public class CTSFlightEffectsPacket
         Player player = context.getSender();
 
         context.enqueueWork(() -> {
+            if(player == null)
+                return;
             switch (message.getUpdateType()) {
                 //Movement logic handled on client. This packet tells the server to play the sound.
                 case FLAP:
@@ -50,18 +52,13 @@ public class CTSFlightEffectsPacket
                     playSound(player,Sounds.BOOST.get(), 2F, 1F);
                     break;
                 case TAKEOFF:
-                    if(player == null)
-                        break;
                     player.startFallFlying();
                     playSound(player,Sounds.FLAP.get(),1F, 2F);
                     break;
-                //Action is actually handled by server
                 case STOP:
                     player.stopFallFlying();
                     break;
                 case RECHARGE:
-                    if(player == null)
-                        break;
                     FlightHandler.handleFlightStaminaExhaustion(player);
                     break;
             }
