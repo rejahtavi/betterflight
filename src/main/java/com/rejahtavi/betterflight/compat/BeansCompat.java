@@ -10,6 +10,7 @@ public class BeansCompat
 {
     /**
      * Checks if player is wearing Wings in Bean backpack slot.
+     *
      * @param player
      * @return ItemStack if found; null if no wings found
      */

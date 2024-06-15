@@ -6,7 +6,8 @@ import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
-public class Keybinding {
+public class Keybinding
+{
     public static final String KEY_CATEGORY_BETTERFLIGHT = BetterFlight.MODID;
     public static final String KEY_TOGGLE_FLIGHT = "Toggle Flight";
     public static final String KEY_FLAP = "Flap";

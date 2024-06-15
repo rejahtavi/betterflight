@@ -13,6 +13,7 @@ public class FlightMessages
 {
     private static SimpleChannel NETWORK;
     private static int packetID = 0;
+
     private static int id()
     {
         return packetID++;
@@ -41,11 +42,12 @@ public class FlightMessages
     public static void sendToServer(FlightActionType action)
     {
         //preparing for separating action to different packet
-        if(action.equals(FlightActionType.RECHARGE))
+        if (action.equals(FlightActionType.RECHARGE))
             NETWORK.sendToServer(new CTSFlightEffectsPacket(action));
         else
             NETWORK.sendToServer(new CTSFlightEffectsPacket(action));
     }
+
     public static void sendToPlayer(int stamina, ServerPlayer player)
     {
         NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new STCElytraChargePacket(stamina));

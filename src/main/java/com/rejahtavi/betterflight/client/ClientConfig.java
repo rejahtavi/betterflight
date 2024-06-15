@@ -4,7 +4,8 @@ import com.rejahtavi.betterflight.BetterFlight;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class ClientConfig {
+public class ClientConfig
+{
 
     public static final Client CLIENT;
     public static final ForgeConfigSpec CLIENT_SPEC;
@@ -17,7 +18,8 @@ public class ClientConfig {
     public static double flapVolume;
 
     // set up config file
-    static {
+    static
+    {
         Pair<Client, ForgeConfigSpec> clientSpecPair = new ForgeConfigSpec.Builder().configure(Client::new);
         CLIENT = clientSpecPair.getLeft();
         CLIENT_SPEC = clientSpecPair.getRight();
