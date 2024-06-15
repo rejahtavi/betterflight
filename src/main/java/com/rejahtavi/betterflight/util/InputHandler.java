@@ -132,9 +132,15 @@ public class InputHandler {
         if (ClientData.isElytraEquipped()
                 && ClientData.isFlightEnabled()
                 && Keybinding.flareKey.isDown()
-                && (player.isCreative() || charge > 0)
+                && ((player.isCreative() || charge > 0) || player.isInWater() || player.isInLava())
                 && !player.onGround()
                 && player.isFallFlying()) {
+
+            if(player.isInWater()||player.isInLava())
+            {
+                FlightHandler.handleFlightStop();
+                return;
+            }
 
             FlightHandler.handleFlare(player);
 

@@ -149,4 +149,9 @@ public class FlightHandler {
         Vec3 up = player.getLookAngle().cross(left);
         return up;
     }
+
+    public static void handleFlightStop()
+    {
+        FlightMessages.sendToServer(FlightActionType.STOP);
+    }
 }
