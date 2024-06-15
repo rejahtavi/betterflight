@@ -1,23 +1,19 @@
 package com.rejahtavi.betterflight.client;
 
-import java.util.Random;
-
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
-
 import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.Random;
 
 public class HUDOverlay {
 

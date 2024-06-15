@@ -3,7 +3,6 @@ package com.rejahtavi.betterflight.util;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.network.FlightMessages;
-import com.rejahtavi.betterflight.network.CTSFlightEffectsPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 

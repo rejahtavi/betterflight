@@ -3,8 +3,6 @@ package com.rejahtavi.betterflight.events;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.network.FlightMessages;
-import com.rejahtavi.betterflight.network.STCElytraChargePacket;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerEvent;
