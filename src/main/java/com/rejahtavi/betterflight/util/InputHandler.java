@@ -122,7 +122,7 @@ public class InputHandler {
                   charge++;
                   rechargeTickCounter = 0;
                   HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
-                  FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.RECHARGE));
+                  FlightMessages.sendToServer(FlightActionType.RECHARGE);
               }
           }
       }
@@ -136,7 +136,6 @@ public class InputHandler {
                 && !player.onGround()
                 && player.isFallFlying()) {
 
-            //BetterFlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.FLARE));
             FlightHandler.handleFlare(player);
 
             flareTickCounter++;

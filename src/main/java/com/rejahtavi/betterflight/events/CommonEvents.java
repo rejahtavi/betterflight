@@ -5,6 +5,7 @@ import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.network.FlightMessages;
 import com.rejahtavi.betterflight.network.STCElytraChargePacket;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,17 +18,17 @@ public class CommonEvents {
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        STCElytraChargePacket.send(event.getEntity(), BetterFlightCommonConfig.maxCharge);
+        FlightMessages.sendToPlayer(BetterFlightCommonConfig.maxCharge, (ServerPlayer) event.getEntity());
     }
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        STCElytraChargePacket.send(event.getEntity(), BetterFlightCommonConfig.maxCharge);
+        FlightMessages.sendToPlayer(BetterFlightCommonConfig.maxCharge, (ServerPlayer) event.getEntity());
     }
     
     @SubscribeEvent
     public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event) {
-        STCElytraChargePacket.send(event.getEntity(), BetterFlightCommonConfig.maxCharge);
+        FlightMessages.sendToPlayer(BetterFlightCommonConfig.maxCharge, (ServerPlayer) event.getEntity());
     }
     @SubscribeEvent
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
