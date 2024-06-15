@@ -11,25 +11,31 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.DEDICATED_SERVER)
-public class CommonEvents {
+public class CommonEvents
+{
 
 
     @SubscribeEvent
-    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+    {
         FlightMessages.sendToPlayer(BetterFlightCommonConfig.maxCharge, (ServerPlayer) event.getEntity());
     }
 
     @SubscribeEvent
-    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+    {
         FlightMessages.sendToPlayer(BetterFlightCommonConfig.maxCharge, (ServerPlayer) event.getEntity());
     }
-    
+
     @SubscribeEvent
-    public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event) {
+    public static void onPlayerChangeGameMode(PlayerEvent.PlayerChangeGameModeEvent event)
+    {
         FlightMessages.sendToPlayer(BetterFlightCommonConfig.maxCharge, (ServerPlayer) event.getEntity());
     }
+
     @SubscribeEvent
-    public void onCommonSetupEvent(FMLCommonSetupEvent event) {
+    public void onCommonSetupEvent(FMLCommonSetupEvent event)
+    {
         FlightMessages.register();
     }
 }

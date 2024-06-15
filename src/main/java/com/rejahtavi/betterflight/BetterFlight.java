@@ -25,7 +25,8 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 
 
 @Mod(BetterFlight.MODID)
-public class BetterFlight {
+public class BetterFlight
+{
 
     // Mod identification data
     public static final String MODID = "betterflight";
@@ -37,19 +38,21 @@ public class BetterFlight {
     public static boolean isBeanBackpackLoaded = false;
 
     // Constructor & initialization
-    public BetterFlight() {
+    public BetterFlight()
+    {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         Sounds.SOUNDS.register(eventBus);
-        
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, BetterFlightCommonConfig.SERVER_SPEC, MODID + "-server.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_SPEC, MODID + "-client.toml");
-        
+
         eventBus.addListener(this::onCommonSetupEvent);
         eventBus.addListener(this::onModConfigEvent);
         eventBus.addListener(this::onLoadCompleteEvent);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (FMLEnvironment.dist == Dist.CLIENT)
+        {
             MinecraftForge.EVENT_BUS.register(ClientEvents.class);
             MinecraftForge.EVENT_BUS.register(HUDOverlay.class);
             eventBus.addListener(this::onClientSetupEvent);
@@ -60,18 +63,22 @@ public class BetterFlight {
     }
 
     @SubscribeEvent
-    public void onCommonSetupEvent(FMLCommonSetupEvent event) {
+    public void onCommonSetupEvent(FMLCommonSetupEvent event)
+    {
         FlightMessages.register();
     }
 
     @SubscribeEvent
-    public void onClientSetupEvent(FMLClientSetupEvent event) {
+    public void onClientSetupEvent(FMLClientSetupEvent event)
+    {
         ClientEvents.init();
     }
 
     @SubscribeEvent
-    public void onModConfigEvent(final ModConfigEvent evt) {
-        if (evt.getConfig().getModId().equals(MODID)) {
+    public void onModConfigEvent(final ModConfigEvent evt)
+    {
+        if (evt.getConfig().getModId().equals(MODID))
+        {
             if (evt.getConfig().getType() == Type.SERVER)
                 BetterFlightCommonConfig.bake();
             if (evt.getConfig().getType() == Type.CLIENT)
@@ -80,9 +87,11 @@ public class BetterFlight {
     }
 
     @SubscribeEvent
-    public void onLoadCompleteEvent(FMLLoadCompleteEvent event) {
+    public void onLoadCompleteEvent(FMLLoadCompleteEvent event)
+    {
         if ((ModList.get().isLoaded("elytraslot")
-                && ModList.get().isLoaded("curios"))) {
+                && ModList.get().isLoaded("curios")))
+        {
             isCuriousElytraLoaded = true;
         }
         if (ModList.get().isLoaded("beansbackpacks"))

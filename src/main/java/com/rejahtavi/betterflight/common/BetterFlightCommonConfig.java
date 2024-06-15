@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BetterFlightCommonConfig {
+public class BetterFlightCommonConfig
+{
 
     public static final Server SERVER;
     public static final ForgeConfigSpec SERVER_SPEC;
@@ -43,7 +44,8 @@ public class BetterFlightCommonConfig {
     public static List<Item> elytraItems;
 
     // set up config file
-    static {
+    static
+    {
         Pair<Server, ForgeConfigSpec> serverSpecPair = new ForgeConfigSpec.Builder().configure(Server::new);
         SERVER = serverSpecPair.getLeft();
         SERVER_SPEC = serverSpecPair.getRight();

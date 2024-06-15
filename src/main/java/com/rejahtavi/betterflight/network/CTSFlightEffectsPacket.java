@@ -14,46 +14,53 @@ import java.util.function.Supplier;
 
 /**
  * Client->Server packet, keeps server up to date when a client flaps an elytra
-  */
+ */
 public class CTSFlightEffectsPacket
 {
 
     private final FlightActionType flightUpdate;
 
-    public CTSFlightEffectsPacket(FlightActionType flightUpdate) {
+    public CTSFlightEffectsPacket(FlightActionType flightUpdate)
+    {
         this.flightUpdate = flightUpdate;
     }
 
-    public void encode(FriendlyByteBuf buffer) {
+    public void encode(FriendlyByteBuf buffer)
+    {
         buffer.writeEnum(this.flightUpdate);
     }
 
-    public FlightActionType getUpdateType() {
+    public FlightActionType getUpdateType()
+    {
         return this.flightUpdate;
     }
 
-    public static CTSFlightEffectsPacket decode(FriendlyByteBuf buffer) {
+    public static CTSFlightEffectsPacket decode(FriendlyByteBuf buffer)
+    {
         return new CTSFlightEffectsPacket(buffer.readEnum(FlightActionType.class));
     }
 
-    public static void handle(CTSFlightEffectsPacket message, Supplier<NetworkEvent.Context> supplier) {
+    public static void handle(CTSFlightEffectsPacket message, Supplier<NetworkEvent.Context> supplier)
+    {
         NetworkEvent.Context context = supplier.get();
         Player player = context.getSender();
 
-        context.enqueueWork(() -> {
-            if(player == null)
+        context.enqueueWork(() ->
+        {
+            if (player == null)
                 return;
-            switch (message.getUpdateType()) {
+            switch (message.getUpdateType())
+            {
                 //Movement logic handled on client. This packet tells the server to play the sound.
                 case FLAP:
-                    playSound(player,Sounds.FLAP.get(),0.5F, 2F);
+                    playSound(player, Sounds.FLAP.get(), 0.5F, 2F);
                     break;
                 case BOOST:
-                    playSound(player,Sounds.BOOST.get(), 2F, 1F);
+                    playSound(player, Sounds.BOOST.get(), 2F, 1F);
                     break;
                 case TAKEOFF:
                     player.startFallFlying();
-                    playSound(player,Sounds.FLAP.get(),1F, 2F);
+                    playSound(player, Sounds.FLAP.get(), 1F, 2F);
                     break;
                 case STOP:
                     player.stopFallFlying();

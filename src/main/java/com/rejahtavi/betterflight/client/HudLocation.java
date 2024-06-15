@@ -1,7 +1,8 @@
 package com.rejahtavi.betterflight.client;
 
 // HUD icon position
-public enum HudLocation {
+public enum HudLocation
+{
     BAR_CENTER,
     BAR_LEFT,
     BAR_RIGHT,

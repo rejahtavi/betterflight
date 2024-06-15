@@ -15,7 +15,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Random;
 
-public class HUDOverlay {
+public class HUDOverlay
+{
 
     // HUD layout constraints
     private static final int OFFSET_FROM_CURSOR = 24;
@@ -28,14 +29,14 @@ public class HUDOverlay {
     private static final int HALF_ICON_SIZE = 8;
 
     // sprite row offsets
-    private static final int SPRITE_DURABILITY_FULL = 0 * ICON_SIZE;
-    private static final int SPRITE_DURABILITY_HALF = 1 * ICON_SIZE;
+    private static final int SPRITE_DURABILITY_FULL = 0;
+    private static final int SPRITE_DURABILITY_HALF = ICON_SIZE;
     private static final int SPRITE_DURABILITY_QUARTER = 2 * ICON_SIZE;
     private static final int SPRITE_DURABILITY_LOW = 3 * ICON_SIZE;
 
     // sprite column offsets
-    private static final int SPRITE_BORDER_BLACK = 0 * ICON_SIZE;
-    private static final int SPRITE_BORDER_RECHARGE = 1 * ICON_SIZE;
+    private static final int SPRITE_BORDER_BLACK = 0;
+    private static final int SPRITE_BORDER_RECHARGE = ICON_SIZE;
     private static final int SPRITE_BORDER_DEPLETION = 2 * ICON_SIZE;
     private static final int SPRITE_BORDER_FLARE = 3 * ICON_SIZE;
     private static final int SPRITE_METER_EMPTY = 4 * ICON_SIZE;
@@ -50,18 +51,21 @@ public class HUDOverlay {
     private static int depletionBorderTimer = 0;
 
     @SubscribeEvent
-    public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
-        if (event.getOverlay() == GuiOverlayManager.findOverlay(VanillaGuiOverlay.HOTBAR.id())) {
+    public static void onRenderOverlay(RenderGuiOverlayEvent.Post event)
+    {
+        if (event.getOverlay() == GuiOverlayManager.findOverlay(VanillaGuiOverlay.HOTBAR.id()))
+        {
             renderOverlay(event.getGuiGraphics());
 
         }
     }
 
-    public static void renderOverlay(GuiGraphics guiGraphics) {
+    public static void renderOverlay(GuiGraphics guiGraphics)
+    {
 
         // only draw hud element when elytra is both equipped and functional
-        if (ClientData.isFlightEnabled() == false) return;
-        if (ClientData.isElytraEquipped() == false) return;
+        if (!ClientData.isFlightEnabled()) return;
+        if (!ClientData.isElytraEquipped()) return;
         if (ClientEvents.elytraDurabilityLeft <= 1) return;
 
         Minecraft mc = Minecraft.getInstance();
@@ -76,7 +80,8 @@ public class HUDOverlay {
         int widgetPosY = 0;
 
         // calculate position on screen based on the selected config option
-        switch (ClientConfig.hudLocation) {
+        switch (ClientConfig.hudLocation)
+        {
             case CURSOR_BELOW:
                 widgetPosX = scaleWidth / 2 - HALF_ICON_SIZE;
                 widgetPosY = scaleHeight / 2 + OFFSET_FROM_CURSOR - HALF_ICON_SIZE;
@@ -126,9 +131,11 @@ public class HUDOverlay {
 
         // critical durability takes precedence over all other borders
         // elytraDurability works backwards, this triggers when 5% use is left.
-        if (ClientEvents.elytraDurability > 0.95) {
+        if (ClientEvents.elytraDurability > 0.95)
+        {
 
-            if (mc.level != null) {
+            if (mc.level != null)
+            {
                 long thisTick = mc.level.getGameTime();
 
                 // flash border white and red every 5 ticks
@@ -136,11 +143,12 @@ public class HUDOverlay {
 
                 // move icon randomly +/- 1 pixel in each direction, with uneven timing for X and Y
                 // very chaotic and attention grabbing
-                if (((thisTick / 3) % 2) > 0) {
+                if (((thisTick / 3) % 2) > 0)
+                {
                     // left-right moves on ticks divisible by 3
                     shakeX = random.nextInt(3) - 1;
-                }
-                else {
+                } else
+                {
                     // up-down moves on all other ticks
                     shakeY = random.nextInt(3) - 1;
                 }
@@ -148,17 +156,20 @@ public class HUDOverlay {
         }
 
         // second priority is flaring. this is the yellow border when the meter is being drained to slow down
-        else if (ClientData.isFlaring()) {
+        else if (ClientData.isFlaring())
+        {
             borderOffset = SPRITE_BORDER_FLARE;
         }
 
         // third priority is depletion. this is the red flash for losing a meter tick
-        else if (depletionBorderTimer > 0) {
+        else if (depletionBorderTimer > 0)
+        {
             borderOffset = SPRITE_BORDER_DEPLETION;
         }
 
         // lowest priority is recharge. this is the white flash gaining a meter tick
-        else if (rechargeBorderTimer > 0) {
+        else if (rechargeBorderTimer > 0)
+        {
             borderOffset = SPRITE_BORDER_RECHARGE;
         }
 
@@ -200,22 +211,28 @@ public class HUDOverlay {
         // mc.font.drawShadow(stack, "charge: " + ActionHandler.charge, 0, mc.font.lineHeight * 2, 0xFFFFFFFF);
         // mc.font.drawShadow(stack, "max: " + Config.elytraMaxCharge, 0, mc.font.lineHeight * 3, 0xFFFFFFFF);
     }
-    public static void borderTick() {
+
+    public static void borderTick()
+    {
         if (depletionBorderTimer > 0) depletionBorderTimer--;
         if (rechargeBorderTimer > 0) rechargeBorderTimer--;
     }
 
-    public static void setDepletionBorderTimer(int ticks) {
+    public static void setDepletionBorderTimer(int ticks)
+    {
         depletionBorderTimer = ticks;
     }
 
-    public static void setRechargeBorderTimer(int ticks) {
+    public static void setRechargeBorderTimer(int ticks)
+    {
         rechargeBorderTimer = ticks;
     }
 
-    public static void cycleWidgetLocation() {
+    public static void cycleWidgetLocation()
+    {
 
-        switch (ClientConfig.hudLocation) {
+        switch (ClientConfig.hudLocation)
+        {
             case BAR_CENTER -> ClientConfig.hudLocation = HudLocation.BAR_LEFT;
             case BAR_LEFT -> ClientConfig.hudLocation = HudLocation.BAR_RIGHT;
             case BAR_RIGHT -> ClientConfig.hudLocation = HudLocation.CURSOR_ABOVE;

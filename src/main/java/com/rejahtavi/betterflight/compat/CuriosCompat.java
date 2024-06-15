@@ -13,19 +13,22 @@ public class CuriosCompat
 {
     /**
      * Checks curios slots for elytra items
+     *
      * @param player
      * @return ItemStack found; null if not found
      */
     public static ItemStack getCurioWings(@NotNull Player player)
     {
         ItemStack elytraStack = null;
-        for (Item elytraItem : BetterFlightCommonConfig.elytraItems) {
-            try {
+        for (Item elytraItem : BetterFlightCommonConfig.elytraItems)
+        {
+            try
+            {
                 elytraStack = CuriosApi.getCuriosHelper().findFirstCurio(player, elytraItem)
                         .orElseThrow()
                         .stack();
-            }
-            catch(NoSuchElementException ignored) {
+            } catch (NoSuchElementException ignored)
+            {
             }
         }
         return elytraStack;
