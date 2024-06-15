@@ -38,9 +38,4 @@ public class STCElytraChargePacket {
         });
         context.get().setPacketHandled(true);
     }
-    
-    public static void send(Player recipient, int charge) {
-        ServerPlayer player = (ServerPlayer) recipient;
-        FlightMessages.sendToPlayer(new STCElytraChargePacket(charge),player);
-    }
 }

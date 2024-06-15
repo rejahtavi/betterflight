@@ -28,7 +28,7 @@ public class FlightHandler {
 
         // this plays the sound to everyone EXCEPT the player it is invoked on.
         // the player's copy of the sound is handled on the client side.
-        FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.TAKEOFF));
+        FlightMessages.sendToServer(FlightActionType.TAKEOFF);
     }
 
     /**
@@ -41,7 +41,7 @@ public class FlightHandler {
         Vec3 forwards = player.getDeltaMovement().normalize().scale(BetterFlightCommonConfig.CLASSIC_FLAP_THRUST * 0.25).scale(ceilingFactor);
         Vec3 impulse = forwards.add(upwards);
         player.push(impulse.x,impulse.y,impulse.z);
-        FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.CLASSIC_FLAP));
+        FlightMessages.sendToServer(FlightActionType.FLAP);
     }
 
     /**
@@ -112,7 +112,7 @@ public class FlightHandler {
                 .scale(getCeilingFactor(player))                //scale to ceiling limit
                 .add(getUpVector(player).scale(0.25));  //add slight up vector
         player.push(impulse.x,impulse.y,impulse.z);
-        FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.MODERN_FLAP));
+        FlightMessages.sendToServer(FlightActionType.FLAP);
     }
 
     /**
@@ -134,7 +134,7 @@ public class FlightHandler {
                 .add(getUpVector(player).scale(0.25));  //add slight up vector
 
         player.push(impulse.x,impulse.y,impulse.z);
-        FlightMessages.sendToServer(new CTSFlightEffectsPacket(FlightActionType.BOOST));
+        FlightMessages.sendToServer(FlightActionType.BOOST);
     }
 
     /**

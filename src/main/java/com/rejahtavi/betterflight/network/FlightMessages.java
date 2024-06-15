@@ -1,6 +1,7 @@
 package com.rejahtavi.betterflight.network;
 
 import com.rejahtavi.betterflight.BetterFlight;
+import com.rejahtavi.betterflight.common.FlightActionType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -37,11 +38,18 @@ public class FlightMessages
                 .add();
     }
 
-    public static <MSG> void sendToServer(MSG message)
+    public static void sendToServer(FlightActionType action)
     {
-        NETWORK.sendToServer(message);
+        //preparing for separating action to different packet
+        if(action.equals(FlightActionType.RECHARGE))
+            NETWORK.sendToServer(new CTSFlightEffectsPacket(action));
+        else
+            NETWORK.sendToServer(new CTSFlightEffectsPacket(action));
     }
-    public static <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
-        NETWORK.send(PacketDistributor.PLAYER.with(() -> player), message);
+    public static void sendToPlayer(int stamina, ServerPlayer player)
+    {
+        NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new STCElytraChargePacket(stamina));
     }
+
+
 }
