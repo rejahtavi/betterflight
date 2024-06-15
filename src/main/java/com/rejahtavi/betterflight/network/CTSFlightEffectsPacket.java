@@ -1,14 +1,12 @@
 package com.rejahtavi.betterflight.network;
 
 import java.util.function.Supplier;
-
-import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
-
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.util.FlightHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
@@ -19,7 +17,7 @@ import net.minecraftforge.network.NetworkEvent;
 public class CTSFlightEffectsPacket
 {
 
-    private FlightActionType flightUpdate;
+    private final FlightActionType flightUpdate;
 
     public CTSFlightEffectsPacket(FlightActionType flightUpdate) {
         this.flightUpdate = flightUpdate;
@@ -40,27 +38,42 @@ public class CTSFlightEffectsPacket
     public static void handle(CTSFlightEffectsPacket message, Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         Player player = context.getSender();
+
         context.enqueueWork(() -> {
             switch (message.getUpdateType()) {
                 //Movement logic handled on client. This packet tells the server to play the sound.
-                case MODERN_FLAP, CLASSIC_FLAP:
-                    player.level().playSound(null, BlockPos.containing(player.position()), Sounds.FLAP.get(),
-                            SoundSource.PLAYERS, (float) ClientConfig.flapVolume, ClientConfig.FLAP_SOUND_PITCH);
+                case FLAP:
+                    playSound(player,Sounds.FLAP.get(),0.5F, 2F);
                     break;
                 case BOOST:
-                    player.level().playSound(null, BlockPos.containing(player.position()), Sounds.BOOST.get(),
-                            SoundSource.PLAYERS,2F, 1F);
+                    playSound(player,Sounds.BOOST.get(), 2F, 1F);
                     break;
                 case TAKEOFF:
+                    if(player == null)
+                        break;
                     player.startFallFlying();
-                    player.level().playSound(null, BlockPos.containing(player.position()), Sounds.FLAP.get(),
-                            SoundSource.PLAYERS, (float) ClientConfig.takeOffVolume, ClientConfig.FLAP_SOUND_PITCH);
+                    playSound(player,Sounds.FLAP.get(),1F, 2F);
                     break;
                 case RECHARGE: //Action is actually handled by server
-                    FlightHandler.handleFlightStaminaExhaustion(context.getSender());
+                    if(player == null)
+                        break;
+                    FlightHandler.handleFlightStaminaExhaustion(player);
                     break;
             }
         });
         context.setPacketHandled(true);
+    }
+
+    private static void playSound(Player player, SoundEvent sound, float volume, float pitch)
+    {
+        try
+        {
+            player.level().playSound(null, BlockPos.containing(player.position()), sound,
+                    SoundSource.PLAYERS, volume, pitch);
+        } catch (Exception e)
+        {
+
+            throw new RuntimeException("No level found");
+        }
     }
 }
