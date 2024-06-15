@@ -54,7 +54,11 @@ public class CTSFlightEffectsPacket
                     player.startFallFlying();
                     playSound(player,Sounds.FLAP.get(),1F, 2F);
                     break;
-                case RECHARGE: //Action is actually handled by server
+                //Action is actually handled by server
+                case STOP:
+                    player.stopFallFlying();
+                    break;
+                case RECHARGE:
                     if(player == null)
                         break;
                     FlightHandler.handleFlightStaminaExhaustion(player);
