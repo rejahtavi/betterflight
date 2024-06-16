@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## unreleased
+## [1.20.1 - 2.1.2] June 16th, 2024
 
 ### Added
 - Ability to stop fall flying by flaring when in Water or Lava
@@ -13,8 +13,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ### Fixed
 - Flap sound event not triggering on dedicated server
+- Crash when player is not wearing wings and using ElytraSlot mod
 
-## [1.20.1 - 2.1.1] June 12th, 2023
+## [1.20.1 - 2.1.1] June 12th, 2024
 
 ### Added
 - Compatibility with Bean's Backpacks Winged Backpack
@@ -22,12 +23,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 ### Changed
 - Refactored mod compatibility code to compat package.
 
-## [1.20.1 - 2.1.0] June 7th, 2023
+## [1.20.1 - 2.1.0] June 7th, 2024
 
 ### Changed
 - Ported to 1.20.1 Forge
 
-## [1.19.2 - 2.0.4] June 6th, 2023
+## [1.19.2 - 2.0.4] June 6th, 2024
 
 ### Fixed
 - Bug: Fail to start due to methods being called at the wrong time
