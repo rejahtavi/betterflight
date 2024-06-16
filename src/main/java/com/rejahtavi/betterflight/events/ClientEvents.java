@@ -103,7 +103,7 @@ public class ClientEvents
             if (player == null) return;
 
             //logger.info("Speed:" + player.getDeltaMovement().length());
-            ItemStack elytraStack = InputHandler.findEquippedElytra(player);
+            ItemStack elytraStack = InputHandler.findWings(player);
             if (elytraStack != null)
             {
                 ClientData.setElytraEquipped(true);
