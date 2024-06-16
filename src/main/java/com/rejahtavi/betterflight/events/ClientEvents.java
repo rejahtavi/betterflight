@@ -5,11 +5,11 @@ import com.rejahtavi.betterflight.client.ClientData;
 import com.rejahtavi.betterflight.client.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
+import com.rejahtavi.betterflight.util.ElytraData;
 import com.rejahtavi.betterflight.util.InputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -103,16 +103,7 @@ public class ClientEvents
             if (player == null) return;
 
             //logger.info("Speed:" + player.getDeltaMovement().length());
-            ItemStack elytraStack = InputHandler.findWings(player);
-            if (elytraStack != null)
-            {
-                ClientData.setElytraEquipped(true);
-                elytraDurabilityLeft = elytraStack.getMaxDamage() - elytraStack.getDamageValue();
-                elytraDurability = (float) elytraStack.getDamageValue() / (float) elytraStack.getMaxDamage();
-            } else
-            {
-                ClientData.setElytraEquipped(false);
-            }
+            updateWingStatus(player);
 
             // track ground state for takeoff logic
 
@@ -167,6 +158,24 @@ public class ClientEvents
 //            if (!Keybinding.flareKey.isDown()) {
 //                isDebugButtonDown = false;
 //            }
+        }
+    }
+
+    /**
+     * Checks if player is wearing functional wings and updates status
+     * @param player to check and update
+     */
+    private static void updateWingStatus(LocalPlayer player)
+    {
+        ElytraData elytraStack = InputHandler.findWings(player);
+        if (elytraStack != null && elytraStack.durabilityRemaining() > 1)
+        {
+            ClientData.setWingStatus(true);
+            elytraDurabilityLeft = elytraStack.durabilityRemaining();
+            elytraDurability = elytraStack.durabilityPercent();
+        } else
+        {
+            ClientData.setWingStatus(false);
         }
     }
 
