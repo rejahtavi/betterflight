@@ -10,7 +10,6 @@ import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.compat.BeansCompat;
 import com.rejahtavi.betterflight.compat.CuriosCompat;
 import com.rejahtavi.betterflight.network.FlightMessages;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Stream;
 
@@ -205,31 +203,45 @@ public class InputHandler
     }
 
     /**
+     * Find equipped and working elytra items from the player
+     *
+     * @param player to check
+     * @return ItemStack wings are found; null if wings not found or broken
+     */
+    public static ItemStack findWings(Player player)
+    {
+        ItemStack itemStack = findEquippedElytra(player);
+        if (itemStack == null)
+            return null;
+        if (hasDurabilityLeft(itemStack))
+            return itemStack;
+        return null;
+    }
+
+    /**
      * Looks for an equipped elytra on the target player
      *
      * @param player
      * @return itemstack an elytra was found; null if not found
      */
-    public static ItemStack findEquippedElytra(@NotNull LocalPlayer player)
+    private static ItemStack findEquippedElytra(Player player)
     {
-
         // check the player's chest slot for elytra
         ItemStack elytraStack = player.getItemBySlot(EquipmentSlot.CHEST);
         if (BetterFlightCommonConfig.elytraItems.contains(elytraStack.getItem()))
         {
-            return hasDurabilityLeft(elytraStack) ? elytraStack : null;
+            return elytraStack;
         }
         if (BetterFlight.isCuriousElytraLoaded)
         {
             elytraStack = CuriosCompat.getCurioWings(player);
-            return hasDurabilityLeft(elytraStack) ? elytraStack : null;
+            if (elytraStack != null) return elytraStack;
 
         }
         if (BetterFlight.isBeanBackpackLoaded)
         {
             elytraStack = BeansCompat.getBeanWings(player);
-            if (elytraStack != null)
-                return hasDurabilityLeft(elytraStack) ? elytraStack : null;
+            if (elytraStack != null) return elytraStack;
         }
         return null;
     }
