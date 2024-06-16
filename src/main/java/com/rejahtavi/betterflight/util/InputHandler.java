@@ -59,12 +59,12 @@ public class InputHandler
 
     private static boolean canFlap(Player player)
     {
-        return ClientData.isElytraEquipped() && !player.onGround() && player.isFallFlying();
+        return ClientData.isWearingFunctionalWings() && !player.onGround() && player.isFallFlying();
     }
 
     private static boolean canTakeOff(Player player)
     {
-        return ClientData.isElytraEquipped()
+        return ClientData.isWearingFunctionalWings()
                 && ClientData.getOffGroundTicks() > BetterFlightCommonConfig.TAKE_OFF_JUMP_DELAY
                 && player.isSprinting()
                 && !player.isFallFlying()
@@ -143,7 +143,7 @@ public class InputHandler
     //MAYBE rework flare or introduce a new method to "glide"? Like being able to hold one's position while in the air like a bird.
     public static void tryFlare(Player player)
     {
-        if (ClientData.isElytraEquipped()
+        if (ClientData.isWearingFunctionalWings()
                 && ClientData.isFlightEnabled()
                 && Keybinding.flareKey.isDown()
                 && ((player.isCreative() || charge > 0) || player.isInWater() || player.isInLava())
@@ -208,23 +208,23 @@ public class InputHandler
      * @param player to check
      * @return ItemStack wings are found; null if wings not found or broken
      */
-    public static ItemStack findWings(Player player)
+    public static ElytraData findWings(Player player)
     {
-        ItemStack itemStack = findEquippedElytra(player);
+        ItemStack itemStack = findWingsItemStack(player);
         if (itemStack == null)
             return null;
-        if (hasDurabilityLeft(itemStack))
-            return itemStack;
-        return null;
+        int durabilityRemaining = itemStack.getMaxDamage() - itemStack.getDamageValue();
+        float durabilityPercent = (float) itemStack.getDamageValue() / (float) itemStack.getMaxDamage();
+
+        return new ElytraData(itemStack,durabilityRemaining,durabilityPercent);
     }
 
     /**
-     * Looks for an equipped elytra on the target player
-     *
+     * Returns ItemStack of player equipped wings
      * @param player
-     * @return itemstack an elytra was found; null if not found
+     * @return ItemStack of equipped wings; null if not found
      */
-    private static ItemStack findEquippedElytra(Player player)
+    private static ItemStack findWingsItemStack(Player player)
     {
         // check the player's chest slot for elytra
         ItemStack elytraStack = player.getItemBySlot(EquipmentSlot.CHEST);
@@ -244,17 +244,6 @@ public class InputHandler
             if (elytraStack != null) return elytraStack;
         }
         return null;
-    }
-
-    /**
-     * Check if ItemStack has durability left and is not in a broken state of 0 or 1
-     *
-     * @param itemStack ItemStack to check
-     * @return true if elytra is functional
-     */
-    private static boolean hasDurabilityLeft(ItemStack itemStack)
-    {
-        return itemStack.getMaxDamage() - itemStack.getDamageValue() > 1;
     }
 
     public static boolean checkForAir(Level world, LivingEntity player)

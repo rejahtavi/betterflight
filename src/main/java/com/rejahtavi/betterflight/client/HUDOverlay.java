@@ -65,7 +65,7 @@ public class HUDOverlay
 
         // only draw hud element when elytra is both equipped and functional
         if (!ClientData.isFlightEnabled()) return;
-        if (!ClientData.isElytraEquipped()) return;
+        if (!ClientData.isWearingFunctionalWings()) return;
         if (ClientEvents.elytraDurabilityLeft <= 1) return;
 
         Minecraft mc = Minecraft.getInstance();
