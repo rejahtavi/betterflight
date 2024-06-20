@@ -1,7 +1,9 @@
-package com.rejahtavi.betterflight.client;
+package com.rejahtavi.betterflight.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.rejahtavi.betterflight.BetterFlight;
+import com.rejahtavi.betterflight.client.ClientConfig;
+import com.rejahtavi.betterflight.client.ClientData;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.util.InputHandler;

@@ -1,7 +1,7 @@
 package com.rejahtavi.betterflight;
 
 import com.rejahtavi.betterflight.client.ClientConfig;
-import com.rejahtavi.betterflight.client.HUDOverlay;
+import com.rejahtavi.betterflight.client.gui.HUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.events.ClientEvents;
