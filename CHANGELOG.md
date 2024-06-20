@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## unreleased
+
+### Changed
+- HUD elements refactor to new gui package
+
 ## [1.20.1 - 2.1.2] June 16th, 2024
 
 ### Added

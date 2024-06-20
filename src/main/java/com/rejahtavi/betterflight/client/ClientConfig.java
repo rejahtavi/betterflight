@@ -1,6 +1,7 @@
 package com.rejahtavi.betterflight.client;
 
 import com.rejahtavi.betterflight.BetterFlight;
+import com.rejahtavi.betterflight.client.gui.HudLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 

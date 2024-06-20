@@ -1,4 +1,4 @@
-package com.rejahtavi.betterflight.client;
+package com.rejahtavi.betterflight.client.gui;
 
 // HUD icon position
 public enum HudLocation
