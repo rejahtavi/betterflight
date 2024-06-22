@@ -2,11 +2,13 @@ package com.rejahtavi.betterflight;
 
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.gui.HUDOverlay;
+import com.rejahtavi.betterflight.client.gui.StaminaHUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.events.CommonEvents;
 import com.rejahtavi.betterflight.network.FlightMessages;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -31,7 +33,7 @@ public class BetterFlight
     // Mod identification data
     public static final String MODID = "betterflight";
     public static final String MODNAME = "Better Flight";
-    public static final String VERSION = "2.0.1";
+    public static final String VERSION = "2.1.3-beta";
 
     // Optional dependencies state
     public static boolean isCuriousElytraLoaded = false;
@@ -54,7 +56,8 @@ public class BetterFlight
         if (FMLEnvironment.dist == Dist.CLIENT)
         {
             MinecraftForge.EVENT_BUS.register(ClientEvents.class);
-            MinecraftForge.EVENT_BUS.register(HUDOverlay.class);
+            //MinecraftForge.EVENT_BUS.register(HUDOverlay.class);
+            MinecraftForge.EVENT_BUS.register(this);
             eventBus.addListener(this::onClientSetupEvent);
         }
 
