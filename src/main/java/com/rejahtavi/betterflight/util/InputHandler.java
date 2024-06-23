@@ -4,8 +4,8 @@ import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.ClientData;
 import com.rejahtavi.betterflight.client.Keybinding;
-import com.rejahtavi.betterflight.client.gui.HUDOverlay;
-import com.rejahtavi.betterflight.client.gui.StaminaHUDOverlay;
+import com.rejahtavi.betterflight.client.gui.ClassicHudOverlay;
+import com.rejahtavi.betterflight.client.gui.StaminaHudOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.compat.BeansCompat;
@@ -135,8 +135,8 @@ public class InputHandler
             {
                 charge++;
                 rechargeTickCounter = 0;
-                HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
-                StaminaHUDOverlay.startRegenAnimation();
+                ClassicHudOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
+                StaminaHudOverlay.startRegenAnimation();
                 FlightMessages.sendToServer(FlightActionType.RECHARGE);
             }
         }
@@ -196,7 +196,7 @@ public class InputHandler
             charge -= points;
             rechargeTickCounter = 0;
             ClientData.setCooldown(BetterFlightCommonConfig.cooldownTicks);
-            HUDOverlay.setDepletionBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
+            ClassicHudOverlay.setDepletionBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
             return true;
         } else
         {
