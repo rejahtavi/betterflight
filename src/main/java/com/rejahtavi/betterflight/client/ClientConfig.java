@@ -17,6 +17,7 @@ public class ClientConfig
     public static HudLocation hudLocation = HudLocation.BAR_CENTER;
     public static double takeOffVolume;
     public static double flapVolume;
+    public static boolean classicHudStyle;
 
     // set up config file
     static
@@ -35,6 +36,8 @@ public class ClientConfig
         takeOffVolume               = CLIENT.takeOffVolume.get();
         flapVolume                  = CLIENT.classicFlapVolume.get();
         hudLocation                 = CLIENT.hudLocation.get();
+        classicHudStyle             = CLIENT.classicHud.get();
+
     }
 
     // defines config file format
@@ -43,6 +46,8 @@ public class ClientConfig
         public final ForgeConfigSpec.DoubleValue takeOffVolume;
         public final ForgeConfigSpec.DoubleValue classicFlapVolume;
         public final ForgeConfigSpec.EnumValue<HudLocation> hudLocation;
+        public final ForgeConfigSpec.BooleanValue classicHud;
+
 
         public Client(ForgeConfigSpec.Builder builder) {
             builder.push(BetterFlight.MODID);
@@ -60,7 +65,8 @@ public class ClientConfig
                             + "Options: BAR_CENTER, BAR_LEFT, BAR_RIGHT,\n"
                             + "CURSOR_BELOW, CURSOR_ABOVE, CURSOR_RIGHT, CURSOR_LEFT.")
                     .defineEnum("HudLocation", HudLocation.BAR_CENTER);
-            
+            classicHud = builder.comment("If True, enable classic Hud overlay")
+                    .define("classicHud",false);
             builder.pop();
         }        
     }

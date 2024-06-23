@@ -1,6 +1,7 @@
 package com.rejahtavi.betterflight.client.gui;
 
 import com.rejahtavi.betterflight.BetterFlight;
+import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.ClientData;
 import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.util.InputHandler;
@@ -55,6 +56,7 @@ public class StaminaHudOverlay
     public static final IGuiOverlay BFSTAMINA = ((gui, guiGraphics, partialTick, screenWidth, screenHeight) ->
     {
         if (!ClientData.isFlightEnabled() || !ClientData.isWearingFunctionalWings()) return;
+        if(ClientConfig.CLIENT.classicHud.get()) return;
 
         Minecraft minecraft = Minecraft.getInstance();
         if (!gui.shouldDrawSurvivalElements() || minecraft.options.hideGui) return;
