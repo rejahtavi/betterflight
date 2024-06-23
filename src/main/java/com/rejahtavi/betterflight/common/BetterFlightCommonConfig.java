@@ -40,9 +40,6 @@ public class BetterFlightCommonConfig
     public static int ceilingRange;
     public static boolean classicMode;
 
-    // list of items that count as elytra
-    public static List<Item> elytraItems;
-
     // set up config file
     static
     {
@@ -68,14 +65,6 @@ public class BetterFlightCommonConfig
         cooldownTicks = SERVER.cooldownTicks.get();
         softCeiling = SERVER.softCeiling.get();
         hardCeiling = SERVER.hardCeiling.get();
-        elytraItems = new ArrayList<>();
-
-        for (String id : SERVER.elytraItems.get()) {
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(id));
-            if (item != null && item != Items.AIR) {
-                elytraItems.add(item);
-            }
-        }
         classicMode = SERVER.classicMode.get();
 
         // ensure that soft ceiling is always below or equal to the hard ceiling
@@ -100,7 +89,6 @@ public class BetterFlightCommonConfig
         public final ForgeConfigSpec.IntValue cooldownTicks;
         public final ForgeConfigSpec.IntValue softCeiling;
         public final ForgeConfigSpec.IntValue hardCeiling;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> elytraItems;
         public final ForgeConfigSpec.BooleanValue classicMode;
 
         public Server(ForgeConfigSpec.Builder builder) {
@@ -128,7 +116,7 @@ public class BetterFlightCommonConfig
 
             flareTicksPerChargePoint = builder
                     .comment("Time, in ticks, players can flare per point on the meter.")
-                    .defineInRange("FlareTicksPerChargePoint", 20, 5, 600);
+                    .defineInRange("FlareTicksPerChargePoint", 40, 5, 600);
 
             exhaustionPerChargePoint = builder
                     .comment("How much food it costs to recharge a point on the meter.")
@@ -150,16 +138,6 @@ public class BetterFlightCommonConfig
                     .comment("Height above which flapping no longer provides any thrust.")
                     .defineInRange("hardCeiling", 400, 0, 10000);
 
-            elytraItems = builder
-                    .comment("A list of modid:itemname registry keys that count as an Elytra.")
-                    .defineList("elytraItems",
-                            new ArrayList<>(Arrays.asList(
-                                    "minecraft:elytra",
-                                    "mekanism:hdpe_elytra",
-                                    "alexsmobs:tarantula_hawk_elytra",
-                                    "tconstruct:slime_chestplate",
-                                    "customizableelytra:customizable_elytra")),
-                            s -> s instanceof String);
             classicMode = builder.comment("If True, enable pre-2.0.0 flight system")
                             .define("classicMode",false);
             builder.pop();
