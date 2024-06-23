@@ -108,7 +108,7 @@ public class BetterFlightCommonConfig
 
             maxCharge = builder
                     .comment("Maximum points of charge in a 'full' elytra meter.")
-                    .defineInRange("MaxCharge", 15, 3, 255);
+                    .defineInRange("MaxCharge", 20, 3, 255);
 
             takeOffCost = builder
                     .comment("Meter point cost to take off.")
@@ -116,7 +116,7 @@ public class BetterFlightCommonConfig
 
             flapCost = builder
                     .comment("Meter point cost to flap wings.")
-                    .defineInRange("FlapCost", 1, 0, 255);
+                    .defineInRange("FlapCost", 2, 0, 255);
 
             rechargeTicksInAir = builder
                     .comment("Time, in ticks, it takes to recharge 1 point on the meter while in the air.")

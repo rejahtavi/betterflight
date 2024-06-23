@@ -188,12 +188,11 @@ public class InputHandler
      */
     private static boolean spendCharge(Player player, int points)
     {
-
         if (player.isCreative()) return true;
 
         if (charge >= points)
         {
-            charge -= points;
+            charge = Math.max(0,charge-points);
             rechargeTickCounter = 0;
             ClientData.setCooldown(BetterFlightCommonConfig.cooldownTicks);
             ClassicHudOverlay.setDepletionBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
