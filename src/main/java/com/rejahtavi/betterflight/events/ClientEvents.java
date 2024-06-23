@@ -2,8 +2,8 @@ package com.rejahtavi.betterflight.events;
 
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientData;
-import com.rejahtavi.betterflight.client.gui.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
+import com.rejahtavi.betterflight.client.gui.HUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.ElytraData;
 import com.rejahtavi.betterflight.util.InputHandler;
@@ -35,7 +35,6 @@ public class ClientEvents
 
     // elytra damage
     public static double elytraDurability = 0.5D;
-    public static int elytraDurabilityLeft = 1;
 
     // timers
     private static final boolean isDebugButtonDown = false;
@@ -163,6 +162,7 @@ public class ClientEvents
 
     /**
      * Checks if player is wearing functional wings and updates status
+     *
      * @param player to check and update
      */
     private static void updateWingStatus(LocalPlayer player)
@@ -171,7 +171,6 @@ public class ClientEvents
         if (elytraStack != null && elytraStack.durabilityRemaining() > 1)
         {
             ClientData.setWingStatus(true);
-            elytraDurabilityLeft = elytraStack.durabilityRemaining();
             elytraDurability = elytraStack.durabilityPercent();
         } else
         {
