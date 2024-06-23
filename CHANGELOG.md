@@ -3,10 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
-## unreleased
+
+## [1.20.1 - 2.2.0] June 23rd, 2024
+**BREAKING: Delete Client and Server Configs after updating**
+### Added
+- New Resource element for displaying stamina
+- Toggle to switch between Classic and Modern UI
 
 ### Changed
 - HUD elements refactor to new gui package
+- Elytra Checking methods more flexible and no longer is hard coded in configs
+- Stamina numbers tweaked to match new UI
 
 ## [1.20.1 - 2.1.2] June 16th, 2024
 
