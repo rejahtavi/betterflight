@@ -230,20 +230,20 @@ public class InputHandler
     {
         // check the player's chest slot for elytra
         ItemStack elytraStack = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (BetterFlightCommonConfig.elytraItems.contains(elytraStack.getItem()))
+        if (elytraStack.canElytraFly(player))
         {
             return elytraStack;
         }
         if (BetterFlight.isCuriousElytraLoaded)
         {
             elytraStack = CuriosCompat.getCurioWings(player);
-            if (elytraStack != null) return elytraStack;
+            if (elytraStack != ItemStack.EMPTY) return elytraStack;
 
         }
         if (BetterFlight.isBeanBackpackLoaded)
         {
             elytraStack = BeansCompat.getBeanWings(player);
-            if (elytraStack != null) return elytraStack;
+            if (elytraStack != ItemStack.EMPTY) return elytraStack;
         }
         return null;
     }
