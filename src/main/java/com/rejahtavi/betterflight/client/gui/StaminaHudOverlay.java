@@ -57,8 +57,9 @@ public class StaminaHudOverlay
         if (!ClientData.isFlightEnabled() || !ClientData.isWearingFunctionalWings()) return;
 
         Minecraft minecraft = Minecraft.getInstance();
-        if (!gui.shouldDrawSurvivalElements() || minecraft.options.hideGui)
-            return;
+        if (!gui.shouldDrawSurvivalElements() || minecraft.options.hideGui) return;
+        if(minecraft.player != null && minecraft.player.isPassenger()) return;
+
         int x = screenWidth / 2;
         int y = screenHeight;
         int shakeX = 0;
