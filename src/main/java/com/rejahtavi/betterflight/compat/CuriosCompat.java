@@ -1,5 +1,7 @@
 package com.rejahtavi.betterflight.compat;
 
+import com.illusivesoulworks.elytraslot.platform.ForgeElytraPlatform;
+import com.illusivesoulworks.elytraslot.platform.services.IElytraPlatform;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -11,6 +13,7 @@ import java.util.NoSuchElementException;
 
 public class CuriosCompat
 {
+    private static final ForgeElytraPlatform elytraPlatform = new ForgeElytraPlatform();
     /**
      * Checks curios slots for elytra items
      *
@@ -19,18 +22,6 @@ public class CuriosCompat
      */
     public static ItemStack getCurioWings(@NotNull Player player)
     {
-        ItemStack elytraStack = null;
-        for (Item elytraItem : BetterFlightCommonConfig.elytraItems)
-        {
-            try
-            {
-                elytraStack = CuriosApi.getCuriosHelper().findFirstCurio(player, elytraItem)
-                        .orElseThrow()
-                        .stack();
-            } catch (NoSuchElementException ignored)
-            {
-            }
-        }
-        return elytraStack;
+        return elytraPlatform.getEquipped(player);
     }
 }
