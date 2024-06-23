@@ -3,7 +3,7 @@ package com.rejahtavi.betterflight.events;
 import com.rejahtavi.betterflight.BetterFlight;
 import com.rejahtavi.betterflight.client.ClientData;
 import com.rejahtavi.betterflight.client.Keybinding;
-import com.rejahtavi.betterflight.client.gui.HUDOverlay;
+import com.rejahtavi.betterflight.client.gui.ClassicHudOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.util.ElytraData;
 import com.rejahtavi.betterflight.util.InputHandler;
@@ -72,7 +72,7 @@ public class ClientEvents
 
         if (event.getKey() == Keybinding.widgetPosKey.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS)
         {
-            HUDOverlay.cycleWidgetLocation();
+            ClassicHudOverlay.cycleWidgetLocation();
         }
 
     }
@@ -115,7 +115,7 @@ public class ClientEvents
             }
 
             // decrement timers
-            HUDOverlay.borderTick();
+            ClassicHudOverlay.borderTick();
             if (ClientData.getCooldown() > 0) ClientData.subCooldown(1);
 
 

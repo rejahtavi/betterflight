@@ -17,7 +17,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Random;
 
-public class HUDOverlay
+public class ClassicHudOverlay
 {
 
     // HUD layout constraints

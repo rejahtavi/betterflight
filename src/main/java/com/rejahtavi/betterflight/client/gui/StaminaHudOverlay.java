@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Random;
 
 
-public class StaminaHUDOverlay
+public class StaminaHudOverlay
 {
     private static final int SPRITE_WIDTH = 9;
     private static final int SPRITE_HEIGHT = 9;
