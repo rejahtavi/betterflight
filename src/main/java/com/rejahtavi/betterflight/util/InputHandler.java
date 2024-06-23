@@ -5,6 +5,7 @@ import com.rejahtavi.betterflight.client.ClientConfig;
 import com.rejahtavi.betterflight.client.ClientData;
 import com.rejahtavi.betterflight.client.gui.HUDOverlay;
 import com.rejahtavi.betterflight.client.Keybinding;
+import com.rejahtavi.betterflight.client.gui.StaminaHUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.FlightActionType;
 import com.rejahtavi.betterflight.compat.BeansCompat;
@@ -135,6 +136,7 @@ public class InputHandler
                 charge++;
                 rechargeTickCounter = 0;
                 HUDOverlay.setRechargeBorderTimer(ClientConfig.BORDER_FLASH_TICKS);
+                StaminaHUDOverlay.startRegenAnimation();
                 FlightMessages.sendToServer(FlightActionType.RECHARGE);
             }
         }
