@@ -1,14 +1,11 @@
 package com.rejahtavi.betterflight;
 
 import com.rejahtavi.betterflight.client.ClientConfig;
-import com.rejahtavi.betterflight.client.gui.HUDOverlay;
-import com.rejahtavi.betterflight.client.gui.StaminaHUDOverlay;
 import com.rejahtavi.betterflight.common.BetterFlightCommonConfig;
 import com.rejahtavi.betterflight.common.Sounds;
 import com.rejahtavi.betterflight.events.ClientEvents;
 import com.rejahtavi.betterflight.events.CommonEvents;
 import com.rejahtavi.betterflight.network.FlightMessages;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;

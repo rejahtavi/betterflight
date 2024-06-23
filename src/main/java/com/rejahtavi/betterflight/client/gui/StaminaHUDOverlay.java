@@ -43,11 +43,12 @@ public class StaminaHUDOverlay
     private static int regenEffectTimer = 0;
 
     @Mod.EventBusSubscriber(modid = BetterFlight.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class ClientModBusEvents {
+    public static class ClientModBusEvents
+    {
         @SubscribeEvent
         public static void registerGuiOverlay(RegisterGuiOverlaysEvent event)
         {
-            event.registerAbove(VanillaGuiOverlay.AIR_LEVEL.id(), BetterFlight.MODID,BFSTAMINA);
+            event.registerAbove(VanillaGuiOverlay.AIR_LEVEL.id(), BetterFlight.MODID, BFSTAMINA);
         }
     }
 
@@ -56,7 +57,7 @@ public class StaminaHUDOverlay
         if (!ClientData.isFlightEnabled() || !ClientData.isWearingFunctionalWings()) return;
 
         Minecraft minecraft = Minecraft.getInstance();
-        if(!gui.shouldDrawSurvivalElements() || minecraft.options.hideGui)
+        if (!gui.shouldDrawSurvivalElements() || minecraft.options.hideGui)
             return;
         int x = screenWidth / 2;
         int y = screenHeight;
@@ -67,17 +68,17 @@ public class StaminaHUDOverlay
 
         int durability = getDurabilityState(ClientEvents.elytraDurability);
 
-        if(durability == LOW_DURABILITY)
+        if (durability == LOW_DURABILITY)
         {
-            if(minecraft.level != null && !minecraft.isPaused())
+            if (minecraft.level != null && !minecraft.isPaused())
             {
                 long thisTick = minecraft.level.getGameTime();
-                if(shakeEffectTimer > 0)
+                if (shakeEffectTimer > 0)
                 {
                     if (thisTick % 3 == 0)
                     {
                         shakeX = random.nextInt(2) - 1;
-                    } else if(thisTick % 3 == 1)
+                    } else if (thisTick % 3 == 1)
                     {
                         shakeY = random.nextInt(2) - 1;
                     }
@@ -87,18 +88,17 @@ public class StaminaHUDOverlay
                     shakeEffectTimer = 20;
                 }
             }
-        }
-        else
+        } else
         {
             shakeEffectTimer = 0;
         }
 
         //Render Empty Resources
-        for(int i = 0; i< 10; i++)
+        for (int i = 0; i < 10; i++)
         {
-            guiGraphics.blit(staminaIcons, getXPos(x,i)+shakeX, y - rightOffset + shakeY,
-                    NONE,durability,
-                    SPRITE_WIDTH,SPRITE_HEIGHT,
+            guiGraphics.blit(staminaIcons, getXPos(x, i) + shakeX, y - rightOffset + shakeY,
+                    NONE, durability,
+                    SPRITE_WIDTH, SPRITE_HEIGHT,
                     256, 256);
         }
 
@@ -108,50 +108,50 @@ public class StaminaHUDOverlay
             if ((i + 1) <= Math.ceil((double) InputHandler.charge / 2.0d)
                     && InputHandler.charge > 0)
             {
-                int type = ((i + 1 == Math.ceil((double) InputHandler.charge/ 2.0d)
+                int type = ((i + 1 == Math.ceil((double) InputHandler.charge / 2.0d)
                         && (InputHandler.charge % 2 != 0)) ? FILL_HALF : FILL_FULL);
-                guiGraphics.blit(staminaIcons, getXPos(x,i)+shakeX, y - rightOffset + shakeY,
-                        type,durability,
-                        SPRITE_WIDTH,SPRITE_HEIGHT,
+                guiGraphics.blit(staminaIcons, getXPos(x, i) + shakeX, y - rightOffset + shakeY,
+                        type, durability,
+                        SPRITE_WIDTH, SPRITE_HEIGHT,
                         256, 256);
             }
         }
-        if(ClientData.isFlaring())
+        if (ClientData.isFlaring())
         {
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
-                guiGraphics.blit(staminaIcons, getXPos(x,i)+shakeX, y - rightOffset + shakeY,
-                        FLARE_OUTLINE,durability,
-                        SPRITE_WIDTH,SPRITE_HEIGHT,
+                guiGraphics.blit(staminaIcons, getXPos(x, i) + shakeX, y - rightOffset + shakeY,
+                        FLARE_OUTLINE, durability,
+                        SPRITE_WIDTH, SPRITE_HEIGHT,
                         256, 256);
             }
         }
-        if(shakeEffectTimer > 0)
+        if (shakeEffectTimer > 0)
         {
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
-                guiGraphics.blit(staminaIcons, getXPos(x,i)+shakeX, y - rightOffset + shakeY,
-                        RED_OUTLINE,durability,
-                        SPRITE_WIDTH,SPRITE_HEIGHT,
+                guiGraphics.blit(staminaIcons, getXPos(x, i) + shakeX, y - rightOffset + shakeY,
+                        RED_OUTLINE, durability,
+                        SPRITE_WIDTH, SPRITE_HEIGHT,
                         256, 256);
             }
         }
-        if(regenEffectTimer > 0)
+        if (regenEffectTimer > 0)
         {
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
-                guiGraphics.blit(staminaIcons, getXPos(x,i)+shakeX, y - rightOffset + shakeY,
-                        WHITE_OUTLINE,durability,
-                        SPRITE_WIDTH,SPRITE_HEIGHT,
+                guiGraphics.blit(staminaIcons, getXPos(x, i) + shakeX, y - rightOffset + shakeY,
+                        WHITE_OUTLINE, durability,
+                        SPRITE_WIDTH, SPRITE_HEIGHT,
                         256, 256);
             }
             regenEffectTimer--;
         }
-    } );
+    });
 
     private static int getDurabilityState(double durability)
     {
-        if(durability > 0.95f)
+        if (durability > 0.95f)
             return LOW_DURABILITY;
         else if (durability > 0.75f)
         {
@@ -165,11 +165,12 @@ public class StaminaHUDOverlay
 
     private static int getXPos(int x, int i)
     {
-        return x+90-((i+1)*(SPRITE_WIDTH-1));
+        return x + 90 - ((i + 1) * (SPRITE_WIDTH - 1));
     }
+
     public static void startRegenAnimation()
     {
-        if(regenEffectTimer == 0)
+        if (regenEffectTimer == 0)
             regenEffectTimer = 10;
     }
     //int x = screenWidth / 2;

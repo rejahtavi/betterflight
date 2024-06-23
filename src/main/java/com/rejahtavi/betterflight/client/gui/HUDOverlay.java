@@ -45,7 +45,7 @@ public class HUDOverlay
     private static final int SPRITE_METER_FULL = 5 * ICON_SIZE;
     private static final int SPRITE_ALARM = 6 * ICON_SIZE;
 
-    private static Random random = new Random(System.currentTimeMillis());
+    private static final Random random = new Random(System.currentTimeMillis());
 
     private static final ResourceLocation elytraIcons = new ResourceLocation(
             BetterFlight.MODID, "textures/elytraicons.png");
